@@ -1,5 +1,6 @@
-# Project_team-9 - SASP
-Project_team-9 created by GitHub Classroom
+# Project Team 9 - SASP
+
+This repository will hold the UML diagramss and code files related to AP 1398-99 Second Semester's project.
 
 # Team Members
 
