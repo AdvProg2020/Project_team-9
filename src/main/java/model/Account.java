@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Account {
+public abstract class Account {
     private String username;
     private String password;
     private String email;
