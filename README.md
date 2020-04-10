@@ -1,6 +1,6 @@
 # Project Team 9 - SASP
 
-This repository will hold the UML diagramss and code files related to AP 1398-99 Second Semester's project.
+This repository will hold the code files related to AP 1398-99 Second Semester's project.
 
 ## Team Members
 
