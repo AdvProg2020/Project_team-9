@@ -35,8 +35,8 @@ public class Manager {
         return false;
     }
 
-    public void registerSeller(Seller seller) {
-        allAccounts.add(seller);
+    public void registerAccount(Account account) {
+        allAccounts.add(account);
         saveData();
     }
 

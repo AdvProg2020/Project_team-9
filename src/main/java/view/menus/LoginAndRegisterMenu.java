@@ -1,6 +1,8 @@
 package view.menus;
 
 import model.Account;
+import model.Administrator;
+import model.Customer;
 import model.Seller;
 
 import java.util.HashMap;
@@ -45,12 +47,30 @@ public class LoginAndRegisterMenu extends Menu {
         setSubMenus(subMenus);
     }
 
+    private static void loginCommand() {
+        System.out.println("Create Account");
+        System.out.print("Username: ");
+        String username;
+        while (true) {
+            username = scanner.nextLine();
+            if (!manager.doesUserWithGivenUsernameExist(username)) {
+                System.out.print("User doesn't exists with the given username. Try again: ");
+            } else break;
+        }
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+    }
+
     private static void createAccountCommand() {
         System.out.println("Create Account");
         System.out.println("Enter your desired account type: customer, seller or administrator");
         String type = scanner.nextLine();
         if (type.equalsIgnoreCase("administrator") && manager.hasAnyAdminRegistered()) {
             System.out.println("You should log in as an administrator to add new admins.");
+            return;
+        }
+        if (!type.equalsIgnoreCase("administrator") && !type.equalsIgnoreCase("seller") && !type.equalsIgnoreCase("customer")) {
+            System.out.println("Invalid type.");
             return;
         }
         System.out.print("Username: ");
@@ -75,7 +95,18 @@ public class LoginAndRegisterMenu extends Menu {
             System.out.print("Company name: ");
             String companyDetails = scanner.nextLine();
             Seller seller = new Seller(username, password, email, phone, firstName, lastName, companyDetails);
-            manager.registerSeller(seller);
+            manager.registerAccount(seller);
+            System.out.println("Account created");
+        } else if (type.equalsIgnoreCase("customer")) {
+            Customer customer = new Customer(username, password, email, phone, firstName, lastName);
+            manager.registerAccount(customer);
+            System.out.println("Account created");
+        } else if (type.equalsIgnoreCase("administrator")) {
+            Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName);
+            manager.registerAccount(administrator);
+            System.out.println("Account created");
+        } else {
+            System.out.println("An unexpected error has happened.");
         }
     }
 }
