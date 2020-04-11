@@ -9,6 +9,7 @@ public class Product {
     private String brand;
     private int price;
     private ArrayList<Seller> sellers;
+    private ArrayList<Customer> customers;
     private int numberAvailable;
     private Category category;
     private String description;
