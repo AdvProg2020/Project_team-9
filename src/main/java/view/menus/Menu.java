@@ -40,7 +40,7 @@ public abstract class Menu {
         return name;
     }
 
-    public void setSubmenus(HashMap<Integer, Menu> submenus) {
+    public void setSubMenus(HashMap<Integer, Menu> submenus) {
         this.submenus = submenus;
     }
 
@@ -65,7 +65,9 @@ public abstract class Menu {
                 nextMenu = this.parentMenu;
         } else
             nextMenu = submenus.get(chosenMenu);
-        nextMenu.show();
-        nextMenu.execute();
+        if (nextMenu != null) {
+            nextMenu.show();
+            nextMenu.execute();
+        }
     }
 }
