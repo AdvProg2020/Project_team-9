@@ -40,6 +40,15 @@ public class Manager {
         saveData();
     }
 
+    public boolean givenUsernameHasGivenPassword(String username, String password) {
+        for (Account account : allAccounts) {
+            if (account.getUsername().equals(username)) {
+                return account.getPassword().equalsIgnoreCase(password);
+            }
+        }
+        return false;
+    }
+
     public void saveData() {
         // TODO: MMM
     }

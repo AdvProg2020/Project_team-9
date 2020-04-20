@@ -58,10 +58,16 @@ public class LoginAndRegisterMenu extends Menu {
             } else break;
         }
         System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password;
+        while (true) {
+            password = scanner.nextLine();
+            if (!manager.givenUsernameHasGivenPassword(username, password)) {
+                System.out.print("Wrong password. Try again: ");
+            } else break;
+        }
     }
 
-    private static void createAccountCommand() {
+    private void createAccountCommand() {
         System.out.println("Create Account");
         System.out.println("Enter your desired account type: customer, seller or administrator");
         String type = scanner.nextLine();
