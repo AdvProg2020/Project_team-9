@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import model.*;
 
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -9,10 +10,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.concurrent.CountDownLatch;
 
 public class DataManager {
     private static DataManager sharedInstance;
-    private DataManager() {}
+
+    private DataManager() {
+    }
 
     public static DataManager shared() {
         if (sharedInstance == null) {
@@ -39,6 +43,51 @@ public class DataManager {
         } catch (IOException e) {
             System.out.println("Unexpected exception happened in loading data: " + e.getLocalizedMessage());
         }
+    }
+
+    public void addCoupon(Coupon coupon) {
+    }
+
+    public void addRequest(Request request) {
+    }
+
+    public void registerAccount(Account account) {
+    }
+
+    public void addCategory(Category category) {
+    }
+
+    public void addSale(Sale sale) {
+    }
+
+    public void removeCoupon(Coupon coupon) {
+    }
+
+    public void removeRequest(Request request) {
+    }
+
+    public void removeAccount(Account account) {
+    }
+
+    public void removeCategory(Category category, Category superCategory) {
+    }
+
+    public void removeSale(Sale sale) {
+    }
+
+    public Request getRequestWithId(int id) {
+    }
+
+    public Coupon getCouponWithId(int id) {
+    }
+
+    public Account getAccountWithId(int id) {
+    }
+
+    public Category getCategoryWithId(int id) {
+    }
+
+    public Sale getSaleWithId(int id) {
     }
 
 }
