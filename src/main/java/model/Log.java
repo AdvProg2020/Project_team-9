@@ -1,14 +1,22 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Log {
+public abstract class Log {
     private int id;
-    private String date;
-    private int price;
+    private LocalDateTime date;
+    private long price;
     private int discountAmount;
-    private ArrayList<Product> products;
-    private Customer customer;
-    private Seller seller;
+    private Product[] products;
     private DeliveryStatus deliveryStatus;
+
+    public Log(int id, LocalDateTime date, long price, int discountAmount, Product[] products, DeliveryStatus deliveryStatus) {
+        this.id = id;
+        this.date = date;
+        this.price =  price;
+        this.discountAmount = discountAmount;
+        this.products = products;
+        this.deliveryStatus = deliveryStatus;
+    }
 }
