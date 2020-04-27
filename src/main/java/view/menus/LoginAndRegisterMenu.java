@@ -1,6 +1,5 @@
 package view.menus;
 
-import model.Account;
 import model.Administrator;
 import model.Customer;
 import model.Seller;
@@ -22,6 +21,11 @@ public class LoginAndRegisterMenu extends Menu {
                 parentMenu.show();
                 parentMenu.execute();
             }
+
+            @Override
+            protected void showHelp() {
+
+            }
         });
         subMenus.put(2, new Menu("MainMenu Help", this) {
             @Override
@@ -42,6 +46,11 @@ public class LoginAndRegisterMenu extends Menu {
                         break;
                     }
                 }
+            }
+
+            @Override
+            protected void showHelp() {
+
             }
         });
         setSubMenus(subMenus);
@@ -114,5 +123,10 @@ public class LoginAndRegisterMenu extends Menu {
         } else {
             System.out.println("An unexpected error has happened.");
         }
+    }
+
+    @Override
+    protected void showHelp() {
+
     }
 }

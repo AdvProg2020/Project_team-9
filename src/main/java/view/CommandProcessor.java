@@ -6,7 +6,7 @@ import view.menus.Menu;
 
 import java.util.Scanner;
 
-public class MainView {
+public class CommandProcessor {
     private static Manager manager;
     private static Scanner scanner;
 

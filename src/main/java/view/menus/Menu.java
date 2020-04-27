@@ -70,4 +70,6 @@ public abstract class Menu {
             nextMenu.execute();
         }
     }
+
+    protected abstract void showHelp();
 }

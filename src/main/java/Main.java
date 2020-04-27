@@ -1,7 +1,7 @@
-import view.MainView;
+import view.CommandProcessor;
 
 public class Main {
     public static void main(String[] args) {
-        MainView.show();
+        CommandProcessor.show();
     }
 }
