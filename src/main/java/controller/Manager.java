@@ -19,6 +19,17 @@ public class Manager {
         return loggedInAccount;
     }
 
+    public boolean login(String username, String password) {
+        for (Account account : allAccounts) {
+            if (account.getUsername().equals(username) && account.getUsername().equals(password)) {
+                loggedInAccount = account;
+                return true;
+            }
+        }
+        loggedInAccount = null;
+        return false;
+    }
+
     public boolean hasAnyAdminRegistered() {
         for (Account account : allAccounts) {
             if (account instanceof Administrator) return true;

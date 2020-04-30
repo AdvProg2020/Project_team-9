@@ -43,46 +43,55 @@ public class MainController {
     }
 
     public String getUsername() {
+        return null;
     }
 
     ;
 
     public String getFirstName() {
+        return null;
     }
 
     ;
 
     public String getLastName() {
+        return null;
     }
 
     ;
 
     public String getEmail() {
+        return null;
     }
 
     ;
 
     public String getPhone() {
+        return null;
     }
 
     ;
 
     public String getCompanyDetails() {
+        return null;
     }
 
     ;
 
     public Account[] getAllAccounts() {
+        return null;
     }
 
     ;
 
     public String getLoggedInAccountDetails() {
+        return null;
     }
 
     ;
 
     public Account getLoggedInAccount() {
+        return null;
     }
 
     ;
@@ -99,12 +108,14 @@ public class MainController {
     }
 
     public Coupon[] getCoupons() {
+        return null;
     }
 
     public void removeCoupon(Coupon coupon) {
     }
 
     public Request[] getAdminRequests() {
+        return null;
     }
 
     public void acceptAdminRequest(Request request) {
@@ -114,12 +125,15 @@ public class MainController {
     }
 
     public Category[] getAllCategories() {
+        return null;
     }
 
     public Category[] getSubCategories(Category category) {
+        return null;
     }
 
     public Product[] getAllProductsInCategory(Category category) {
+        return null;
     }
 
     public void addCategory(Category category) {
@@ -132,18 +146,23 @@ public class MainController {
     }
 
     public boolean addProductToCategory(Product product, Category category) {
+        return false;
     }
 
     public Product[] getSellsHistory() {
+        return null;
     }
 
     public Product[] getSellerProducts() {
+        return null;
     }
 
     public boolean addProductToCart(Product product) {
+        return false;
     }
 
     public boolean checkout() {
+        return false;
     }
 
     public void addProduct(Product product) {
@@ -159,6 +178,7 @@ public class MainController {
     }
 
     public Product[] getCart() {
+        return null;
     }
 
     public void incrementCountOfProductInCart(Product product) {

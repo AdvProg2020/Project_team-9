@@ -17,7 +17,25 @@ public class LoginAndRegisterMenu extends Menu {
 
             @Override
             public void execute() {
-                createAccountCommand();
+                if (!createAccountCommand()) {
+                    parentMenu.show();
+                    parentMenu.execute();
+                }
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+        subMenus.put(1, new Menu("Login", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                loginCommand();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -27,7 +45,7 @@ public class LoginAndRegisterMenu extends Menu {
 
             }
         });
-        subMenus.put(2, new Menu("MainMenu Help", this) {
+        subMenus.put(3, new Menu("MainMenu Help", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + " - Enter Back to return");
@@ -56,14 +74,15 @@ public class LoginAndRegisterMenu extends Menu {
         setSubMenus(subMenus);
     }
 
-    private static void loginCommand() {
-        System.out.println("Create Account");
+    private boolean loginCommand() {
+        System.out.println("Login");
         System.out.print("Username: ");
         String username;
         while (true) {
             username = scanner.nextLine();
             if (!manager.doesUserWithGivenUsernameExist(username)) {
                 System.out.print("User doesn't exists with the given username. Try again: ");
+                return false;
             } else break;
         }
         System.out.print("Password: ");
@@ -74,19 +93,29 @@ public class LoginAndRegisterMenu extends Menu {
                 System.out.print("Wrong password. Try again: ");
             } else break;
         }
+        boolean result = manager.login(username, password);
+        if (result) {
+            System.out.println("Login Successful");
+            // TODO: Show the next menu
+
+            return true;
+        } else {
+            System.out.println("An unexpected error has occurred. Please try again.");
+        }
+        return false;
     }
 
-    private void createAccountCommand() {
+    private boolean createAccountCommand() {
         System.out.println("Create Account");
         System.out.println("Enter your desired account type: customer, seller or administrator");
         String type = scanner.nextLine();
         if (type.equalsIgnoreCase("administrator") && manager.hasAnyAdminRegistered()) {
             System.out.println("You should log in as an administrator to add new admins.");
-            return;
+            return false;
         }
         if (!type.equalsIgnoreCase("administrator") && !type.equalsIgnoreCase("seller") && !type.equalsIgnoreCase("customer")) {
             System.out.println("Invalid type.");
-            return;
+            return false;
         }
         System.out.print("Username: ");
         String username;
@@ -123,6 +152,7 @@ public class LoginAndRegisterMenu extends Menu {
         } else {
             System.out.println("An unexpected error has happened.");
         }
+        return false;
     }
 
     @Override

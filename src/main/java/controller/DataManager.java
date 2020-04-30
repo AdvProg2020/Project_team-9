@@ -5,12 +5,10 @@ import com.google.gson.GsonBuilder;
 import model.*;
 
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.CountDownLatch;
 
 public class DataManager {
     private static DataManager sharedInstance;
@@ -76,18 +74,23 @@ public class DataManager {
     }
 
     public Request getRequestWithId(int id) {
+        return null;
     }
 
     public Coupon getCouponWithId(int id) {
+        return null;
     }
 
     public Account getAccountWithId(int id) {
+        return null;
     }
 
     public Category getCategoryWithId(int id) {
+        return null;
     }
 
     public Sale getSaleWithId(int id) {
+        return null;
     }
 
 }
