@@ -1,9 +1,6 @@
 package controller;
 
-import model.Account;
-import model.Administrator;
-import model.RegisterResult;
-import model.Seller;
+import model.*;
 
 import java.util.ArrayList;
 
@@ -19,15 +16,26 @@ public class Manager {
         return loggedInAccount;
     }
 
-    public boolean login(String username, String password) {
+    public enum AccountType {
+        CUSTOMER, ADMINISTRATOR, SELLER, NONE
+    }
+
+    public AccountType login(String username, String password) {
         for (Account account : allAccounts) {
             if (account.getUsername().equals(username) && account.getUsername().equals(password)) {
                 loggedInAccount = account;
-                return true;
+                if (account instanceof Customer) {
+                    return AccountType.CUSTOMER;
+                } else if (account instanceof Administrator) {
+                    return AccountType.ADMINISTRATOR;
+                } else if (account instanceof Seller) {
+                    return AccountType.SELLER;
+                }
+                break;
             }
         }
         loggedInAccount = null;
-        return false;
+        return AccountType.NONE;
     }
 
     public boolean hasAnyAdminRegistered() {

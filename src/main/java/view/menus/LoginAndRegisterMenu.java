@@ -1,5 +1,6 @@
 package view.menus;
 
+import controller.Manager;
 import model.Administrator;
 import model.Customer;
 import model.Seller;
@@ -28,16 +29,17 @@ public class LoginAndRegisterMenu extends Menu {
 
             }
         });
-        subMenus.put(1, new Menu("Login", this) {
+        subMenus.put(2, new Menu("Login", this) {
             @Override
             public void show() {
             }
 
             @Override
             public void execute() {
-                loginCommand();
-                parentMenu.show();
-                parentMenu.execute();
+                if (!loginCommand()) {
+                    parentMenu.show();
+                    parentMenu.execute();
+                }
             }
 
             @Override
@@ -93,11 +95,26 @@ public class LoginAndRegisterMenu extends Menu {
                 System.out.print("Wrong password. Try again: ");
             } else break;
         }
-        boolean result = manager.login(username, password);
-        if (result) {
-            System.out.println("Login Successful");
-            // TODO: Show the next menu
-
+        var result = manager.login(username, password);
+        if (result == Manager.AccountType.NONE) {
+            System.out.println("An unexpected error has occurred. Please try again.");
+            return false;
+        }
+        System.out.println("Login Successful");
+        if (result == Manager.AccountType.CUSTOMER) {
+            Menu menu = new CustomerMenu("Welcome", this);
+            menu.show();
+            menu.execute();
+            return true;
+        } else if (result == Manager.AccountType.ADMINISTRATOR) {
+            Menu menu = new AdministratorMenu("Welcome", this);
+            menu.show();
+            menu.execute();
+            return true;
+        } else if (result == Manager.AccountType.SELLER) {
+            Menu menu = new SellerMenu("Welcome", this);
+            menu.show();
+            menu.execute();
             return true;
         } else {
             System.out.println("An unexpected error has occurred. Please try again.");
