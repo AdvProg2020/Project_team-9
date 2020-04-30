@@ -4,14 +4,36 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
 
+import javax.xml.crypto.Data;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class DataManager {
     private static DataManager sharedInstance;
+
+    private Account loggedInAccount;
+    private ArrayList<Account> allAccounts = new ArrayList<>();
+    private ArrayList<Product> allProducts = new ArrayList<>();
+
+    public ArrayList<Account> getAllAccounts() {
+        return allAccounts;
+    }
+
+    public Account getLoggedInAccount() {
+        return loggedInAccount;
+    }
+
+    public ArrayList<Product> getAllProducts() {
+        return allProducts;
+    }
+
+    public enum AccountType {
+        CUSTOMER, ADMINISTRATOR, SELLER, NONE
+    }
 
     private DataManager() {
     }
@@ -21,6 +43,61 @@ public class DataManager {
             sharedInstance = new DataManager();
         }
         return sharedInstance;
+    }
+
+    public Account getAccountWithGivenUsername(String username) {
+        for (Account account : allAccounts) {
+            if (account.getUsername().equals(username)) return account;
+        }
+        return null;
+    }
+
+    public DataManager.AccountType login(String username, String password) {
+        for (Account account : allAccounts) {
+            if (account.getUsername().equals(username) && account.getUsername().equals(password)) {
+                loggedInAccount = account;
+                if (account instanceof Customer) {
+                    return DataManager.AccountType.CUSTOMER;
+                } else if (account instanceof Administrator) {
+                    return DataManager.AccountType.ADMINISTRATOR;
+                } else if (account instanceof Seller) {
+                    return DataManager.AccountType.SELLER;
+                }
+                break;
+            }
+        }
+        loggedInAccount = null;
+        return DataManager.AccountType.NONE;
+    }
+
+    public boolean hasAnyAdminRegistered() {
+        for (Account account : allAccounts) {
+            if (account instanceof Administrator) return true;
+        }
+        return false;
+    }
+
+    public boolean doesUserWithGivenUsernameExist(String username) {
+        for (Account account : allAccounts) {
+            if (account.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void registerAccount(Account account) {
+        allAccounts.add(account);
+        saveData();
+    }
+
+    public boolean givenUsernameHasGivenPassword(String username, String password) {
+        for (Account account : allAccounts) {
+            if (account.getUsername().equals(username)) {
+                return account.getPassword().equalsIgnoreCase(password);
+            }
+        }
+        return false;
     }
 
     public static void saveData() {
@@ -49,9 +126,6 @@ public class DataManager {
     public void addRequest(Request request) {
     }
 
-    public void registerAccount(Account account) {
-    }
-
     public void addCategory(Category category) {
     }
 
@@ -65,6 +139,7 @@ public class DataManager {
     }
 
     public void removeAccount(Account account) {
+        allAccounts.remove(account);
     }
 
     public void removeCategory(Category category, Category superCategory) {

@@ -1,10 +1,11 @@
 package view.menus;
 
-import controller.Manager;
+import controller.DataManager;
 import model.Administrator;
 import model.Customer;
 import model.Seller;
 
+import javax.xml.crypto.Data;
 import java.util.HashMap;
 
 public class LoginAndRegisterMenu extends Menu {
@@ -82,7 +83,7 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
-            if (!manager.doesUserWithGivenUsernameExist(username)) {
+            if (!DataManager.shared().doesUserWithGivenUsernameExist(username)) {
                 System.out.print("User doesn't exists with the given username. Try again: ");
                 return false;
             } else break;
@@ -91,27 +92,27 @@ public class LoginAndRegisterMenu extends Menu {
         String password;
         while (true) {
             password = scanner.nextLine();
-            if (!manager.givenUsernameHasGivenPassword(username, password)) {
+            if (!DataManager.shared().givenUsernameHasGivenPassword(username, password)) {
                 System.out.print("Wrong password. Try again: ");
             } else break;
         }
-        var result = manager.login(username, password);
-        if (result == Manager.AccountType.NONE) {
+        var result = DataManager.shared().login(username, password);
+        if (result == DataManager.AccountType.NONE) {
             System.out.println("An unexpected error has occurred. Please try again.");
             return false;
         }
         System.out.println("Login Successful");
-        if (result == Manager.AccountType.CUSTOMER) {
+        if (result == DataManager.AccountType.CUSTOMER) {
             Menu menu = new CustomerMenu("Welcome", this);
             menu.show();
             menu.execute();
             return true;
-        } else if (result == Manager.AccountType.ADMINISTRATOR) {
+        } else if (result == DataManager.AccountType.ADMINISTRATOR) {
             Menu menu = new AdministratorMenu("Welcome", this);
             menu.show();
             menu.execute();
             return true;
-        } else if (result == Manager.AccountType.SELLER) {
+        } else if (result == DataManager.AccountType.SELLER) {
             Menu menu = new SellerMenu("Welcome", this);
             menu.show();
             menu.execute();
@@ -126,7 +127,7 @@ public class LoginAndRegisterMenu extends Menu {
         System.out.println("Create Account");
         System.out.println("Enter your desired account type: customer, seller or administrator");
         String type = scanner.nextLine();
-        if (type.equalsIgnoreCase("administrator") && manager.hasAnyAdminRegistered()) {
+        if (type.equalsIgnoreCase("administrator") && DataManager.shared().hasAnyAdminRegistered()) {
             System.out.println("You should log in as an administrator to add new admins.");
             return false;
         }
@@ -138,7 +139,7 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
-            if (manager.doesUserWithGivenUsernameExist(username)) {
+            if (DataManager.shared().doesUserWithGivenUsernameExist(username)) {
                 System.out.print("User exists with the given username. Try a new one: ");
             } else break;
         }
@@ -156,15 +157,15 @@ public class LoginAndRegisterMenu extends Menu {
             System.out.print("Company name: ");
             String companyDetails = scanner.nextLine();
             Seller seller = new Seller(username, password, email, phone, firstName, lastName, companyDetails);
-            manager.registerAccount(seller);
+            DataManager.shared().registerAccount(seller);
             System.out.println("Account created");
         } else if (type.equalsIgnoreCase("customer")) {
             Customer customer = new Customer(username, password, email, phone, firstName, lastName);
-            manager.registerAccount(customer);
+            DataManager.shared().registerAccount(customer);
             System.out.println("Account created");
         } else if (type.equalsIgnoreCase("administrator")) {
             Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName);
-            manager.registerAccount(administrator);
+            DataManager.shared().registerAccount(administrator);
             System.out.println("Account created");
         } else {
             System.out.println("An unexpected error has happened.");

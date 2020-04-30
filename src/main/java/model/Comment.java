@@ -17,6 +17,6 @@ public class Comment {
     }
 
     public boolean hasUserPurchasedProduct(){
-
+        return false;
     }
 }

@@ -10,9 +10,20 @@ public class Customer extends Account {
         super(username, password, email, phone, firstName, lastName);
     }
 
-    public Product[] getCart(){}
-    public void addProductToCart(Product product){}
-    public boolean hasPurchasedProduct(Product product){}
+    public Customer(Account account) {
+        this(account.getUsername(), account.getPassword(), account.getEmail(), account.getPhoneNumber(), account.getFirstName(), account.getLastName());
+    }
+
+    public Product[] getCart() {
+        return null;
+    }
+
+    public void addProductToCart(Product product) {
+    }
+
+    public boolean hasPurchasedProduct(Product product) {
+        return false;
+    }
 
     @Override
     public String toString() {

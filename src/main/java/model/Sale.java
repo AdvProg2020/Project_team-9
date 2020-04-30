@@ -23,6 +23,7 @@ public class Sale {
         this.deliveryStatus = deliveryStatus;
     }
     public Sale newSale(Sale oldSale){
+        return null;
     }
     public void addProduct(Product product){}
 }

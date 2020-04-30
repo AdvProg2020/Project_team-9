@@ -13,6 +13,10 @@ public class Administrator extends Account {
         super(username, password, email, phone, firstName, lastName);
     }
 
+    public Administrator(Account account) {
+        this(account.getUsername(), account.getPassword(), account.getEmail(), account.getPhoneNumber(), account.getFirstName(), account.getLastName());
+    }
+
     public ArrayList<Account> getAllAccounts() {
         return allAccounts;
     }

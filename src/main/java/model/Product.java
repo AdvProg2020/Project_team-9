@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Product {
-    private int ProductId;
+    private int productId;
     private Status status;
     private String name;
     private String brand;
@@ -27,11 +27,20 @@ public class Product {
         this.description = description;
     }
 
-    public Product newProduct(Product oldProduct) {
+    public int getProductId() {
+        return productId;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public Product newProduct(Product oldProduct) {
+        return null;
     }
 
     public int getAverageScore() {
+        return 0;
     }
 
     public void addSeller(Seller seller) {

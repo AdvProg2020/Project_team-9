@@ -82,6 +82,10 @@ public abstract class Account {
         this.phoneNumber = newPhoneNumber;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void submitLog(Log log) {
 
     }

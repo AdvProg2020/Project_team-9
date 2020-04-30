@@ -12,6 +12,15 @@ public class Seller extends Account {
         super(username, password, email, phone, firstName, lastName);
         this.companyDetails = companyDetails;
     }
+
+    public Seller(Account account) {
+        this(account.getUsername(), account.getPassword(), account.getEmail(), account.getPhoneNumber(), account.getFirstName(), account.getLastName(), "");
+    }
+
+    public String getCompanyDetails() {
+        return companyDetails;
+    }
+
     public void addProduct(Product product){}
     public void addSale(Sale sale){}
 
