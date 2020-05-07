@@ -192,7 +192,58 @@ public class AdministratorMenu extends Menu {
             }
         });
 
-        subMenus.put(12, new Menu("Administrator Menu Help", this) {
+        subMenus.put(12, new Menu("Remove Product", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeProduct()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(13, new Menu("Create Coupon", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (createDiscountCode()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(14, new Menu("View All Coupons", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewCoupons()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(15, new Menu("Administrator Menu Help", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + " - Enter Back to return");
@@ -218,6 +269,29 @@ public class AdministratorMenu extends Menu {
 
             }
         });
+    }
+
+    private boolean viewAllCoupons() {
+        DataManager.shared().cou
+        return false;
+    }
+
+    private boolean createDiscountCode() {
+        // TODO: Not implemented!
+        return false;
+    }
+
+    private boolean removeProduct() {
+        System.out.print("Enter the id of the product you want to remove completely: ");
+        int id = scanner.nextInt();
+        var product = DataManager.shared().productWithID(id);
+        if (product == null) {
+            System.out.println("No product exists with the given ID");
+            return false;
+        }
+        DataManager.shared().removeProduct(id);
+        System.out.println("Product \"" + product.getName() + "\" was removed successfully");
+        return false;
     }
 
     private boolean summaryOfAllProducts() {

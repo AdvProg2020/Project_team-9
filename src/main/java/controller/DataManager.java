@@ -45,6 +45,24 @@ public class DataManager {
         return sharedInstance;
     }
 
+    public void removeProduct(int productID) {
+        for (Product product : allProducts) {
+            if (product.getProductId() == productID) {
+                allProducts.remove(product);
+                return;
+            }
+        }
+    }
+
+    public Product productWithID(int id) {
+        for (Product product : allProducts) {
+            if (product.getProductId() == id) {
+                return product;
+            }
+        }
+        return null;
+    }
+
     public Account getAccountWithGivenUsername(String username) {
         for (Account account : allAccounts) {
             if (account.getUsername().equals(username)) return account;

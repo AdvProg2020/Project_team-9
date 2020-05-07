@@ -19,4 +19,6 @@ public class Coupon {
         this.id = id;
         this.products = products;
     }
+
+
 }
