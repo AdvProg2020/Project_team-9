@@ -20,6 +20,9 @@ public abstract class Account {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.coupons = new ArrayList<>();
+        this.logs = new ArrayList<>();
+        this.credit = 0;
     }
 
     public String getUsername() {
@@ -55,15 +58,17 @@ public abstract class Account {
     }
 
     public void addCoupon(Coupon coupon) {
-
+        coupons.add(coupon);
     }
 
     public void addLog(Log log) {
-
+        logs.add(log);
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-
+        if (oldPassword.equals(password)) {
+            password = newPassword;
+        }
     }
 
     public void setEmail(String newEmail) {
@@ -86,12 +91,8 @@ public abstract class Account {
         this.password = password;
     }
 
-    public void submitLog(Log log) {
-
-    }
-
     public boolean doesPasswordMatch(String password) {
-        return false;
+        return password.equals(this.password);
     }
 
     @Override
