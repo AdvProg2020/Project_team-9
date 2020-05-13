@@ -8,6 +8,7 @@ public class CustomerMenu extends Menu {
     }
 
     private void viewPersonalInfo() {
+        System.out.println();
     }
 
     private void editEmail() {

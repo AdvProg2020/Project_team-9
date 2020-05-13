@@ -49,19 +49,29 @@ public abstract class Menu {
     }
 
     public void execute() {
-        Menu nextMenu = null;
-        int chosenMenu = Integer.parseInt(scanner.nextLine());
-        if (chosenMenu == submenus.size() + 1) {
-            if (this.parentMenu == null)
-                System.exit(1);
-            else
-                nextMenu = this.parentMenu;
+        Menu nextMenu;
+        int validSizeLimit = submenus.size() + 1;
+        int chosenMenu = getNextMenu(validSizeLimit);
+        if (chosenMenu == validSizeLimit) {
+            return;
         } else
             nextMenu = submenus.get(chosenMenu);
         if (nextMenu != null) {
             nextMenu.show();
             nextMenu.execute();
         }
+    }
+
+    private int getNextMenu(int validSizeLimit) {
+        int chosenMenu = validSizeLimit + 1;
+        String input;
+        while (chosenMenu > validSizeLimit) {
+            input = scanner.nextLine();
+            if (!input.matches("\\d+"))
+                continue;
+            chosenMenu = Integer.parseInt(input);
+        }
+        return chosenMenu;
     }
 
     protected abstract void showHelp();
