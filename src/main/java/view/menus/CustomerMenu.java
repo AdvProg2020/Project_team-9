@@ -1,5 +1,6 @@
 package view.menus;
 
+import controller.DataManager;
 import model.Product;
 
 public class CustomerMenu extends Menu {
@@ -8,10 +9,11 @@ public class CustomerMenu extends Menu {
     }
 
     private void viewPersonalInfo() {
-        System.out.println();
+        System.out.println(DataManager.shared().getLoggedInAccount());
     }
 
     private void editEmail() {
+        
     }
 
     private void editFirstName() {
