@@ -109,4 +109,11 @@ public abstract class Account {
                 ", credit=" + credit +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Account))
+            return false;
+        return (((Account) obj).email.equals(this.email));
+    }
 }
