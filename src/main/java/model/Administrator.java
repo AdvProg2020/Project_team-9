@@ -20,15 +20,4 @@ public class Administrator extends Account {
     public ArrayList<Account> getAllAccounts() {
         return allAccounts;
     }
-
-    @Override
-    public String toString() {
-        return "Administrator{" +
-                "requests=" + requests +
-                ", allCoupons=" + allCoupons +
-                ", allAccounts=" + allAccounts +
-                ", allCategories=" + allCategories +
-                ", sales=" + sales +
-                '}';
-    }
 }

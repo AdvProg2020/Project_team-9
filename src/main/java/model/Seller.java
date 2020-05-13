@@ -26,11 +26,7 @@ public class Seller extends Account {
 
     @Override
     public String toString() {
-        return "Seller{" +
-                "companyDetails='" + companyDetails + '\'' +
-                ", isPermittedToSell=" + isPermittedToSell +
-                ", products=" + products +
-                ", sales=" + sales +
-                '}';
+        return super.toString() + '\n' +
+                "Company Details: " + companyDetails;
     }
 }

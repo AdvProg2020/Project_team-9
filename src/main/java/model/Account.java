@@ -13,7 +13,8 @@ public abstract class Account {
     private ArrayList<Log> logs;
     private int credit;
 
-    public Account(String username, String password, String email, String phoneNumber, String firstName, String lastName) {
+    public Account(String username, String password, String email,
+                   String phoneNumber, String firstName, String lastName) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -97,23 +98,17 @@ public abstract class Account {
 
     @Override
     public String toString() {
-        return "Account{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", coupons=" + coupons +
-                ", logs=" + logs +
-                ", credit=" + credit +
-                '}';
+        return "Username: " + username + '\n' +
+                "Email: " + email + '\n' +
+                "PhoneNumber: " + phoneNumber + '\n' +
+                "FirstName: " + firstName + '\n' +
+                "LastName: " + lastName;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Account))
             return false;
-        return (((Account) obj).email.equals(this.email));
+        return (((Account) obj).username.equals(this.username));
     }
 }

@@ -31,13 +31,6 @@ public class Customer extends Account {
     }
 
     @Override
-    public String toString() {
-        return "Customer{" +
-                "cart=" + cart +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Customer))
             return false;
