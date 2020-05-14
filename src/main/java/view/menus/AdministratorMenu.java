@@ -233,7 +233,7 @@ public class AdministratorMenu extends Menu {
 
             @Override
             public void execute() {
-                if (viewCoupons()) return;
+                if (viewAllCoupons()) return;
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -243,7 +243,194 @@ public class AdministratorMenu extends Menu {
             }
         });
 
-        subMenus.put(15, new Menu("Administrator Menu Help", this) {
+        subMenus.put(15, new Menu("Remove Coupon", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeCoupon()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(16, new Menu("View Coupon Details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewCoupon();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(17, new Menu("Edit Coupon Details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (editCoupon()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(18, new Menu("View all requests", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewAllRequests()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(19, new Menu("View request details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewRequestDetails()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(20, new Menu("Accept request", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (resolveRequest(true)) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(21, new Menu("Decline request", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (resolveRequest(false)) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(22, new Menu("View all categories", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewAllCategories()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(23, new Menu("Edit category details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (editCategory()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(24, new Menu("Add category", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (addCategory()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(25, new Menu("Remove category", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeCategory()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(26, new Menu("Administrator Menu Help", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + " - Enter Back to return");
@@ -271,13 +458,232 @@ public class AdministratorMenu extends Menu {
         });
     }
 
+    private boolean editCoupon() {
+        Coupon coupon = viewCoupon();
+        if (coupon == null) return false;
+        System.out.println("Enter \"d\" to edit discount percent, \"m\" to edit maximum possible discount, \"s\" to edit start time and \"e\" to edit end time");
+        String input = scanner.nextLine().trim();
+        switch (input) {
+            case "d":
+                editCouponDiscountPercent(coupon);
+                break;
+            case "m":
+                editCouponMaximumDiscount(coupon);
+                break;
+            case "s":
+                editCouponStartTime(coupon);
+                break;
+            case "e":
+                editCouponEndTime(coupon);
+                break;
+            default:
+                System.out.println("Wrong letter was typed.");
+                return false;
+        }
+        System.out.println("Changed successfully");
+        return false;
+    }
+
+    private void editCouponDiscountPercent(Coupon coupon) {
+        System.out.println("Current discount percent: " + coupon.getDiscountPercent());
+        System.out.print("Enter a new value for discount percent (between 0 and 100): ");
+        while (true) {
+            int newValue = scanner.nextInt();
+            if (newValue < 0 || newValue > 100) {
+                System.out.print("Impossible value. Please enter a new value again: ");
+                break;
+            }
+            coupon.setDiscountPercent(newValue);
+        }
+    }
+
+    private void editCouponMaximumDiscount(Coupon coupon) {
+        System.out.println("Current maximum discount: " + coupon.getMaximumDiscount());
+        System.out.print("Enter a new value for maximum discount: ");
+        int newValue = scanner.nextInt();
+        coupon.setMaximumDiscount(newValue);
+    }
+
+    private void editCouponStartTime(Coupon coupon) {
+        // TODO: not implemented yet
+    }
+
+    private void editCouponEndTime(Coupon coupon) {
+        // TODO: not implemented yet
+    }
+
+    private Coupon viewCoupon() {
+        System.out.print("Enter coupon's ID: ");
+        int id = scanner.nextInt();
+        Coupon coupon = DataManager.shared().getCouponWithId(id);
+        if (coupon == null) {
+            System.out.println("No coupon with the given ID exists");
+            return null;
+        }
+        showCouponDetails(coupon);
+        return coupon;
+    }
+
+    private void showCouponDetails(Coupon coupon) {
+        System.out.println("Coupon #" + coupon.getId());
+        //System.out.println("Sale status: " + coupon.getSaleStatus().toString());
+        System.out.println("Discount percent: " + coupon.getDiscountPercent());
+        System.out.println("Maximum possible discount: " + coupon.getDiscountPercent());
+        System.out.println("Start time: " + coupon.getStartTime());
+        System.out.println("End time: " + coupon.getEndTime());
+    }
+
+    private boolean removeCoupon() {
+        System.out.print("Enter an ID to remove the related coupon: ");
+        int id = scanner.nextInt();
+        Coupon coupon = DataManager.shared().getCouponWithId(id);
+        if (coupon == null) {
+            System.out.println("No coupon with the given ID exists");
+            return false;
+        }
+        DataManager.shared().removeCoupon(coupon);
+        System.out.println("Coupon Removed");
+        return false;
+    }
+
     private boolean viewAllCoupons() {
-        DataManager.shared().cou
+        System.out.println("All Coupons");
+        for (Coupon coupon : DataManager.shared().getAllCoupons()) {
+            System.out.println("#" + coupon.getId() + " - " + coupon.getDiscountPercent() + " percent discount");
+        }
         return false;
     }
 
     private boolean createDiscountCode() {
         // TODO: Not implemented!
+        return false;
+    }
+
+    private Request getRequestWithIDFromUser() {
+        System.out.print("Enter the request ID: ");
+        int id = scanner.nextInt();
+        return DataManager.shared().getRequestWithID(id);
+    }
+
+    private boolean resolveRequest(boolean shouldAccept) {
+        Request request = getRequestWithIDFromUser();
+        if (request == null) {
+            System.out.println("No such request exists.");
+            return false;
+        }
+        if (shouldAccept) {
+            request.fulfill();
+            System.out.println("Request Accepted");
+        } else {
+            DataManager.shared().removeRequest(request);
+            System.out.println("Request Declined");
+        }
+        return false;
+    }
+
+    private boolean viewRequestDetails() {
+        Request request = getRequestWithIDFromUser();
+        if (request == null) {
+            System.out.println("No such request exists.");
+            return false;
+        }
+        if (request instanceof AddProductBySellerRequest) {
+            System.out.println("Add Product By Seller Request - Seller's username: " + ((AddProductBySellerRequest)request).getSeller().getUsername() + ", Product's ID: " + ((AddProductBySellerRequest)request).getProduct().getProductId());
+        } else if (request instanceof AddSaleBySellerRequest) {
+            System.out.println("Add Sale By Seller Request - Seller's username: " + ((AddSaleBySellerRequest)request).getSeller().getUsername() + ", Sale's ID: " + ((AddSaleBySellerRequest)request).getSale().getOffId());
+        } else if (request instanceof EditProductBySellerRequest) {
+            System.out.println("Edit Product By Seller Request - Seller's username: " + ((EditProductBySellerRequest)request).getSeller().getUsername() + ", wants to change details of product #" + ((EditProductBySellerRequest)request).getOldProduct().getProductId());
+        } else if (request instanceof EditSaleBySellerRequest) {
+            System.out.println("Edit Sale By Seller Request - Seller's username: " + ((EditSaleBySellerRequest)request).getSeller().getUsername() + ", wants to change details of sale #" + ((EditSaleBySellerRequest)request).getOldSale().getOffId());
+        } else if (request instanceof SellerRegistrationRequest) {
+            System.out.println("Seller Registration Request - Seller's username: " + ((SellerRegistrationRequest)request).getSeller().getUsername() + ", name: " + ((SellerRegistrationRequest)request).getSeller().getFirstName() + " " + ((SellerRegistrationRequest)request).getSeller().getLastName());
+        } else {
+            System.out.println("Request ID: #" + request.getId());
+        }
+        return false;
+    }
+
+    private boolean viewAllRequests() {
+        System.out.println("All Requests");
+        for (Request request : DataManager.shared().getAllRequests()) {
+            System.out.println("#" + request.getId());
+        }
+        return false;
+    }
+
+    private void showCategoryDetails(Category category) {
+        System.out.println("Category #" + category.getId());
+        System.out.println("Name: " + category.getName());
+        System.out.println("Description: " + category.getDescription());
+    }
+
+    private Category viewCategory() {
+        System.out.print("Enter category's ID: ");
+        int id = scanner.nextInt();
+        Category category = DataManager.shared().getCategoryWithId(id);
+        if (category == null) {
+            System.out.println("No category with the given ID exists");
+            return null;
+        }
+        showCategoryDetails(category);
+        return category;
+    }
+
+    public void editCategoryName(Category category) {
+        System.out.println("Current category name: " + category.getName());
+        System.out.print("Enter a new value for category's name ");
+        String newValue = scanner.nextLine();
+        category.setName(newValue);
+    }
+
+    public void editCategoryDescription(Category category) {
+        System.out.println("Current category description: " + category.getDescription());
+        System.out.print("Enter a new value for category's description ");
+        String newValue = scanner.nextLine();
+        category.setDescription(newValue);
+    }
+
+    private boolean editCategory() {
+        Category category = viewCategory();
+        if (category == null) return false;
+        System.out.println("Enter \"n\" to edit name and \"d\" to edit description");
+        String input = scanner.nextLine().trim();
+        switch (input) {
+            case "n":
+                editCategoryName(category);
+                break;
+            case "d":
+                editCategoryDescription(category);
+                break;
+            default:
+                System.out.println("Wrong letter was typed.");
+                return false;
+        }
+        System.out.println("Changed successfully");
+        return false;
+    }
+
+    private boolean removeCategory() {
+        Category category = viewCategory();
+        System.out.println("Are you sure you want to remove this category? Type \"y\" for yes and anything else for no.");
+        String confirmation = scanner.nextLine().trim();
+        if (confirmation.equals("y")) {
+            DataManager.shared().removeCategory(category, category.getParentCategory());
+        }
+        return false;
+    }
+
+    private boolean addCategory() {
+        // TODO: Not implemented
+        return false;
+    }
+
+    private boolean viewAllCategories() {
+        System.out.println("All Categories");
+        for (Category category : DataManager.shared().getAllCategories()) {
+            System.out.println("#" + category.getId() + " - " + category.getName());
+            System.out.println(category.getDescription());
+        }
         return false;
     }
 
@@ -298,6 +704,7 @@ public class AdministratorMenu extends Menu {
         for (Product product : DataManager.shared().getAllProducts()) {
             System.out.println("#" + product.getProductId() + " - " + product.getName());
         }
+        return false;
     }
 
     private boolean addAdmin() {
