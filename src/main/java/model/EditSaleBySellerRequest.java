@@ -5,6 +5,18 @@ public class EditSaleBySellerRequest extends Request {
     private Sale oldSale;
     private Sale newSale;
 
+    public Sale getNewSale() {
+        return newSale;
+    }
+
+    public Sale getOldSale() {
+        return oldSale;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
     public EditSaleBySellerRequest(Seller seller, Sale oldSale, Sale newSale) {
         this.seller = seller;
         this.oldSale = oldSale;

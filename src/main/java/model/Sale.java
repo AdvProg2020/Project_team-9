@@ -12,6 +12,10 @@ public class Sale {
     private Seller seller;
     private DeliveryStatus deliveryStatus;
 
+    public int getOffId() {
+        return offId;
+    }
+
     public Sale(int offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount, int startTime, int endTime, Seller seller, DeliveryStatus deliveryStatus) {
         this.offId = offId;
         this.products = products;
