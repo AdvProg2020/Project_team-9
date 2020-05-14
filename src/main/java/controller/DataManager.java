@@ -18,13 +18,36 @@ public class DataManager {
     private Account loggedInAccount;
     private ArrayList<Account> allAccounts = new ArrayList<>();
     private ArrayList<Product> allProducts = new ArrayList<>();
+    private ArrayList<Coupon> allCoupons = new ArrayList<>();
+    private ArrayList<Request> allRequests = new ArrayList<>();
+    private ArrayList<Category> allCategories = new ArrayList<>();
+    private ArrayList<Sale> allSales = new ArrayList<>();
 
     public ArrayList<Account> getAllAccounts() {
         return allAccounts;
     }
 
+    public ArrayList<Category> getAllCategories() {
+        return allCategories;
+    }
+
+    public ArrayList<Request> getAllRequests() {
+        return allRequests;
+    }
+
+    public Request getRequestWithID(int id) {
+        for (Request request : allRequests) {
+            if (request.getId() == id) return request;
+        }
+        return null;
+    }
+
     public Account getLoggedInAccount() {
         return loggedInAccount;
+    }
+
+    public ArrayList<Coupon> getAllCoupons() {
+        return allCoupons;
     }
 
     public ArrayList<Product> getAllProducts() {
@@ -139,6 +162,7 @@ public class DataManager {
     }
 
     public void addCoupon(Coupon coupon) {
+        allCoupons.add(coupon);
     }
 
     public void addRequest(Request request) {
@@ -151,16 +175,20 @@ public class DataManager {
     }
 
     public void removeCoupon(Coupon coupon) {
+        allCoupons.remove(coupon);
     }
 
     public void removeRequest(Request request) {
+        allRequests.remove(request);
     }
 
     public void removeAccount(Account account) {
         allAccounts.remove(account);
     }
 
-    public void removeCategory(Category category, Category superCategory) {
+    public void removeCategory(Category category, Category parent) {
+        parent.getSubCategories().removeIf(subCategory -> subCategory.getId() == category.getId());
+        allCategories.removeIf(c -> c.getId() == category.getId());
     }
 
     public void removeSale(Sale sale) {
@@ -171,18 +199,29 @@ public class DataManager {
     }
 
     public Coupon getCouponWithId(int id) {
-        return null;
-    }
-
-    public Account getAccountWithId(int id) {
+        for (Coupon coupon : allCoupons) {
+            if (coupon.getId() == id) {
+                return coupon;
+            }
+        }
         return null;
     }
 
     public Category getCategoryWithId(int id) {
+        for (Category category : allCategories) {
+            if (category.getId() == id) {
+                return category;
+            }
+        }
         return null;
     }
 
     public Sale getSaleWithId(int id) {
+        for (Sale sale : allSales) {
+            if (sale.getOffId() == id) {
+                return sale;
+            }
+        }
         return null;
     }
 

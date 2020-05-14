@@ -7,7 +7,40 @@ public class Category {
     private String name;
     private String description;
     private ArrayList<Category> subCategories;
+    private Category parentCategory;
     private ArrayList<Product> products;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public ArrayList<Category> getSubCategories() {
+        return subCategories;
+    }
+
+    public Category getParentCategory() {
+        return parentCategory;
+    }
 
     public Category(int id, String name, String description) {
         this.id = id;

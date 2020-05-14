@@ -20,5 +20,47 @@ public class Coupon {
         this.products = products;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public int getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public Status getSaleStatus() {
+        return saleStatus;
+    }
+
+    public int getMaximumDiscount() {
+        return maximumDiscount;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public Account[] getAccountsPermittedToUseThisCoupon() {
+        return accountsPermittedToUseThisCoupon;
+    }
+
+    public HashMap<Account, Integer> getRemainingUsagesCount() {
+        return remainingUsagesCount;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public void setMaximumDiscount(int maximumDiscount) {
+        this.maximumDiscount = maximumDiscount;
+    }
 }
