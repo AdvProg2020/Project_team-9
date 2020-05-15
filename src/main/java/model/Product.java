@@ -28,6 +28,14 @@ public class Product {
         this.description = description;
     }
 
+    public int getVisitCount() {
+        return visitCount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
     public void incrementVisitCount() {
         visitCount += 1;
     }
@@ -38,6 +46,14 @@ public class Product {
 
     public String getName() {
         return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Product newProduct(Product oldProduct) {

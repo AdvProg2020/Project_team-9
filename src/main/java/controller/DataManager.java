@@ -199,30 +199,19 @@ public class DataManager {
     }
 
     public Coupon getCouponWithId(int id) {
-        for (Coupon coupon : allCoupons) {
-            if (coupon.getId() == id) {
-                return coupon;
-            }
-        }
-        return null;
+        return allCoupons.stream().filter(coupon -> coupon.getId() == id).findFirst().orElse(null);
     }
 
     public Category getCategoryWithId(int id) {
-        for (Category category : allCategories) {
-            if (category.getId() == id) {
-                return category;
-            }
-        }
-        return null;
+        return allCategories.stream().filter(category -> category.getId() == id).findFirst().orElse(null);
+    }
+
+    public Product getProductWithId(int id) {
+        return allProducts.stream().filter(product -> product.getProductId() == id).findFirst().orElse(null);
     }
 
     public Sale getSaleWithId(int id) {
-        for (Sale sale : allSales) {
-            if (sale.getOffId() == id) {
-                return sale;
-            }
-        }
-        return null;
+        return allSales.stream().filter(sale -> sale.getOffId() == id).findFirst().orElse(null);
     }
 
 }

@@ -5,8 +5,7 @@ import model.Category;
 import model.Product;
 
 import javax.xml.crypto.Data;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class AllProductsMenu extends Menu {
 
@@ -293,7 +292,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(16, new Menu("View current sort method", this) {
+        subMenus.put(17, new Menu("View current sort method", this) {
             @Override
             public void show() {
             }
@@ -310,7 +309,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(16, new Menu("Disable sort method", this) {
+        subMenus.put(18, new Menu("Disable sort method", this) {
             @Override
             public void show() {
             }
@@ -326,6 +325,35 @@ public class AllProductsMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        subMenus.put(19, new Menu("Show product details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (showProductDetailsCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+    }
+
+    private boolean showProductDetailsCommand() {
+        System.out.print("Enter the desired product's ID to go into its details page: ");
+        int id = scanner.nextInt();
+        Product product = DataManager.shared().getProductWithId(id);
+        if (product == null) {
+            System.out.print("No product with the given ID exists.");
+            return false;
+        }
+        // TODO: Go to product details menu...
+        return false;
     }
 
     private boolean viewCurrentSortMethod() {
@@ -356,10 +384,51 @@ public class AllProductsMenu extends Menu {
     }
 
     private boolean viewAllProductsCommand() {
-        csjhlfqchefiggdkfheijd
+        findFilteredAndSortedProducts().stream()
+                .map(product -> "#" + product.getProductId() + " - " + product.getName())
+                .forEach(System.out::println);
+        return false;
+    }
+
+    private ArrayList<Product> findFilteredAndSortedProducts() {
+        ArrayList<Product> currentProducts = new ArrayList<>();
+        findFilteredProducts(currentProducts);
+        findSortedProducts(currentProducts);
+        return currentProducts;
+    }
+
+    private void findSortedProducts(ArrayList<Product> currentProducts) {
+        switch (sortingMethod) {
+            case VISIT_COUNT:
+                currentProducts.sort(Comparator.comparingInt(Product::getVisitCount));
+                break;
+            case NAME:
+                // TODO: Does the lambda structure work for name??
+                currentProducts.sort(Comparator.comparing(Product::getName));
+                break;
+            case PRICE:
+                currentProducts.sort(Comparator.comparingInt(Product::getPrice));
+                break;
+        }
+    }
+
+    private void findFilteredProducts(ArrayList<Product> currentProducts) {
+        addToCurrentProducts: for (Product product : DataManager.shared().getAllProducts()) {
+            if (!nameFilter.equals("") && !product.getName().contains(nameFilter)) continue;
+            if (!descriptionFilter.equals("") && !product.getDescription().contains(descriptionFilter)) continue;
+            if (priceFilter != 0 && product.getPrice() != priceFilter) continue;
+            if (filteredCategories.isEmpty()) continue;
+            for (Category category : filteredCategories) {
+                if (product.getCategory() == category) {
+                    currentProducts.add(product);
+                    continue addToCurrentProducts;
+                }
+            }
+        }
     }
 
     // TODO: Sort by time and score is not done
+    // TODO: Descending sort
 
     private boolean removeCategoryFilter() {
         System.out.println("Current categories filtered by:");
