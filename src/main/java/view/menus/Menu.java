@@ -5,14 +5,21 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public abstract class Menu {
-    private String name;
-    protected HashMap<Integer, Menu> submenus;
-    protected Menu parentMenu;
     public static Scanner scanner;
     protected static ArrayList<Menu> allMenus;
 
     static {
         allMenus = new ArrayList<>();
+    }
+
+    protected HashMap<Integer, Menu> submenus;
+    protected Menu parentMenu;
+    private String name;
+
+    public Menu(String name, Menu parentMenu) {
+        this.name = name;
+        this.parentMenu = parentMenu;
+        allMenus.add(this);
     }
 
     public static void setScanner(Scanner scanner) {
@@ -21,12 +28,6 @@ public abstract class Menu {
 
     public void setParentMenu(Menu parentMenu) {
         this.parentMenu = parentMenu;
-    }
-
-    public Menu(String name, Menu parentMenu) {
-        this.name = name;
-        this.parentMenu = parentMenu;
-        allMenus.add(this);
     }
 
     public String getName() {
@@ -72,6 +73,26 @@ public abstract class Menu {
             chosenMenu = Integer.parseInt(input);
         }
         return chosenMenu;
+    }
+
+    public String getString() {
+        return scanner.nextLine();
+    }
+
+    public String getStringWithPattern(String pattern) {
+        String input = "";
+        while (!input.matches(pattern))
+            input = getString();
+        return input;
+    }
+
+    public int getInt() {
+        String input = getStringWithPattern("\\d{1, 9}");
+        return Integer.parseInt(input);
+    }
+
+    public void showString(String string) {
+        System.out.println(string);
     }
 
     protected abstract void showHelp();

@@ -1,34 +1,20 @@
 package view.menus;
 
+import controller.DataManager;
+import controller.Validator;
+import model.Account;
 import model.Product;
 import model.Sale;
 
 import java.time.LocalDateTime;
 
-public class SellerMenu extends Menu {
+public class SellerMenu extends UserMenu {
     public SellerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
     }
 
-    private void viewPersonalInfo() {
-    }
-
-    private void editEmail() {
-    }
-
-    private void editFirstName() {
-    }
-
-    private void editLastName() {
-    }
-
-    private void editPhoneNumber() {
-    }
-
-    private void changePassword() {
-    }
-
     private void editCompanyInformation() {
+
     }
 
     private void viewSellLog() {
