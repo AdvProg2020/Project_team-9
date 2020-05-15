@@ -11,6 +11,7 @@ public abstract class Account {
     private String lastName;
     private ArrayList<Coupon> coupons;
     private ArrayList<Log> logs;
+    public ArrayList<Product> cart = new ArrayList<>();
     private int credit;
 
     public Account(String username, String password, String email,

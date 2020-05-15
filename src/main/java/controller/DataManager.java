@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DataManager {
     private static DataManager sharedInstance;
@@ -22,6 +23,15 @@ public class DataManager {
     private ArrayList<Request> allRequests = new ArrayList<>();
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
+    public ArrayList<Product> temporaryCart = new ArrayList<>();
+
+    public static String getNewId() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    public ArrayList<Sale> getAllSales() {
+        return allSales;
+    }
 
     public ArrayList<Account> getAllAccounts() {
         return allAccounts;
@@ -199,30 +209,19 @@ public class DataManager {
     }
 
     public Coupon getCouponWithId(int id) {
-        for (Coupon coupon : allCoupons) {
-            if (coupon.getId() == id) {
-                return coupon;
-            }
-        }
-        return null;
+        return allCoupons.stream().filter(coupon -> coupon.getId() == id).findFirst().orElse(null);
     }
 
     public Category getCategoryWithId(int id) {
-        for (Category category : allCategories) {
-            if (category.getId() == id) {
-                return category;
-            }
-        }
-        return null;
+        return allCategories.stream().filter(category -> category.getId() == id).findFirst().orElse(null);
+    }
+
+    public Product getProductWithId(int id) {
+        return allProducts.stream().filter(product -> product.getProductId() == id).findFirst().orElse(null);
     }
 
     public Sale getSaleWithId(int id) {
-        for (Sale sale : allSales) {
-            if (sale.getOffId() == id) {
-                return sale;
-            }
-        }
-        return null;
+        return allSales.stream().filter(sale -> sale.getOffId() == id).findFirst().orElse(null);
     }
 
 }

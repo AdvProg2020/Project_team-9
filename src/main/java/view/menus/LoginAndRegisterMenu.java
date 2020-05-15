@@ -6,6 +6,7 @@ import model.Customer;
 import model.Seller;
 
 import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LoginAndRegisterMenu extends Menu {
@@ -103,6 +104,8 @@ public class LoginAndRegisterMenu extends Menu {
         }
         System.out.println("Login Successful");
         if (result == DataManager.AccountType.CUSTOMER) {
+            DataManager.shared().getLoggedInAccount().cart.addAll(DataManager.shared().temporaryCart);
+            DataManager.shared().temporaryCart = new ArrayList<>();
             Menu menu = new CustomerMenu("Welcome", this);
             menu.show();
             menu.execute();

@@ -458,6 +458,8 @@ public class AdministratorMenu extends UserMenu {
         });
     }
 
+
+
     private boolean editCoupon() {
         Coupon coupon = viewCoupon();
         if (coupon == null) return false;
@@ -491,9 +493,10 @@ public class AdministratorMenu extends UserMenu {
             int newValue = scanner.nextInt();
             if (newValue < 0 || newValue > 100) {
                 System.out.print("Impossible value. Please enter a new value again: ");
-                break;
+                continue;
             }
             coupon.setDiscountPercent(newValue);
+            break;
         }
     }
 
