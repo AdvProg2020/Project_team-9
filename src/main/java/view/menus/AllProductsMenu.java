@@ -223,6 +223,8 @@ public class AllProductsMenu extends Menu {
         });
     }
 
+    // TODO: Sort by time and score is not done
+
     private boolean removeCategoryFilter() {
         System.out.println("Current categories filtered by:");
         filteredCategories.stream().map(category -> "#" + category.getId() + " - " + category.getName())
