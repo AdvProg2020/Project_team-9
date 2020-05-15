@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DataManager {
     private static DataManager sharedInstance;
@@ -23,6 +24,10 @@ public class DataManager {
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
     public ArrayList<Product> temporaryCart = new ArrayList<>();
+
+    public static String getNewId() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
 
     public ArrayList<Sale> getAllSales() {
         return allSales;
