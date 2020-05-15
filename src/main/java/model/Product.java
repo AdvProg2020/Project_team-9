@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Product {
-    private int productId;
+    private String productId;
     private Status status;
     private String name;
     private String brand;
@@ -16,6 +16,18 @@ public class Product {
     private String description;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
+
+    public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description) {
+        this.status = status;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.discountPercent = discountPercent;
+        this.sellers = sellers;
+        this.numberAvailable = numberAvailable;
+        this.category = category;
+        this.description = description;
+    }
 
     public Status getStatus() {
         return status;
@@ -35,18 +47,6 @@ public class Product {
 
     public ArrayList<Score> getScores() {
         return scores;
-    }
-
-    public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description) {
-        this.status = status;
-        this.name = name;
-        this.brand = brand;
-        this.price = price;
-        this.discountPercent = discountPercent;
-        this.sellers = sellers;
-        this.numberAvailable = numberAvailable;
-        this.category = category;
-        this.description = description;
     }
 
     public ArrayList<Seller> getSellers() {
@@ -73,7 +73,7 @@ public class Product {
         visitCount += 1;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
@@ -98,7 +98,7 @@ public class Product {
         for (Score score : scores) {
             total += score.getScore();
         }
-        return (double)(total) / scores.size();
+        return (double) (total) / scores.size();
     }
 
     public void addSeller(Seller seller) {

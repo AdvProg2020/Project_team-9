@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Coupon {
-    private int id;
+    private String id;
     private ArrayList<Product> products;
     private Status saleStatus;
     private int discountPercent;
@@ -15,17 +15,21 @@ public class Coupon {
     private Account[] accountsPermittedToUseThisCoupon;
     private HashMap<Account, Integer> remainingUsagesCount;
 
-    public Coupon(int id, ArrayList<Product> products) {
+    public Coupon(String id, ArrayList<Product> products) {
         this.id = id;
         this.products = products;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     public int getDiscountPercent() {
         return discountPercent;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
     }
 
     public ArrayList<Product> getProducts() {
@@ -38,6 +42,10 @@ public class Coupon {
 
     public int getMaximumDiscount() {
         return maximumDiscount;
+    }
+
+    public void setMaximumDiscount(int maximumDiscount) {
+        this.maximumDiscount = maximumDiscount;
     }
 
     public LocalDateTime getStartTime() {
@@ -54,13 +62,5 @@ public class Coupon {
 
     public HashMap<Account, Integer> getRemainingUsagesCount() {
         return remainingUsagesCount;
-    }
-
-    public void setDiscountPercent(int discountPercent) {
-        this.discountPercent = discountPercent;
-    }
-
-    public void setMaximumDiscount(int maximumDiscount) {
-        this.maximumDiscount = maximumDiscount;
     }
 }

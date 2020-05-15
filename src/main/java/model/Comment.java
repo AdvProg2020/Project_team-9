@@ -11,6 +11,15 @@ public class Comment {
     private CommentStatus commentStatus;
     //private boolean hasUserPurchasedProduct;
 
+    public Comment(Customer customer, Product product, String title, String text) {
+        this.id = DataManager.getNewId();
+        this.customer = customer;
+        this.product = product;
+        this.title = title;
+        this.text = text;
+        this.commentStatus = CommentStatus.WAITING_FOR_REVIEW;
+    }
+
     public String getId() {
         return id;
     }
@@ -29,15 +38,6 @@ public class Comment {
 
     public CommentStatus getCommentStatus() {
         return commentStatus;
-    }
-
-    public Comment(Customer customer, Product product, String title, String text) {
-        this.id = DataManager.getNewId();
-        this.customer = customer;
-        this.product = product;
-        this.title = title;
-        this.text = text;
-        this.commentStatus = CommentStatus.WAITING_FOR_REVIEW;
     }
 
     public String getTitle() {

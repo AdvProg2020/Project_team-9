@@ -3,14 +3,20 @@ package model;
 import java.util.ArrayList;
 
 public class Category {
-    private int id;
+    private String id;
     private String name;
     private String description;
     private ArrayList<Category> subCategories;
     private Category parentCategory;
     private ArrayList<Product> products;
 
-    public int getId() {
+    public Category(String id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -40,12 +46,6 @@ public class Category {
 
     public Category getParentCategory() {
         return parentCategory;
-    }
-
-    public Category(int id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
     }
 
     public ArrayList<Product> getAllProductsInCategories() {
