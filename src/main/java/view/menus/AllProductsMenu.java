@@ -4,7 +4,6 @@ import controller.DataManager;
 import model.Category;
 import model.Product;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class AllProductsMenu extends Menu {
