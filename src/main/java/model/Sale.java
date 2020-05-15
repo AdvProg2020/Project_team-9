@@ -16,6 +16,34 @@ public class Sale {
         return offId;
     }
 
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public SaleStatus getSaleStatus() {
+        return saleStatus;
+    }
+
+    public int getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
     public Sale(int offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount, int startTime, int endTime, Seller seller, DeliveryStatus deliveryStatus) {
         this.offId = offId;
         this.products = products;
@@ -26,8 +54,8 @@ public class Sale {
         this.seller = seller;
         this.deliveryStatus = deliveryStatus;
     }
-    public Sale newSale(Sale oldSale){
-        return null;
+
+    public void addProduct(Product product) {
+        products.add(product);
     }
-    public void addProduct(Product product){}
 }
