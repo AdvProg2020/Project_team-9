@@ -1,7 +1,9 @@
 package model;
 
+import controller.DataManager;
+
 public class Comment {
-    private int id;
+    private String id;
     private Customer customer;
     private Product product;
     private String title;
@@ -9,7 +11,7 @@ public class Comment {
     private CommentStatus commentStatus;
     //private boolean hasUserPurchasedProduct;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -29,13 +31,13 @@ public class Comment {
         return commentStatus;
     }
 
-    public Comment(int id, Customer customer, Product product, String title, String text, CommentStatus commentStatus) {
-        this.id = id;
+    public Comment(Customer customer, Product product, String title, String text) {
+        this.id = DataManager.getNewId();
         this.customer = customer;
         this.product = product;
         this.title = title;
         this.text = text;
-        this.commentStatus = commentStatus;
+        this.commentStatus = CommentStatus.WAITING_FOR_REVIEW;
     }
 
     public String getTitle() {
