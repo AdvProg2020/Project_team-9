@@ -6,7 +6,7 @@ import model.*;
 import javax.xml.crypto.Data;
 import java.util.HashMap;
 
-public class AdministratorMenu extends Menu {
+public class AdministratorMenu extends UserMenu {
     public AdministratorMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
         HashMap<Integer, Menu> subMenus = new HashMap<>();

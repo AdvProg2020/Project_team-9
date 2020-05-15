@@ -3,7 +3,7 @@ package view.menus;
 import controller.DataManager;
 import model.Product;
 
-public class CustomerMenu extends Menu {
+public class CustomerMenu extends UserMenu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
     }

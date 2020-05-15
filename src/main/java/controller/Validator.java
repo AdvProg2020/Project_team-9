@@ -15,4 +15,8 @@ public class Validator {
     public boolean emailIsValid(String email) {
         return email.matches("([\\w!#$%&'*+\\-/=?^_`{|}~]\\.?)+@[\\w\\-]+\\.\\w+");
     }
+
+    public boolean phoneNumberIsValid(String phoneNumber) {
+        return phoneNumber.matches("[\\d\\-()]+");
+    }
 }
