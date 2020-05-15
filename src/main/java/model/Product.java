@@ -11,12 +11,31 @@ public class Product {
     private int discountPercent;
     private int visitCount = 0;
     private ArrayList<Seller> sellers;
-    private ArrayList<Customer> customers;
     private int numberAvailable;
     private Category category;
     private String description;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public int getNumberAvailable() {
+        return numberAvailable;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public ArrayList<Score> getScores() {
+        return scores;
+    }
 
     public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description) {
         this.status = status;
