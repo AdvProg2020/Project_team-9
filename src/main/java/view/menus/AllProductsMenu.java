@@ -15,6 +15,9 @@ public class AllProductsMenu extends Menu {
     private String descriptionFilter = "";
     private int priceFilter = 0;
 
+    private enum SortingMethod { VISIT_COUNT, NAME, PRICE }
+    private SortingMethod sortingMethod = SortingMethod.VISIT_COUNT;
+
     public AllProductsMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
         HashMap<Integer, Menu> subMenus = new HashMap<>();
@@ -35,14 +38,14 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(2, new Menu("View all products matching the current filters", this) {
+        subMenus.put(2, new Menu("Show Products", this) {
             @Override
             public void show() {
             }
 
             @Override
             public void execute() {
-                if (viewMainCategoriesCommand()) return;
+                if (viewAllProductsCommand()) return;
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -221,6 +224,139 @@ public class AllProductsMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        subMenus.put(13, new Menu("Show available sorting methods", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (showAvailableSortingMethods()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(14, new Menu("Sort by visit count", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (setSortingMethod(SortingMethod.VISIT_COUNT)) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(15, new Menu("Sort by name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (setSortingMethod(SortingMethod.NAME)) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(16, new Menu("Sort by price", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (setSortingMethod(SortingMethod.PRICE)) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(16, new Menu("View current sort method", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewCurrentSortMethod()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(16, new Menu("Disable sort method", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (setSortingMethod(SortingMethod.VISIT_COUNT)) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+    }
+
+    private boolean viewCurrentSortMethod() {
+        switch (sortingMethod) {
+            case VISIT_COUNT:
+                System.out.println("Sorted by visit count (default sorting method)");
+                break;
+            case NAME:
+                System.out.println("Sorted by name");
+                break;
+            case PRICE:
+                System.out.println("Sorted by price");
+                break;
+        }
+        return false;
+    }
+
+    private boolean setSortingMethod(SortingMethod sortingMethod) {
+        this.sortingMethod = sortingMethod;
+        viewCurrentSortMethod();
+        return false;
+    }
+
+    private boolean showAvailableSortingMethods() {
+        System.out.println("You can type \"Sort by visit count\" (which is the default sorting method"
+                + "and therefor by sorting using visit count, other sorting methods are removed), \"Sort by name\", and \"Sort by price\".");
+        return false;
+    }
+
+    private boolean viewAllProductsCommand() {
+        csjhlfqchefiggdkfheijd
     }
 
     // TODO: Sort by time and score is not done
