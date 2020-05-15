@@ -1,5 +1,5 @@
 package model;
 
 public enum DeliveryStatus {
-    ORDERED,PROCESSED,QUEUED,DELIVERED
+    ORDERED, PROCESSED, QUEUED, DELIVERED
 }

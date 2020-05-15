@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public abstract class Account {
+    public ArrayList<Product> cart = new ArrayList<>();
     private String username;
     private String password;
     private String email;
@@ -11,7 +12,6 @@ public abstract class Account {
     private String lastName;
     private ArrayList<Coupon> coupons;
     private ArrayList<Log> logs;
-    public ArrayList<Product> cart = new ArrayList<>();
     private int credit;
 
     public Account(String username, String password, String email,
@@ -35,20 +35,40 @@ public abstract class Account {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String newEmail) {
+        this.email = newEmail;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String newPhoneNumber) {
+        this.phoneNumber = newPhoneNumber;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String newFirstName) {
+        this.firstName = newFirstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String newLastName) {
+        this.lastName = newLastName;
     }
 
     public ArrayList<Coupon> getCoupons() {
@@ -71,26 +91,6 @@ public abstract class Account {
         if (oldPassword.equals(password)) {
             password = newPassword;
         }
-    }
-
-    public void setEmail(String newEmail) {
-        this.email = newEmail;
-    }
-
-    public void setFirstName(String newFirstName) {
-        this.firstName = newFirstName;
-    }
-
-    public void setLastName(String newLastName) {
-        this.lastName = newLastName;
-    }
-
-    public void setPhoneNumber(String newPhoneNumber) {
-        this.phoneNumber = newPhoneNumber;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public boolean doesPasswordMatch(String password) {

@@ -31,10 +31,11 @@ public class Seller extends Account {
         return companyDetails;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) {
         products.add(product);
     }
-    public void addSale(Sale sale){
+
+    public void addSale(Sale sale) {
         sales.add(sale);
     }
 

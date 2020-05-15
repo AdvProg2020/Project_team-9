@@ -1,13 +1,14 @@
 package model;
 
 public abstract class Request {
-    private int id;
-
-    public int getId() {
-        return id;
-    }
+    private String id;
 
     public Request() {
     }
+
+    public String getId() {
+        return id;
+    }
+
     public abstract void fulfill();
 }
