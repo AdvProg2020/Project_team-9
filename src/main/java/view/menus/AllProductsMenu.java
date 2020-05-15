@@ -351,6 +351,7 @@ public class AllProductsMenu extends Menu {
             System.out.print("No product with the given ID exists.");
             return false;
         }
+        product.incrementVisitCount();
         // TODO: Go to product details menu...
         return false;
     }

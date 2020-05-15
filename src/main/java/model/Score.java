@@ -6,12 +6,18 @@ public class Score {
     private int id;
     private Customer customer;
     private int score;
-    private Product product;
 
-    public Score(int id, Customer customer, int score, Product product) {
+    public int getScore() {
+        return score;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Score(int id, Customer customer, int score) {
         this.id = id;
         this.customer = customer;
         this.score = score;
-        this.product = product;
     }
 }
