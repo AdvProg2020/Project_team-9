@@ -22,6 +22,7 @@ public class DataManager {
     private ArrayList<Request> allRequests = new ArrayList<>();
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
+    public ArrayList<Product> temporaryCart = new ArrayList<>();
 
     public ArrayList<Account> getAllAccounts() {
         return allAccounts;
