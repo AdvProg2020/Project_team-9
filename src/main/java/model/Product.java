@@ -8,6 +8,7 @@ public class Product {
     private String name;
     private String brand;
     private int price;
+    private int visitCount = 0;
     private ArrayList<Seller> sellers;
     private ArrayList<Customer> customers;
     private int numberAvailable;
@@ -27,12 +28,32 @@ public class Product {
         this.description = description;
     }
 
+    public int getVisitCount() {
+        return visitCount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void incrementVisitCount() {
+        visitCount += 1;
+    }
+
     public int getProductId() {
         return productId;
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Product newProduct(Product oldProduct) {
