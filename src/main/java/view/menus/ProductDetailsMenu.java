@@ -1,10 +1,7 @@
 package view.menus;
 
 import controller.DataManager;
-import model.Comment;
-import model.CommentStatus;
-import model.Product;
-import model.Seller;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,12 +160,18 @@ public class ProductDetailsMenu extends Menu {
     // TODO: Replace all scanner inputs with better equivalents
 
     private boolean addCommentCommand() {
+        if (DataManager.shared().getLoggedInAccount() != null || !(DataManager.shared().getLoggedInAccount() instanceof Customer)) {
+            System.out.println("You should log in as a customer to post comments");
+            return false;
+        }
         System.out.print("Enter comment's title: ");
         String title = scanner.nextLine();
         System.out.print("Enter comment's content: ");
         String text = scanner.nextLine();
-        // TODO: Not implemented: Create new comment... set the ID...
-
+        Comment comment = new Comment((Customer) DataManager.shared().getLoggedInAccount(), currentProduct, title, text);
+        currentProduct.addComment(comment);
+        // TODO: Save data???
+        System.out.println("Comment was registered successfully and is waiting to be reviewed");
         return false;
     }
 
