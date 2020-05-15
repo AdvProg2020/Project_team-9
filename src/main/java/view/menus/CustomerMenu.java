@@ -1,19 +1,17 @@
 package view.menus;
 
-import controller.DataManager;
 import model.Product;
 
-public class CustomerMenu extends UserMenu {
+public class CustomerMenu extends Menu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
     }
 
     private void viewPersonalInfo() {
-        System.out.println(DataManager.shared().getLoggedInAccount());
+        System.out.println();
     }
 
     private void editEmail() {
-        
     }
 
     private void editFirstName() {
