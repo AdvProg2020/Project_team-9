@@ -4,7 +4,6 @@ import controller.DataManager;
 import model.Category;
 import model.Product;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class AllProductsMenu extends Menu {
@@ -352,6 +351,7 @@ public class AllProductsMenu extends Menu {
             System.out.print("No product with the given ID exists.");
             return false;
         }
+        product.incrementVisitCount();
         // TODO: Go to product details menu...
         return false;
     }
