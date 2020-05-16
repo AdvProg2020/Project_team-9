@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public abstract class Account {
-    public ArrayList<Product> cart = new ArrayList<>();
+    public Cart cart = new Cart();
     private String username;
     private String password;
     private String email;

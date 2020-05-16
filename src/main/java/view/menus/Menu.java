@@ -79,15 +79,18 @@ public abstract class Menu {
         return scanner.nextLine();
     }
 
-    public String getStringWithPattern(String pattern) {
-        String input = "";
-        while (!input.matches(pattern))
+    public String getStringWithPattern(String pattern, String messageInCaseOfRepeat) {
+        String input = getString();
+        while (!input.matches(pattern)) {
+            showString(messageInCaseOfRepeat);
             input = getString();
+        }
         return input;
     }
 
     public int getInt() {
-        String input = getStringWithPattern("\\d{1, 9}");
+        String input = getStringWithPattern("\\d{1, 9}",
+                "Please enter a valid integer less than 1,000,000,000.");
         return Integer.parseInt(input);
     }
 
