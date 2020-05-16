@@ -23,7 +23,7 @@ public class DataManager {
     private ArrayList<Request> allRequests = new ArrayList<>();
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
-    public ArrayList<Product> temporaryCart = new ArrayList<>();
+    public Cart temporaryCart = new Cart();
 
     public static String getNewId() {
         return UUID.randomUUID().toString().replace("-", "");
@@ -45,9 +45,9 @@ public class DataManager {
         return allRequests;
     }
 
-    public Request getRequestWithID(int id) {
+    public Request getRequestWithID(String id) {
         for (Request request : allRequests) {
-            if (request.getId() == id) return request;
+            if (request.getId().equals(id)) return request;
         }
         return null;
     }
@@ -78,18 +78,18 @@ public class DataManager {
         return sharedInstance;
     }
 
-    public void removeProduct(int productID) {
+    public void removeProduct(String productID) {
         for (Product product : allProducts) {
-            if (product.getProductId() == productID) {
+            if (product.getProductId().equals(productID)) {
                 allProducts.remove(product);
                 return;
             }
         }
     }
 
-    public Product productWithID(int id) {
+    public Product productWithID(String id) {
         for (Product product : allProducts) {
-            if (product.getProductId() == id) {
+            if (product.getProductId().equals(id)) {
                 return product;
             }
         }
@@ -197,8 +197,8 @@ public class DataManager {
     }
 
     public void removeCategory(Category category, Category parent) {
-        parent.getSubCategories().removeIf(subCategory -> subCategory.getId() == category.getId());
-        allCategories.removeIf(c -> c.getId() == category.getId());
+        parent.getSubCategories().removeIf(subCategory -> subCategory.getId().equals(category.getId()));
+        allCategories.removeIf(c -> c.getId().equals(category.getId()));
     }
 
     public void removeSale(Sale sale) {
@@ -208,20 +208,20 @@ public class DataManager {
         return null;
     }
 
-    public Coupon getCouponWithId(int id) {
-        return allCoupons.stream().filter(coupon -> coupon.getId() == id).findFirst().orElse(null);
+    public Coupon getCouponWithId(String id) {
+        return allCoupons.stream().filter(coupon -> coupon.getId().equals(id)).findFirst().orElse(null);
     }
 
-    public Category getCategoryWithId(int id) {
-        return allCategories.stream().filter(category -> category.getId() == id).findFirst().orElse(null);
+    public Category getCategoryWithId(String id) {
+        return allCategories.stream().filter(category -> category.getId().equals(id)).findFirst().orElse(null);
     }
 
-    public Product getProductWithId(int id) {
-        return allProducts.stream().filter(product -> product.getProductId() == id).findFirst().orElse(null);
+    public Product getProductWithId(String id) {
+        return allProducts.stream().filter(product -> product.getProductId().equals(id)).findFirst().orElse(null);
     }
 
-    public Sale getSaleWithId(int id) {
-        return allSales.stream().filter(sale -> sale.getOffId() == id).findFirst().orElse(null);
+    public Sale getSaleWithId(String id) {
+        return allSales.stream().filter(sale -> sale.getOffId().equals(id)).findFirst().orElse(null);
     }
 
 }
