@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Seller extends Account {
     private String companyDetails;
     private boolean isPermittedToSell;
-    private ArrayList<Product> products;
-    private ArrayList<Sale> sales;
+    private ArrayList<String> products;
+    private ArrayList<String> sales;
 
     public Seller(String username, String password, String email, String phone, String firstName, String lastName, String companyDetails) {
         super(username, password, email, phone, firstName, lastName);
@@ -32,11 +32,11 @@ public class Seller extends Account {
     }
 
     public void addProduct(Product product) {
-        products.add(product);
+        products.add(product.getProductId());
     }
 
     public void addSale(Sale sale) {
-        sales.add(sale);
+        sales.add(sale.getOffId());
     }
 
     @Override

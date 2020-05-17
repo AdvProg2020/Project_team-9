@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Customer extends Account {
+    // TODO: Does containing cart make error for Gson??
     private Cart cart;
     private String address = "";
 

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
 
-import javax.xml.crypto.Data;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -23,7 +22,16 @@ public class DataManager {
     private ArrayList<Request> allRequests = new ArrayList<>();
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
+    private ArrayList<Log> allLogs = new ArrayList<>();
     private Cart temporaryCart = new Cart();
+
+    public ArrayList<Log> getAllLogs() {
+        return allLogs;
+    }
+
+    public void setAllLogs(ArrayList<Log> allLogs) {
+        this.allLogs = allLogs;
+    }
 
     public Cart getTemporaryCart() {
         return temporaryCart;
@@ -56,6 +64,13 @@ public class DataManager {
     public Request getRequestWithID(String id) {
         for (Request request : allRequests) {
             if (request.getId().equals(id)) return request;
+        }
+        return null;
+    }
+
+    public Log getLogWithId(String id) {
+        for (Log log : allLogs) {
+            if (log.getId().equals(id)) return log;
         }
         return null;
     }

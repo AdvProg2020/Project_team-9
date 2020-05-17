@@ -1,6 +1,9 @@
 package model;
 
+import controller.DataManager;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public abstract class Account {
     private String username;
@@ -9,8 +12,8 @@ public abstract class Account {
     private String phoneNumber;
     private String firstName;
     private String lastName;
-    private ArrayList<Coupon> coupons;
-    private ArrayList<Log> logs;
+    private ArrayList<String> coupons;
+    private ArrayList<String> logs;
     private int credit;
 
     public Account(String username, String password, String email,
@@ -87,19 +90,19 @@ public abstract class Account {
     }
 
     public ArrayList<Coupon> getCoupons() {
-        return coupons;
+        return coupons.stream().map(id -> DataManager.shared().getCouponWithId(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Log> getLogs() {
-        return logs;
+        return logs.stream().map(id -> DataManager.shared().getLogWithId(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void addCoupon(Coupon coupon) {
-        coupons.add(coupon);
+        coupons.add(coupon.getId());
     }
 
     public void addLog(Log log) {
-        logs.add(log);
+        logs.add(log.getId());
     }
 
     public void changePassword(String oldPassword, String newPassword) {
