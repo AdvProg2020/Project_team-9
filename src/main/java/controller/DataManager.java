@@ -29,6 +29,18 @@ public class DataManager {
         return allLogs;
     }
 
+    public void logout() {
+        loggedInAccount= null;
+        DataManager.saveData();
+    }
+
+    public PurchaseLog purchaseLogForCustomerById(Customer customer, String id) {
+        return (PurchaseLog) allLogs.stream()
+                .filter(log -> log instanceof PurchaseLog && log.getId().equals(id)
+                        && ((PurchaseLog) log).getCustomer().getUsername().equals(customer.getUsername()))
+                .findFirst().orElse(null);
+    }
+
     public void setAllLogs(ArrayList<Log> allLogs) {
         this.allLogs = allLogs;
         saveData();
@@ -142,7 +154,6 @@ public class DataManager {
         return DataManager.AccountType.NONE;
     }
 
-    // TODO: This admin registration problems...
     public boolean hasAnyAdminRegistered() {
         for (Account account : allAccounts) {
             if (account instanceof Administrator) return true;

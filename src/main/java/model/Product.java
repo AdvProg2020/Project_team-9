@@ -31,6 +31,8 @@ public class Product {
         this.numberAvailable = numberAvailable;
         this.category = category.getId();
         this.description = description;
+        this.comments = new ArrayList<>();
+        this.scores = new ArrayList<>();
     }
 
     public Status getStatus() {
@@ -114,12 +116,12 @@ public class Product {
     }
 
     public void addComment(Comment comment) {
-
+        comments.add(comment);
         DataManager.saveData();
     }
 
-    public void addScore(Score score) {
-
+    public void addScore(int rating, Customer customer) {
+        scores.add(new Score(DataManager.getNewId(), customer, rating));
         DataManager.saveData();
     }
 }

@@ -46,7 +46,6 @@ public class Comment {
     }
 
     public boolean hasUserPurchasedProduct() {
-        // TODO: Not implemented (and also as a result, when a user sees this...)
-        return false;
+        return getCustomer().hasPurchasedProduct(getProduct());
     }
 }

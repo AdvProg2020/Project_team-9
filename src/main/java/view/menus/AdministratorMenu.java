@@ -456,9 +456,31 @@ public class AdministratorMenu extends UserMenu {
 
             }
         });
+
+        subMenus.put(27, new Menu("Logout", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+                if (logoutCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
     }
 
-
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        return true;
+    }
 
     private boolean editCoupon() {
         Coupon coupon = viewCoupon();

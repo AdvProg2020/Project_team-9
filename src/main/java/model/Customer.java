@@ -41,7 +41,10 @@ public class Customer extends Account {
     }
 
     public boolean hasPurchasedProduct(Product product) {
-        return cart.containsProduct(product);
+        return DataManager.shared().getAllLogs().stream()
+                .anyMatch(log -> log instanceof PurchaseLog
+                        && ((PurchaseLog) log).getCustomer().getUsername().equals(this.getUsername())
+                        && log.getProducts().contains(product));
     }
 
     @Override
