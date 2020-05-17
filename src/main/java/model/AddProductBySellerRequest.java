@@ -1,20 +1,24 @@
 package model;
 
+import controller.DataManager;
+
 public class AddProductBySellerRequest extends Request {
-    private Seller seller;
-    private Product product;
+    private String seller;
+    private String product;
+
+    // TODO" Fulfilling requests...
 
     public AddProductBySellerRequest(Seller seller, Product product) {
-        this.seller = seller;
-        this.product = product;
+        this.seller = seller.getUsername();
+        this.product = product.getProductId();
     }
 
     public Seller getSeller() {
-        return seller;
+        return (Seller)(DataManager.shared().getAccountWithGivenUsername(seller));
     }
 
     public Product getProduct() {
-        return product;
+        return DataManager.shared().getProductWithId(product);
     }
 
     @Override

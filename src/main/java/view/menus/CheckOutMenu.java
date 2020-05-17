@@ -48,7 +48,6 @@ public class CheckOutMenu extends Menu {
             double price = ((Product)pair.getKey()).getPrice();
             totalPrice += price;
             System.out.println(pair.getValue() + "x\t" + ((Product)pair.getKey()).getName() + "\t$" + price);
-            it.remove();
         }
         System.out.println("");
         // TODO: Sale not used here...!

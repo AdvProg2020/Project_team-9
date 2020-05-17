@@ -1,20 +1,22 @@
 package model;
 
+import controller.DataManager;
+
 public class AddSaleBySellerRequest extends Request {
-    private Seller seller;
-    private Sale sale;
+    private String seller;
+    private String sale;
 
     public AddSaleBySellerRequest(Seller seller, Sale sale) {
-        this.seller = seller;
-        this.sale = sale;
+        this.seller = seller.getUsername();
+        this.sale = sale.getOffId();
     }
 
     public Seller getSeller() {
-        return seller;
+        return (Seller)(DataManager.shared().getAccountWithGivenUsername(seller));
     }
 
     public Sale getSale() {
-        return sale;
+        return DataManager.shared().getSaleWithId(sale);
     }
 
     @Override

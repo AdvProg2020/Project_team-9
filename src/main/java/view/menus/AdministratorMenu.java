@@ -517,7 +517,7 @@ public class AdministratorMenu extends UserMenu {
 
     private Coupon viewCoupon() {
         System.out.print("Enter coupon's ID: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         Coupon coupon = DataManager.shared().getCouponWithId(id);
         if (coupon == null) {
             System.out.println("No coupon with the given ID exists");
@@ -538,7 +538,7 @@ public class AdministratorMenu extends UserMenu {
 
     private boolean removeCoupon() {
         System.out.print("Enter an ID to remove the related coupon: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         Coupon coupon = DataManager.shared().getCouponWithId(id);
         if (coupon == null) {
             System.out.println("No coupon with the given ID exists");
@@ -564,7 +564,7 @@ public class AdministratorMenu extends UserMenu {
 
     private Request getRequestWithIDFromUser() {
         System.out.print("Enter the request ID: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         return DataManager.shared().getRequestWithID(id);
     }
 
@@ -622,7 +622,7 @@ public class AdministratorMenu extends UserMenu {
 
     private Category viewCategory() {
         System.out.print("Enter category's ID: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         Category category = DataManager.shared().getCategoryWithId(id);
         if (category == null) {
             System.out.println("No category with the given ID exists");
@@ -692,7 +692,7 @@ public class AdministratorMenu extends UserMenu {
 
     private boolean removeProduct() {
         System.out.print("Enter the id of the product you want to remove completely: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         var product = DataManager.shared().productWithID(id);
         if (product == null) {
             System.out.println("No product exists with the given ID");
