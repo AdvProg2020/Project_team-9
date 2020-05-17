@@ -138,6 +138,8 @@ public class ProductDetailsMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        this.setSubMenus(subMenus);
     }
 
     // TODO: Replace all scanner inputs with better equivalents

@@ -341,6 +341,8 @@ public class AllProductsMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        this.setSubMenus(subMenus);
     }
 
     private boolean showProductDetailsCommand() {

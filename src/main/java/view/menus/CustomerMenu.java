@@ -129,6 +129,8 @@ public class CustomerMenu extends Menu {
 
             }
         });
+
+        this.setSubMenus(subMenus);
     }
 
     private boolean logoutCommand() {
