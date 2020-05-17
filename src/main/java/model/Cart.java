@@ -57,4 +57,10 @@ public class Cart {
     public boolean containsProduct(Product product) {
         return products.containsKey(product.getProductId());
     }
+
+    public long getPrice(){
+        HashMap<Product,Integer> products = getProducts();
+        long price = products.keySet().stream().mapToLong(Product::getPrice).sum();
+        return price;
+    }
 }

@@ -155,6 +155,7 @@ public class ProductDetailsMenu extends Menu {
             protected void showHelp() {
             }
         });
+        subMenus.put()
     }
 
     // TODO: Replace all scanner inputs with better equivalents
@@ -230,7 +231,7 @@ public class ProductDetailsMenu extends Menu {
         return false;
     }
 
-    private boolean attributesCommand() {
+    public boolean attributesCommand() {
         System.out.println("Product #" + currentProduct.getProductId());
         System.out.println("Name: " + currentProduct.getName());
         System.out.println("Brand: " + currentProduct.getBrand());
