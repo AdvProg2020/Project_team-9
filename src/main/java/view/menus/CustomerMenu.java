@@ -1,13 +1,9 @@
 package view.menus;
 
 import controller.DataManager;
-import model.Comment;
-import model.Customer;
-import model.Product;
-import model.Score;
+import model.*;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class CustomerMenu extends Menu {
     Product currentProduct;
@@ -38,10 +34,10 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(3, new Menu("Increment Product's Number In Cart", this) {
+        subMenus.put(3, new Menu("View PurchaseLog",this) {
             @Override
             public void execute() {
-                incrementProductCountInCart();
+                viewPurchaseLog();
             }
 
             @Override
@@ -49,41 +45,36 @@ public class CustomerMenu extends Menu {
 
             }
         })
+
     }
 
     private void viewCart() {
         Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
-        for (Product product : customer.getCart()) {
-            if (customer.getCart() == null) {
+        for (int counter = 0; counter < customer.getCart().getProducts().size(); counter++) {
+            if (customer.getCart().getProducts().size() == 0) {
                 System.out.println("There is no product in your cart yet");
                 break;
             }
-            int counter = 0;
-            counter++;
-            System.out.println(counter + ". " + product);
+            System.out.println((counter+1) + ". " + customer.getCart().getProducts().get(counter));
         }
     }
 
     private void showProduct() {
         System.out.println("Enter the product id you want to show:");
-        int id = scanner.nextInt();
-        currentProduct = DataManager.shared().productWithID(id);
+        String id = scanner.next();
+        currentProduct = DataManager.shared().getProductWithId(id);
         if (currentProduct == null) {
             System.out.println("No product exists with the given ID");
             return;
         }
+        currentProduct.incrementVisitCount();
         new ProductDetailsMenu("ProductDetailsMenu", parentMenu, currentProduct);
     }
 
 
-    private void incrementProductCountInCart() {
-
-    }
-
-    private void decrementProductCountInCart() {
-    }
-
     private void viewPurchaseLog() {
+        Customer customer = (Customer)DataManager.shared().getLoggedInAccount();
+        // TODO : need to be completed
     }
 
     @Override
