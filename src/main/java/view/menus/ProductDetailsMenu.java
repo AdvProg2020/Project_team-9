@@ -281,12 +281,16 @@ public class ProductDetailsMenu extends Menu {
         return false;
     }
 
+
     private Cart getCurrentCart() {
         if (DataManager.shared().getLoggedInAccount() == null) {
-            return DataManager.shared().temporaryCart;
+            return DataManager.shared().getTemporaryCart();
         } else {
-            return DataManager.shared().getLoggedInAccount().cart;
+            if (DataManager.shared().getLoggedInAccount() != null && (DataManager.shared().getLoggedInAccount() instanceof Customer)) {
+                return ((Customer)(DataManager.shared().getLoggedInAccount())).getCart();
+            }
         }
+        return new Cart();
     }
 
     private boolean digestCommand() {

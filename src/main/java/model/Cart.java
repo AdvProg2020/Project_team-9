@@ -1,14 +1,20 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Cart {
     HashMap<Product, Integer> products;
 
     public Cart() {
         products = new HashMap<>();
+    }
+
+    public HashMap<Product, Integer> getProducts() {
+        return products;
+    }
+
+    public void setProducts(HashMap<Product, Integer> products) {
+        this.products = products;
     }
 
     public void addProduct(Product product, int quantity) {
