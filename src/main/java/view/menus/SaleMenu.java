@@ -47,7 +47,7 @@ public class SaleMenu extends Menu {
 
     private boolean showProductDetailsCommand() {
         System.out.print("Enter the desired product's ID to go into its details page: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         Product product = DataManager.shared().getProductWithId(id);
         if (product == null) {
             System.out.print("No product with the given ID exists.");

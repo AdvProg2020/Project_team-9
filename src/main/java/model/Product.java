@@ -1,18 +1,22 @@
 package model;
 
+import controller.DataManager;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Product {
     private String productId;
+    // TODO: enum in Gson?
     private Status status;
     private String name;
     private String brand;
     private int price;
     private int discountPercent;
     private int visitCount = 0;
-    private ArrayList<Seller> sellers;
+    private ArrayList<String> sellers;
     private int numberAvailable;
-    private Category category;
+    private String category;
     private String description;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
@@ -23,9 +27,9 @@ public class Product {
         this.brand = brand;
         this.price = price;
         this.discountPercent = discountPercent;
-        this.sellers = sellers;
+        this.sellers = sellers.stream().map(Account::getUsername).collect(Collectors.toCollection(ArrayList::new));
         this.numberAvailable = numberAvailable;
-        this.category = category;
+        this.category = category.getId();
         this.description = description;
     }
 
@@ -50,7 +54,7 @@ public class Product {
     }
 
     public ArrayList<Seller> getSellers() {
-        return sellers;
+        return sellers.stream().map(id -> (Seller)DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public int getDiscountPercent() {
@@ -59,6 +63,7 @@ public class Product {
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
+        DataManager.saveData();
     }
 
     public int getVisitCount() {
@@ -66,11 +71,12 @@ public class Product {
     }
 
     public Category getCategory() {
-        return category;
+        return DataManager.shared().getCategoryWithId(category);
     }
 
     public void incrementVisitCount() {
         visitCount += 1;
+        DataManager.saveData();
     }
 
     public String getProductId() {
@@ -89,10 +95,6 @@ public class Product {
         return description;
     }
 
-    public Product newProduct(Product oldProduct) {
-        return null;
-    }
-
     public double getAverageScore() {
         int total = 0;
         for (Score score : scores) {
@@ -103,17 +105,21 @@ public class Product {
 
     public void addSeller(Seller seller) {
 
+        DataManager.saveData();
     }
 
     public void addCustomer(Customer customer) {
 
+        DataManager.saveData();
     }
 
     public void addComment(Comment comment) {
 
+        DataManager.saveData();
     }
 
     public void addScore(Score score) {
 
+        DataManager.saveData();
     }
 }

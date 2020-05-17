@@ -1,15 +1,19 @@
 package model;
 
+import controller.DataManager;
+
 import java.util.ArrayList;
 
 public class Customer extends Account {
-    private ArrayList<Product> cart;
+    // TODO: Does containing cart make error for Gson??
+    private Cart cart;
+    private String address = "";
 
     public Customer(String username, String password, String email, String phone, String firstName, String lastName) {
-        this(username, password, email, phone, firstName, lastName, new ArrayList<>());
+        this(username, password, email, phone, firstName, lastName, new Cart());
     }
 
-    public Customer(String username, String password, String email, String phoneNumber, String firstName, String lastName, ArrayList<Product> cart) {
+    public Customer(String username, String password, String email, String phoneNumber, String firstName, String lastName, Cart cart) {
         super(username, password, email, phoneNumber, firstName, lastName);
         this.cart = cart;
     }
@@ -18,16 +22,26 @@ public class Customer extends Account {
         this(account.getUsername(), account.getPassword(), account.getEmail(), account.getPhoneNumber(), account.getFirstName(), account.getLastName());
     }
 
-    public ArrayList<Product> getCart() {
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+        DataManager.saveData();
+    }
+
+    public Cart getCart() {
         return cart;
     }
 
     public void addProductToCart(Product product) {
-        cart.add(product);
+        cart.addProduct(product);
+        DataManager.saveData();
     }
 
     public boolean hasPurchasedProduct(Product product) {
-        return cart.contains(product);
+        return cart.containsProduct(product);
     }
 
     @Override

@@ -4,7 +4,7 @@ import model.*;
 
 public class MainController {
     private Account loggedInAccount;
-    private Product[] temporaryCart;
+    private Cart temporaryCart;
 
     public MainController() {
     }
@@ -27,79 +27,62 @@ public class MainController {
     public void changePassword(String oldPassword, String newPassword) {
     }
 
-    public void setFirstName(String newValue) {
-    }
-
-    public void setLastName(String newValue) {
-    }
-
-    public void setEmail(String newValue) {
-    }
-
     public void setPhoneNumber(String newValue) {
-    }
-
-    public void setCompanyDetails(String newValue) {
     }
 
     public String getUsername() {
         return null;
     }
 
-    ;
-
     public String getFirstName() {
         return null;
     }
 
-    ;
+    public void setFirstName(String newValue) {
+    }
 
     public String getLastName() {
         return null;
     }
 
-    ;
+    public void setLastName(String newValue) {
+    }
 
     public String getEmail() {
         return null;
     }
 
-    ;
+    public void setEmail(String newValue) {
+    }
 
     public String getPhone() {
         return null;
     }
 
-    ;
-
     public String getCompanyDetails() {
         return null;
     }
 
-    ;
+    public void setCompanyDetails(String newValue) {
+    }
 
     public Account[] getAllAccounts() {
         return null;
     }
 
-    ;
-
     public String getLoggedInAccountDetails() {
         return null;
     }
 
-    ;
 
     public Account getLoggedInAccount() {
         return null;
     }
 
-    ;
 
     public void deleteAccount(String username) {
     }
 
-    ;
 
     public void removeProductFromAllProducts(int productId) {
     }
@@ -157,8 +140,8 @@ public class MainController {
         return null;
     }
 
-    public boolean addProductToCart(Product product) {
-        return false;
+    public void addProductToCart(Product product) {
+        temporaryCart.addProduct(product);
     }
 
     public boolean checkout() {
@@ -177,11 +160,12 @@ public class MainController {
     public void addSale(Sale sale) {
     }
 
-    public Product[] getCart() {
-        return null;
+    public Cart getCart() {
+        return temporaryCart;
     }
 
     public void incrementCountOfProductInCart(Product product) {
+        temporaryCart.addProduct(product);
     }
 
     public void requestEditingProductName(Product oldProduct, Product newProduct) {

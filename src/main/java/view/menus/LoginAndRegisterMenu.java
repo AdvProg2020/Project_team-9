@@ -104,8 +104,10 @@ public class LoginAndRegisterMenu extends Menu {
         }
         System.out.println("Login Successful");
         if (result == DataManager.AccountType.CUSTOMER) {
-            DataManager.shared().getLoggedInAccount().cart.addAll(DataManager.shared().temporaryCart);
-            DataManager.shared().temporaryCart = new ArrayList<>();
+            // TODO: Does it work??
+            ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts().putAll(DataManager.shared().getTemporaryCart().getProducts());
+            DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
+            DataManager.saveData();
             Menu menu = new CustomerMenu("Welcome", this);
             menu.show();
             menu.execute();

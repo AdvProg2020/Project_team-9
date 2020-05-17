@@ -1,23 +1,28 @@
 package model;
 
+import controller.DataManager;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class Coupon {
     private String id;
-    private ArrayList<Product> products;
+    private ArrayList<String> products;
+    // TODO: enums in Gson...
     private Status saleStatus;
     private int discountPercent;
     private int maximumDiscount;
+    // TODO: LocalDateTime in Gson???
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Account[] accountsPermittedToUseThisCoupon;
-    private HashMap<Account, Integer> remainingUsagesCount;
+    private ArrayList<String> accountsPermittedToUseThisCoupon;
+    private HashMap<String, Integer> remainingUsagesCount;
 
     public Coupon(String id, ArrayList<Product> products) {
         this.id = id;
-        this.products = products;
+        this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String getId() {
@@ -30,10 +35,11 @@ public class Coupon {
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
+        DataManager.saveData();
     }
 
     public ArrayList<Product> getProducts() {
-        return products;
+        return products.stream().map(id -> DataManager.shared().getProductWithId(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Status getSaleStatus() {
@@ -46,6 +52,7 @@ public class Coupon {
 
     public void setMaximumDiscount(int maximumDiscount) {
         this.maximumDiscount = maximumDiscount;
+        DataManager.saveData();
     }
 
     public LocalDateTime getStartTime() {
@@ -56,11 +63,9 @@ public class Coupon {
         return endTime;
     }
 
-    public Account[] getAccountsPermittedToUseThisCoupon() {
-        return accountsPermittedToUseThisCoupon;
+    public ArrayList<Account> getAccountsPermittedToUseThisCoupon() {
+        return accountsPermittedToUseThisCoupon.stream().map(id -> DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public HashMap<Account, Integer> getRemainingUsagesCount() {
-        return remainingUsagesCount;
-    }
+    // TODO: getter for remaining usages count...
 }

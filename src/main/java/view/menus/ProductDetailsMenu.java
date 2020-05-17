@@ -190,7 +190,7 @@ public class ProductDetailsMenu extends Menu {
 
     private boolean compareCommand() {
         System.out.print("Enter another product ID: ");
-        int id = scanner.nextInt();
+        String id = getString();
         Product product = DataManager.shared().getProductWithId(id);
         if (product == null) {
             System.out.println("No such product exists");
@@ -261,33 +261,37 @@ public class ProductDetailsMenu extends Menu {
     }
 
     private boolean addToCart() {
-        ArrayList<Product> cart = getCurrentCart();
-        if (cart.contains(currentProduct)) {
+        Cart cart = getCurrentCart();
+        if (cart.containsProduct(currentProduct)) {
             System.out.println("Product is already added to cart");
         } else {
-            cart.add(currentProduct);
+            cart.addProduct(currentProduct);
             System.out.println("Product added to the cart successfully");
         }
         return false;
     }
 
     private boolean removeFromCart() {
-        ArrayList<Product> cart = getCurrentCart();
-        if (!cart.contains(currentProduct)) {
+        Cart cart = getCurrentCart();
+        if (!cart.containsProduct(currentProduct)) {
             System.out.println("Cart doesn't contain this product");
         } else {
-            cart.remove(currentProduct);
+            cart.removeProduct(currentProduct);
             System.out.println("Product removed from the cart successfully");
         }
         return false;
     }
 
-    private ArrayList<Product> getCurrentCart() {
+
+    private Cart getCurrentCart() {
         if (DataManager.shared().getLoggedInAccount() == null) {
-            return DataManager.shared().temporaryCart;
+            return DataManager.shared().getTemporaryCart();
         } else {
-            return DataManager.shared().getLoggedInAccount().cart;
+            if (DataManager.shared().getLoggedInAccount() != null && (DataManager.shared().getLoggedInAccount() instanceof Customer)) {
+                return ((Customer)(DataManager.shared().getLoggedInAccount())).getCart();
+            }
         }
+        return new Cart();
     }
 
     private boolean digestCommand() {

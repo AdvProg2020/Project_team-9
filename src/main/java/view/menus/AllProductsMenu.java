@@ -345,7 +345,7 @@ public class AllProductsMenu extends Menu {
 
     private boolean showProductDetailsCommand() {
         System.out.print("Enter the desired product's ID to go into its details page: ");
-        int id = scanner.nextInt();
+        String id = scanner.nextLine();
         Product product = DataManager.shared().getProductWithId(id);
         if (product == null) {
             System.out.print("No product with the given ID exists.");
@@ -435,8 +435,8 @@ public class AllProductsMenu extends Menu {
         filteredCategories.stream().map(category -> "#" + category.getId() + " - " + category.getName())
                 .forEach(System.out::println);
         System.out.print("Enter a category ID to remove it from filtered-by categories, or -1 to clear category filter: ");
-        int id = scanner.nextInt();
-        if (id == -1) {
+        String id = scanner.nextLine();
+        if (id.equals("-1")) {
             filteredCategories = new ArrayList<>();
             System.out.println("Category filter was successfully removed");
             return false;
@@ -498,7 +498,7 @@ public class AllProductsMenu extends Menu {
     private boolean filterByCategoryCommand() {
         System.out.print("Enter a new category ID to only see products in that category: ");
         while (true) {
-            int id = scanner.nextInt();
+            String id = scanner.nextLine();
             Category category = DataManager.shared().getCategoryWithId(id);
             if (category == null) {
                 System.out.print("No category with the given ID exists. Please enter a new ID again: ");

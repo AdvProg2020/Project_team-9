@@ -15,21 +15,30 @@ public abstract class UserMenu extends Menu {
     }
 
     private void editEmail() {
-        String newEmail = getStringWithPattern(Email.getPattern());
+        showEditPrompt("email");
+        String newEmail = getStringWithPattern(Email.getPattern(), "Please enter a valid email.");
         getCurrentUser().setEmail(newEmail);
+        declareEditSuccess("email");
     }
 
     private void editFirstName() {
+        showEditPrompt("first name");
         getCurrentUser().setFirstName(getString());
+        declareEditSuccess("first name");
     }
 
     private void editLastName() {
+        showEditPrompt("last name");
         getCurrentUser().setLastName(getString());
+        declareEditSuccess("last name");
     }
 
     private void editPhoneNumber() {
-        String newPhoneNumber = getStringWithPattern(PhoneNumber.getPattern());
+        showEditPrompt("phone number");
+        String newPhoneNumber = getStringWithPattern(PhoneNumber.getPattern(),
+                "Please enter a valid phone number.");
         getCurrentUser().setPhoneNumber(newPhoneNumber);
+        declareEditSuccess("phone number");
     }
 
     private void changePassword() {
@@ -39,6 +48,14 @@ public abstract class UserMenu extends Menu {
             return;
         }
         getCurrentUser().setPassword(password);
+    }
+
+    private void showEditPrompt(String field) {
+        showString("Please enter your new " + field + ":");
+    }
+
+    private void declareEditSuccess(String field) {
+        showString("Your " + field + " was successfully changed.");
     }
 
     private Account getCurrentUser() {
