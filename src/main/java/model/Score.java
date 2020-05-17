@@ -1,13 +1,15 @@
 package model;
 
+import controller.DataManager;
+
 public class Score {
     private String id;
-    private Customer customer;
+    private String customer;
     private int score;
 
     public Score(String id, Customer customer, int score) {
         this.id = id;
-        this.customer = customer;
+        this.customer = customer.getUsername();
         this.score = score;
     }
 
@@ -16,6 +18,6 @@ public class Score {
     }
 
     public Customer getCustomer() {
-        return customer;
+        return (Customer) DataManager.shared().getAccountWithGivenUsername(customer);
     }
 }

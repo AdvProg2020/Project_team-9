@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.*;
 
-import javax.xml.crypto.Data;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -23,7 +22,26 @@ public class DataManager {
     private ArrayList<Request> allRequests = new ArrayList<>();
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
-    public Cart temporaryCart = new Cart();
+    private ArrayList<Log> allLogs = new ArrayList<>();
+    private Cart temporaryCart = new Cart();
+
+    public ArrayList<Log> getAllLogs() {
+        return allLogs;
+    }
+
+    public void setAllLogs(ArrayList<Log> allLogs) {
+        this.allLogs = allLogs;
+        saveData();
+    }
+
+    public Cart getTemporaryCart() {
+        return temporaryCart;
+    }
+
+    public void setTemporaryCart(Cart temporaryCart) {
+        this.temporaryCart = temporaryCart;
+        saveData();
+    }
 
     public static String getNewId() {
         return UUID.randomUUID().toString().replace("-", "");
@@ -41,6 +59,8 @@ public class DataManager {
         return allCategories;
     }
 
+   // TODO: Up to here checked saveData()s...
+
     public ArrayList<Request> getAllRequests() {
         return allRequests;
     }
@@ -48,6 +68,13 @@ public class DataManager {
     public Request getRequestWithID(String id) {
         for (Request request : allRequests) {
             if (request.getId().equals(id)) return request;
+        }
+        return null;
+    }
+
+    public Log getLogWithId(String id) {
+        for (Log log : allLogs) {
+            if (log.getId().equals(id)) return log;
         }
         return null;
     }
@@ -82,18 +109,10 @@ public class DataManager {
         for (Product product : allProducts) {
             if (product.getProductId().equals(productID)) {
                 allProducts.remove(product);
+                saveData();
                 return;
             }
         }
-    }
-
-    public Product productWithID(String id) {
-        for (Product product : allProducts) {
-            if (product.getProductId().equals(id)) {
-                return product;
-            }
-        }
-        return null;
     }
 
     public Account getAccountWithGivenUsername(String username) {
@@ -107,6 +126,7 @@ public class DataManager {
         for (Account account : allAccounts) {
             if (account.getUsername().equals(username) && account.getUsername().equals(password)) {
                 loggedInAccount = account;
+                saveData();
                 if (account instanceof Customer) {
                     return DataManager.AccountType.CUSTOMER;
                 } else if (account instanceof Administrator) {
@@ -118,9 +138,11 @@ public class DataManager {
             }
         }
         loggedInAccount = null;
+        saveData();
         return DataManager.AccountType.NONE;
     }
 
+    // TODO: This admin registration problems...
     public boolean hasAnyAdminRegistered() {
         for (Account account : allAccounts) {
             if (account instanceof Administrator) return true;
@@ -173,39 +195,28 @@ public class DataManager {
 
     public void addCoupon(Coupon coupon) {
         allCoupons.add(coupon);
-    }
-
-    public void addRequest(Request request) {
-    }
-
-    public void addCategory(Category category) {
-    }
-
-    public void addSale(Sale sale) {
+        saveData();
     }
 
     public void removeCoupon(Coupon coupon) {
         allCoupons.remove(coupon);
+        saveData();
     }
 
     public void removeRequest(Request request) {
         allRequests.remove(request);
+        saveData();
     }
 
     public void removeAccount(Account account) {
         allAccounts.remove(account);
+        saveData();
     }
 
     public void removeCategory(Category category, Category parent) {
         parent.getSubCategories().removeIf(subCategory -> subCategory.getId().equals(category.getId()));
         allCategories.removeIf(c -> c.getId().equals(category.getId()));
-    }
-
-    public void removeSale(Sale sale) {
-    }
-
-    public Request getRequestWithId(int id) {
-        return null;
+        saveData();
     }
 
     public Coupon getCouponWithId(String id) {

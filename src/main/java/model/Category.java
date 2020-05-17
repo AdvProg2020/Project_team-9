@@ -1,14 +1,17 @@
 package model;
 
+import controller.DataManager;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Category {
     private String id;
     private String name;
     private String description;
-    private ArrayList<Category> subCategories;
-    private Category parentCategory;
-    private ArrayList<Product> products;
+    private ArrayList<String> subCategories;
+    private String parentCategory;
+    private ArrayList<String> products;
 
     public Category(String id, String name, String description) {
         this.id = id;
@@ -26,6 +29,7 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+        DataManager.saveData();
     }
 
     public String getDescription() {
@@ -34,29 +38,20 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+        DataManager.saveData();
     }
 
     public ArrayList<Product> getProducts() {
-        return products;
+        return products.stream().map(id -> DataManager.shared().getProductWithId(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Category> getSubCategories() {
-        return subCategories;
+        return subCategories.stream().map(id -> DataManager.shared().getCategoryWithId(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Category getParentCategory() {
-        return parentCategory;
+        return DataManager.shared().getCategoryWithId(parentCategory);
     }
 
-    public ArrayList<Product> getAllProductsInCategories() {
-        return products;
-    }
-
-    public void addSubcategory(Category subcategory) {
-
-    }
-
-    public void addProduct(Product product) {
-
-    }
+    // TODO: Adding subcategories and products into a product????
 }

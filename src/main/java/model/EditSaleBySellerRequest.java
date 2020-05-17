@@ -1,26 +1,28 @@
 package model;
 
+import controller.DataManager;
+
 public class EditSaleBySellerRequest extends Request {
-    private Seller seller;
-    private Sale oldSale;
-    private Sale newSale;
+    private String seller;
+    private String oldSale;
+    private String newSale;
 
     public EditSaleBySellerRequest(Seller seller, Sale oldSale, Sale newSale) {
-        this.seller = seller;
-        this.oldSale = oldSale;
-        this.newSale = newSale;
+        this.seller = seller.getUsername();
+        this.oldSale = oldSale.getOffId();
+        this.newSale = newSale.getOffId();
     }
 
     public Sale getNewSale() {
-        return newSale;
+        return DataManager.shared().getSaleWithId(newSale);
     }
 
     public Sale getOldSale() {
-        return oldSale;
+        return DataManager.shared().getSaleWithId(oldSale);
     }
 
     public Seller getSeller() {
-        return seller;
+        return (Seller) DataManager.shared().getAccountWithGivenUsername(seller);
     }
 
     @Override

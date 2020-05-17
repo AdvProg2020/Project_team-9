@@ -1,14 +1,16 @@
 package model;
 
+import controller.DataManager;
+
 public class SellerRegistrationRequest extends Request {
-    private Seller seller;
+    private String seller;
 
     public SellerRegistrationRequest(Seller seller) {
-        this.seller = seller;
+        this.seller = seller.getUsername();
     }
 
     public Seller getSeller() {
-        return seller;
+        return (Seller) DataManager.shared().getAccountWithGivenUsername(seller);
     }
 
     @Override
