@@ -17,7 +17,6 @@ public class Coupon {
     // TODO: LocalDateTime in Gson???
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private ArrayList<String> accountsPermittedToUseThisCoupon;
     private HashMap<String, Integer> remainingUsagesCount;
 
     public Coupon(String id, ArrayList<Product> products) {
@@ -63,9 +62,12 @@ public class Coupon {
         return endTime;
     }
 
-    public ArrayList<Account> getAccountsPermittedToUseThisCoupon() {
-        return accountsPermittedToUseThisCoupon.stream().map(id -> DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
+    public void decrementRemainingUsagesCountForAccount(Account account) {
+        remainingUsagesCount.put(account.getUsername(), Math.max(remainingUsagesCount.get(account.getUsername()) - 1, 0));
+        DataManager.saveData();
     }
 
-    // TODO: getter for remaining usages count...
+    public int remainingUsageCountForAccount(Account account) {
+        return remainingUsagesCount.get(account.getUsername());
+    }
 }

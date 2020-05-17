@@ -67,7 +67,9 @@ public class CheckOutMenu extends Menu {
             String response = scanner.nextLine().trim();
             if (response.equalsIgnoreCase("yes")) {
                 customer.decreaseCredit((int)priceAfterDiscount);
+                coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
                 // TODO: Register a Log here!!!
+                DataManager.saveData();
                 System.out.println("Thank you for your purchase!");
             }
         }

@@ -29,6 +29,18 @@ public class DataManager {
         return allLogs;
     }
 
+    public void logout() {
+        loggedInAccount= null;
+        DataManager.saveData();
+    }
+
+    public PurchaseLog purchaseLogForCustomerById(Customer customer, String id) {
+        return (PurchaseLog) allLogs.stream()
+                .filter(log -> log instanceof PurchaseLog && log.getId().equals(id)
+                        && ((PurchaseLog) log).getCustomer().getUsername().equals(customer.getUsername()))
+                .findFirst().orElse(null);
+    }
+
     public void setAllLogs(ArrayList<Log> allLogs) {
         this.allLogs = allLogs;
         saveData();
