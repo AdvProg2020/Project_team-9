@@ -142,7 +142,6 @@ public class DataManager {
         return DataManager.AccountType.NONE;
     }
 
-    // TODO: This admin registration problems...
     public boolean hasAnyAdminRegistered() {
         for (Account account : allAccounts) {
             if (account instanceof Administrator) return true;
