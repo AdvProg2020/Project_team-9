@@ -475,6 +475,8 @@ public class AdministratorMenu extends UserMenu {
 
             }
         });
+
+        this.setSubMenus(subMenus);
     }
 
     private boolean logoutCommand() {

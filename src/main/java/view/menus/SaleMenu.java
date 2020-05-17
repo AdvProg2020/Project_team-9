@@ -43,6 +43,8 @@ public class SaleMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        this.setSubMenus(subMenus);
     }
 
     private boolean showProductDetailsCommand() {
