@@ -42,12 +42,25 @@ public abstract class UserMenu extends Menu {
     }
 
     private void changePassword() {
+        showString("Please enter your current password:");
+        String oldPassword = getString();
+        if (!getCurrentUser().doesPasswordMatch(oldPassword)) {
+            showString("Incorrect password");
+            return;
+        }
+        showEditPrompt("password");
         String password = getString();
         if (getCurrentUser().doesPasswordMatch(password)) {
             System.out.println("Your new password cannot be the same as your old password.");
             return;
         }
+        String passwordRepeat = getString();
+        if (!password.equals(passwordRepeat)) {
+            showString("The two passwords are not equal.");
+            return;
+        }
         getCurrentUser().setPassword(password);
+        declareEditSuccess("password");
     }
 
     private void showEditPrompt(String field) {
