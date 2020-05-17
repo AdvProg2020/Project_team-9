@@ -62,5 +62,6 @@ public class Sale {
 
     public void addProduct(Product product) {
         products.add(product.getProductId());
+        DataManager.saveData();
     }
 }

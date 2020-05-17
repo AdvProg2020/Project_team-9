@@ -35,6 +35,7 @@ public class Coupon {
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
+        DataManager.saveData();
     }
 
     public ArrayList<Product> getProducts() {
@@ -51,6 +52,7 @@ public class Coupon {
 
     public void setMaximumDiscount(int maximumDiscount) {
         this.maximumDiscount = maximumDiscount;
+        DataManager.saveData();
     }
 
     public LocalDateTime getStartTime() {

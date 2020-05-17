@@ -693,7 +693,7 @@ public class AdministratorMenu extends UserMenu {
     private boolean removeProduct() {
         System.out.print("Enter the id of the product you want to remove completely: ");
         String id = scanner.nextLine();
-        var product = DataManager.shared().productWithID(id);
+        Product product = DataManager.shared().getProductWithId(id);
         if (product == null) {
             System.out.println("No product exists with the given ID");
             return false;

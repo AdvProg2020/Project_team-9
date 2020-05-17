@@ -63,6 +63,7 @@ public class Product {
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
+        DataManager.saveData();
     }
 
     public int getVisitCount() {
@@ -75,6 +76,7 @@ public class Product {
 
     public void incrementVisitCount() {
         visitCount += 1;
+        DataManager.saveData();
     }
 
     public String getProductId() {
@@ -103,17 +105,21 @@ public class Product {
 
     public void addSeller(Seller seller) {
 
+        DataManager.saveData();
     }
 
     public void addCustomer(Customer customer) {
 
+        DataManager.saveData();
     }
 
     public void addComment(Comment comment) {
 
+        DataManager.saveData();
     }
 
     public void addScore(Score score) {
 
+        DataManager.saveData();
     }
 }
