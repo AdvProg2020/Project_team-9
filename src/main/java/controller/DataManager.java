@@ -23,7 +23,15 @@ public class DataManager {
     private ArrayList<Request> allRequests = new ArrayList<>();
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
-    public Cart temporaryCart = new Cart();
+    private Cart temporaryCart = new Cart();
+
+    public Cart getTemporaryCart() {
+        return temporaryCart;
+    }
+
+    public void setTemporaryCart(Cart temporaryCart) {
+        this.temporaryCart = temporaryCart;
+    }
 
     public static String getNewId() {
         return UUID.randomUUID().toString().replace("-", "");

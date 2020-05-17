@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 
 public abstract class Account {
-    public Cart cart = new Cart();
     private String username;
     private String password;
     private String email;
@@ -25,6 +24,22 @@ public abstract class Account {
         this.coupons = new ArrayList<>();
         this.logs = new ArrayList<>();
         this.credit = 0;
+    }
+
+    public int getCredit() {
+        return credit;
+    }
+
+    public void increaseCredit(int amount) {
+        credit += amount;
+    }
+
+    public void decreaseCredit(int amount) {
+        credit -= amount;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
     }
 
     public String getUsername() {
