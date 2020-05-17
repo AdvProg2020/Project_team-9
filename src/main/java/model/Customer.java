@@ -1,5 +1,7 @@
 package model;
 
+import controller.DataManager;
+
 import java.util.ArrayList;
 
 public class Customer extends Account {
@@ -26,6 +28,7 @@ public class Customer extends Account {
 
     public void setAddress(String address) {
         this.address = address;
+        DataManager.saveData();
     }
 
     public Cart getCart() {
@@ -34,6 +37,7 @@ public class Customer extends Account {
 
     public void addProductToCart(Product product) {
         cart.addProduct(product);
+        DataManager.saveData();
     }
 
     public boolean hasPurchasedProduct(Product product) {

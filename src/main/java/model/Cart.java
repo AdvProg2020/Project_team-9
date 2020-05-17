@@ -29,11 +29,14 @@ public class Cart {
         for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
             this.products.put(((Product) (((Map.Entry) productIntegerEntry).getKey())).getProductId(), (int) ((Map.Entry) productIntegerEntry).getValue());
         }
+        DataManager.saveData();
     }
 
     public void addProduct(Product product, int quantity) {
         products.put(product.getProductId(), products.getOrDefault(product.getProductId(), 0) + quantity);
+        DataManager.saveData();
     }
+
     public void addProduct(Product product) {
         addProduct(product, 1);
     }
@@ -45,13 +48,10 @@ public class Cart {
         } else {
             products.put(product.getProductId(), finalQuantity);
         }
+        DataManager.saveData();
     }
     public void removeProduct(Product product) {
         removeProduct(product, 1);
-    }
-
-    public void deleteProduct(Product product) {
-        products.remove(product.getProductId());
     }
 
     public boolean containsProduct(Product product) {

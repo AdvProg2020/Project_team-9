@@ -29,6 +29,7 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+        DataManager.saveData();
     }
 
     public String getDescription() {
@@ -37,6 +38,7 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+        DataManager.saveData();
     }
 
     public ArrayList<Product> getProducts() {

@@ -1,5 +1,7 @@
 package model;
 
+import controller.DataManager;
+
 import java.util.ArrayList;
 
 public class Seller extends Account {
@@ -33,10 +35,12 @@ public class Seller extends Account {
 
     public void addProduct(Product product) {
         products.add(product.getProductId());
+        DataManager.saveData();
     }
 
     public void addSale(Sale sale) {
         sales.add(sale.getOffId());
+        DataManager.saveData();
     }
 
     @Override

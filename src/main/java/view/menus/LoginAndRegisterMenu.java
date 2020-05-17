@@ -107,6 +107,7 @@ public class LoginAndRegisterMenu extends Menu {
             // TODO: Does it work??
             ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts().putAll(DataManager.shared().getTemporaryCart().getProducts());
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
+            DataManager.saveData();
             Menu menu = new CustomerMenu("Welcome", this);
             menu.show();
             menu.execute();
