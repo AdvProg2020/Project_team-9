@@ -10,9 +10,12 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -39,8 +42,8 @@ public class DataManager {
 
     public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
         try {
-            return scanner.nextInt();
-        } catch (Exception ignored) {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
             return -1;
         }
     }
@@ -234,10 +237,17 @@ public class DataManager {
     }
 
     public static void saveData() {
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> {
-            Instant instant = Instant.ofEpochMilli(json.getAsJsonPrimitive().getAsLong());
-            return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        }).create();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+
+        Gson gson = gsonBuilder.setPrettyPrinting().create();
+
         String json = gson.toJson(sharedInstance);
         try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
             out.print(json);
@@ -249,10 +259,16 @@ public class DataManager {
     public static void loadData() {
         try {
             String json = new String(Files.readAllBytes(Paths.get("data.txt")));
-            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (_json, type, jsonDeserializationContext) -> {
-                Instant instant = Instant.ofEpochMilli(_json.getAsJsonPrimitive().getAsLong());
-                return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-            }).create();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+
+            gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+
+            gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+
+            gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+
+            Gson gson = gsonBuilder.setPrettyPrinting().create();
             sharedInstance = gson.fromJson(json, DataManager.class);
         } catch (IOException e) {
             System.out.println("Unexpected exception happened in loading data: " + e.getLocalizedMessage());
@@ -315,7 +331,6 @@ public class DataManager {
     }
 
     public void removeCategory(Category category, Category parent) {
-        parent.getSubCategories().removeIf(subCategory -> subCategory.getId().equals(category.getId()));
         allCategories.removeIf(c -> c.getId().equals(category.getId()));
         saveData();
     }
@@ -336,4 +351,40 @@ public class DataManager {
         return allSales.stream().filter(sale -> sale.getOffId().equals(id)).findFirst().orElse(null);
     }
 
+}
+
+class LocalDateTimeSerializer implements JsonSerializer < LocalDateTime > {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss");
+
+    @Override
+    public JsonElement serialize(LocalDateTime localDateTime, Type srcType, JsonSerializationContext context) {
+        return new JsonPrimitive(formatter.format(localDateTime));
+    }
+}
+
+class LocalDateTimeDeserializer implements JsonDeserializer < LocalDateTime > {
+    @Override
+    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        return LocalDateTime.parse(json.getAsString(),
+                DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss").withLocale(Locale.ENGLISH));
+    }
+}
+
+class LocalDateDeserializer implements JsonDeserializer < LocalDate > {
+    @Override
+    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        return LocalDate.parse(json.getAsString(),
+                DateTimeFormatter.ofPattern("d-MMM-yyyy").withLocale(Locale.ENGLISH));
+    }
+}
+
+class LocalDateSerializer implements JsonSerializer < LocalDate > {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-yyyy");
+
+    @Override
+    public JsonElement serialize(LocalDate localDate, Type srcType, JsonSerializationContext context) {
+        return new JsonPrimitive(formatter.format(localDate));
+    }
 }

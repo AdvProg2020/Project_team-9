@@ -9,11 +9,9 @@ public class Category {
     private String id;
     private String name;
     private String description;
-    private ArrayList<String> subCategories;
     // TODO: By filtering by category, we don't consider subcats and parents!
     // TODO: All lists should have filter/search
     private String parentCategory;
-    private ArrayList<String> products;
 
     public Category(String id, String name, String description) {
         this.id = id;
@@ -22,12 +20,11 @@ public class Category {
     }
 
     // TODO: subCategories in intializer??
-    public Category(String id, String name, String description, String parentCategory, ArrayList<Product> products) {
+    public Category(String id, String name, String description, String parentCategory) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
-        this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String getId() {
@@ -52,20 +49,9 @@ public class Category {
         DataManager.saveData();
     }
 
-    public ArrayList<Product> getProducts() {
-        return products.stream().map(id -> DataManager.shared().getProductWithId(id)).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public ArrayList<Category> getSubCategories() {
-        return subCategories.stream().map(id -> DataManager.shared().getCategoryWithId(id)).collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public Category getParentCategory() {
         return DataManager.shared().getCategoryWithId(parentCategory);
     }
-
-    // TODO: Adding subcategories and products into a product????
-
 
     @Override
     public String toString() {

@@ -3,7 +3,8 @@ package model;
 public class Request {
     private String id;
 
-    public Request() {
+    public Request(String id) {
+        this.id = id;
     }
 
     public String getId() {
