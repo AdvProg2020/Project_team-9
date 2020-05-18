@@ -136,7 +136,40 @@ public class ProductDetailsMenu extends Menu {
             }
         });
 
-        this.setSubMenus(subMenus);
+        subMenus.put(8, new Menu("Add comment", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (addCommentCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+    }
+
+    // TODO: Replace all scanner inputs with better equivalents
+
+    private boolean addCommentCommand() {
+        if (DataManager.shared().getLoggedInAccount() != null || !(DataManager.shared().getLoggedInAccount() instanceof Customer)) {
+            System.out.println("You should log in as a customer to post comments");
+            return false;
+        }
+        System.out.print("Enter comment's title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter comment's content: ");
+        String text = scanner.nextLine();
+        Comment comment = new Comment((Customer) DataManager.shared().getLoggedInAccount(), currentProduct, title, text);
+        currentProduct.addComment(comment);
+        // TODO: Save data???
+        System.out.println("Comment was registered successfully and is waiting to be reviewed");
+        return false;
     }
 
     private boolean viewCommentsCommand() {

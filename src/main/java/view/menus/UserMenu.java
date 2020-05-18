@@ -10,30 +10,30 @@ public abstract class UserMenu extends Menu {
         super(name, parentMenu);
     }
 
-    private void viewPersonalInfo() {
+    protected void viewPersonalInfo() {
         System.out.println(DataManager.shared().getLoggedInAccount());
     }
 
-    private void editEmail() {
+    protected void editEmail() {
         showEditPrompt("email");
         String newEmail = getStringWithPattern(Email.getPattern(), "Please enter a valid email.");
         getCurrentUser().setEmail(newEmail);
         declareEditSuccess("email");
     }
 
-    private void editFirstName() {
+    protected void editFirstName() {
         showEditPrompt("first name");
         getCurrentUser().setFirstName(getString());
         declareEditSuccess("first name");
     }
 
-    private void editLastName() {
+    protected void editLastName() {
         showEditPrompt("last name");
         getCurrentUser().setLastName(getString());
         declareEditSuccess("last name");
     }
 
-    private void editPhoneNumber() {
+    protected void editPhoneNumber() {
         showEditPrompt("phone number");
         String newPhoneNumber = getStringWithPattern(PhoneNumber.getPattern(),
                 "Please enter a valid phone number.");
@@ -41,7 +41,7 @@ public abstract class UserMenu extends Menu {
         declareEditSuccess("phone number");
     }
 
-    private void changePassword() {
+    protected void changePassword() {
         showString("Please enter your current password:");
         String oldPassword = getString();
         if (!getCurrentUser().doesPasswordMatch(oldPassword)) {
@@ -63,15 +63,15 @@ public abstract class UserMenu extends Menu {
         declareEditSuccess("password");
     }
 
-    private void showEditPrompt(String field) {
+    protected void showEditPrompt(String field) {
         showString("Please enter your new " + field + ":");
     }
 
-    private void declareEditSuccess(String field) {
+    protected void declareEditSuccess(String field) {
         showString("Your " + field + " was successfully changed.");
     }
 
-    private Account getCurrentUser() {
+    protected Account getCurrentUser() {
         return DataManager.shared().getLoggedInAccount();
     }
 }

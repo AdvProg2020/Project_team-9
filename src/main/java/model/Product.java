@@ -63,7 +63,7 @@ public class Product {
     }
 
     public ArrayList<Seller> getSellers() {
-        return sellers.stream().map(id -> (Seller)DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
+        return sellers.stream().map(id -> (Seller) DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public int getDiscountPercent() {
@@ -130,5 +130,10 @@ public class Product {
     public void addScore(int rating, Customer customer) {
         scores.add(new Score(DataManager.getNewId(), customer, rating));
         DataManager.saveData();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

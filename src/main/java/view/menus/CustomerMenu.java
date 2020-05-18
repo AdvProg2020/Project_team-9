@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class CustomerMenu extends Menu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View cart", this) {
             @Override
             public void execute() {

@@ -86,6 +86,11 @@ public class DataManager {
         return allRequests;
     }
 
+    public void addRequest(Request request) {
+        allRequests.add(request);
+        saveData();
+    }
+
     public Request getRequestWithID(String id) {
         for (Request request : allRequests) {
             if (request.getId().equals(id)) return request;
