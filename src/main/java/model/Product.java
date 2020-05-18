@@ -54,7 +54,7 @@ public class Product {
     }
 
     public ArrayList<Seller> getSellers() {
-        return sellers.stream().map(id -> (Seller)DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
+        return sellers.stream().map(id -> (Seller) DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public int getDiscountPercent() {
@@ -121,5 +121,10 @@ public class Product {
     public void addScore(Score score) {
 
         DataManager.saveData();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

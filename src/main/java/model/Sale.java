@@ -2,6 +2,7 @@ package model;
 
 import controller.DataManager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -11,13 +12,14 @@ public class Sale {
     // TODO: enums in Gson??
     private SaleStatus saleStatus;
     private int discountAmount;
-    private int startTime;
-    private int endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String seller;
     // TODO: enums in Gson??
     private DeliveryStatus deliveryStatus;
 
-    public Sale(String offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount, int startTime, int endTime, Seller seller, DeliveryStatus deliveryStatus) {
+    public Sale(String offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount,
+                LocalDateTime startTime, LocalDateTime endTime, Seller seller, DeliveryStatus deliveryStatus) {
         this.offId = offId;
         this.products =  products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
         this.saleStatus = saleStatus;
@@ -44,11 +46,11 @@ public class Sale {
         return discountAmount;
     }
 
-    public int getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 

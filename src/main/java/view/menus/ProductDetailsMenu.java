@@ -155,7 +155,6 @@ public class ProductDetailsMenu extends Menu {
             protected void showHelp() {
             }
         });
-        subMenus.put()
     }
 
     // TODO: Replace all scanner inputs with better equivalents

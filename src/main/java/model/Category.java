@@ -54,4 +54,11 @@ public class Category {
     }
 
     // TODO: Adding subcategories and products into a product????
+
+
+    @Override
+    public String toString() {
+        return "id: " + id + '\n' +
+                "name: " + name + '\n';
+    }
 }

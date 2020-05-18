@@ -12,7 +12,8 @@ public abstract class Menu {
         allMenus = new ArrayList<>();
     }
 
-    protected HashMap<Integer, Menu> submenus;
+    protected HashMap<Integer, Menu> subMenus;
+    protected HashMap<Integer, MenuChoice> choices;
     protected Menu parentMenu;
     private String name;
 
@@ -35,28 +36,28 @@ public abstract class Menu {
     }
 
     public void setSubMenus(HashMap<Integer, Menu> submenus) {
-        this.submenus = submenus;
+        this.subMenus = submenus;
     }
 
     public void show() {
         System.out.println(this.name + ":");
-        for (Integer menuNum : submenus.keySet()) {
-            System.out.println(menuNum + ". " + submenus.get(menuNum).getName());
+        for (Integer menuNum : subMenus.keySet()) {
+            System.out.println(menuNum + ". " + subMenus.get(menuNum).getName());
         }
         if (this.parentMenu != null)
-            System.out.println((submenus.size() + 1) + ". Back");
+            System.out.println((subMenus.size() + 1) + ". Back");
         else
-            System.out.println((submenus.size() + 1) + ". Exit");
+            System.out.println((subMenus.size() + 1) + ". Exit");
     }
 
     public void execute() {
         Menu nextMenu;
-        int validSizeLimit = submenus.size() + 1;
+        int validSizeLimit = subMenus.size() + 1;
         int chosenMenu = getNextMenu(validSizeLimit);
         if (chosenMenu == validSizeLimit) {
             return;
         } else
-            nextMenu = submenus.get(chosenMenu);
+            nextMenu = subMenus.get(chosenMenu);
         if (nextMenu != null) {
             nextMenu.show();
             nextMenu.execute();
@@ -96,6 +97,10 @@ public abstract class Menu {
 
     public void showString(String string) {
         System.out.println(string);
+    }
+
+    public void showString(Object o) {
+        showString(o.toString());
     }
 
     protected abstract void showHelp();

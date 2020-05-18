@@ -9,7 +9,6 @@ import java.util.HashMap;
 public class AdministratorMenu extends UserMenu {
     public AdministratorMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -17,7 +16,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (viewPersonalInfo()) return;
+                viewPersonalInfo();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -33,7 +32,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (editFirstName()) return;
+                editFirstName();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -49,7 +48,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (editLastName()) return;
+                editLastName();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -65,7 +64,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (editEmail()) return;
+                editEmail();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -81,7 +80,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (editPhoneNumber()) return;
+                editPhoneNumber();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -97,7 +96,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (changePassword()) return;
+                changePassword();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -114,7 +113,7 @@ public class AdministratorMenu extends UserMenu {
 
             @Override
             public void execute() {
-                if (viewUserInfo()) return;
+                viewUserInfo();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -670,7 +669,7 @@ public class AdministratorMenu extends UserMenu {
         Category category = viewCategory();
         System.out.println("Are you sure you want to remove this category? Type \"y\" for yes and anything else for no.");
         String confirmation = scanner.nextLine().trim();
-        if (confirmation.equals("y")) {
+        if (confirmation.equals("y") && category != null) {
             DataManager.shared().removeCategory(category, category.getParentCategory());
         }
         return false;
@@ -735,27 +734,25 @@ public class AdministratorMenu extends UserMenu {
         return false;
     }
 
-    private boolean viewPersonalInfo() {
+    protected void viewPersonalInfo() {
         Administrator administrator = (Administrator) DataManager.shared().getLoggedInAccount();
         System.out.println(administrator.getFirstName() + " " + administrator.getLastName() + " - " + administrator.getUsername());
         System.out.println("Email: " + administrator.getEmail());
         System.out.println("Phone: " + administrator.getPhoneNumber());
-        return false;
     }
 
-    private boolean viewUserInfo() {
+    protected void viewUserInfo() {
         System.out.print("Enter a username: ");
         String username = scanner.nextLine();
         Account account = DataManager.shared().getAccountWithGivenUsername(username);
         if (account == null) {
             System.out.println("No account with the given username exists");
-            return false;
+            return;
         }
         System.out.println(account.getFirstName() + " " + account.getLastName());
         System.out.println("Email: " + account.getEmail());
         System.out.println("Phone: " + account.getPhoneNumber());
         if (account instanceof Seller) System.out.println("Company Details: " + ((Seller) account).getCompanyDetails());
-        return false;
     }
 
     private boolean changeUserType() {
@@ -805,52 +802,48 @@ public class AdministratorMenu extends UserMenu {
         return false;
     }
 
-    private boolean editEmail() {
+    protected void editEmail() {
         System.out.print("Enter your new email address: ");
         String email = scanner.nextLine();
         // TODO: Check regex!
         DataManager.shared().getLoggedInAccount().setEmail(email);
-        return false;
     }
 
-    private boolean editFirstName() {
+    protected void editFirstName() {
         System.out.print("Enter your new first name: ");
         String firstName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setFirstName(firstName);
-        return false;
     }
 
-    private boolean editLastName() {
+    protected void editLastName() {
         System.out.print("Enter your new last name: ");
         String lastName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setLastName(lastName);
-        return false;
     }
 
-    private boolean editPhoneNumber() {
+    protected void editPhoneNumber() {
         System.out.print("Enter your new phone number: ");
         String phone = scanner.nextLine();
         // TODO: Check regex!
         DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
-        return false;
     }
 
-    private boolean changePassword() {
+    protected void changePassword() {
         System.out.print("Enter your old password: ");
         String oldPassword = scanner.nextLine();
         if (!DataManager.shared().getLoggedInAccount().getPassword().equals(oldPassword)) {
             System.out.println("Your password is wrong. Try again.");
-            return false;
+            return;
         }
         System.out.print("Enter your new password: ");
         String newPassword = scanner.nextLine();
         if (oldPassword.equals(newPassword)) {
             System.out.println("Your new password should be different from the previous password. Try again.");
-            return false;
+            return;
         }
         DataManager.shared().getLoggedInAccount().setPassword(newPassword);
         System.out.println("New password has been set");
-        return false;
+        return;
     }
 
     private void seeAllRequests() {

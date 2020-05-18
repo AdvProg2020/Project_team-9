@@ -2,6 +2,7 @@ package model;
 
 import controller.DataManager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Seller extends Account {
@@ -36,6 +37,33 @@ public class Seller extends Account {
     public void addProduct(Product product) {
         products.add(product.getProductId());
         DataManager.saveData();
+    }
+
+    public ArrayList<Product> getProducts() {
+        ArrayList<Product> products = new ArrayList<>();
+        for (String productId : this.products) {
+            products.add(DataManager.shared().getProductWithId(productId));
+        }
+        return products;
+    }
+
+    public ArrayList<Sale> getSales() {
+        ArrayList<Sale> sales = new ArrayList<>();
+        for (String saleId : this.sales) {
+            sales.add(DataManager.shared().getSaleWithId(saleId));
+        }
+        return sales;
+    }
+
+    public ArrayList<Sale> getCurrentSales() {
+        ArrayList<Sale> sales = new ArrayList<>();
+        Sale temporarySale;
+        for (String saleId : this.sales) {
+            temporarySale = DataManager.shared().getSaleWithId(saleId);
+            if (temporarySale.getEndTime().compareTo(LocalDateTime.now()) > 0)
+                sales.add(temporarySale);
+        }
+        return sales;
     }
 
     public void addSale(Sale sale) {

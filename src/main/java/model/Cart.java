@@ -58,9 +58,26 @@ public class Cart {
         return products.containsKey(product.getProductId());
     }
 
+    public boolean isEmpty() {
+        return products.size() == 0;
+    }
+
     public long getPrice(){
         HashMap<Product,Integer> products = getProducts();
         long price = products.keySet().stream().mapToLong(Product::getPrice).sum();
         return price;
+    }
+
+    @Override
+    public String toString() {
+        if (isEmpty())
+            return "There is no product in your cart yet";
+        int i = 1;
+        StringBuilder res = new StringBuilder();
+        for (String productId : products.keySet()) {
+            res.append(i).append(") ").append(DataManager.shared().getProductWithId(productId))
+                    .append(" - Quantity: ").append(products.get(productId));
+        }
+        return res.toString();
     }
 }

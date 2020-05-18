@@ -10,7 +10,6 @@ public class CustomerMenu extends Menu {
 
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View cart", this) {
             @Override
             public void execute() {
@@ -44,19 +43,12 @@ public class CustomerMenu extends Menu {
             protected void showHelp() {
 
             }
-        })
-
+        });
     }
 
     private void viewCart() {
         Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
-        for (int counter = 0; counter < customer.getCart().getProducts().size(); counter++) {
-            if (customer.getCart().getProducts().size() == 0) {
-                System.out.println("There is no product in your cart yet");
-                break;
-            }
-            System.out.println((counter+1) + ". " + customer.getCart().getProducts().get(counter));
-        }
+        System.out.println(customer.getCart());
     }
 
     private void showProduct() {
