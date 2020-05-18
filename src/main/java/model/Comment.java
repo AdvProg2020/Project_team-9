@@ -21,6 +21,10 @@ public class Comment {
         this.commentStatus = CommentStatus.WAITING_FOR_REVIEW;
     }
 
+    public void setCommentStatus(CommentStatus commentStatus) {
+        this.commentStatus = commentStatus;
+    }
+
     public String getId() {
         return id;
     }
@@ -46,7 +50,6 @@ public class Comment {
     }
 
     public boolean hasUserPurchasedProduct() {
-        // TODO: Not implemented (and also as a result, when a user sees this...)
-        return false;
+        return getCustomer().hasPurchasedProduct(getProduct());
     }
 }

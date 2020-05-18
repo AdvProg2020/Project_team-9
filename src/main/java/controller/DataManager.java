@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class DataManager {
@@ -25,8 +26,28 @@ public class DataManager {
     private ArrayList<Log> allLogs = new ArrayList<>();
     private Cart temporaryCart = new Cart();
 
+    public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
+        try {
+            return scanner.nextInt();
+        } catch (Exception ignored) {
+            return -1;
+        }
+    }
+
     public ArrayList<Log> getAllLogs() {
         return allLogs;
+    }
+
+    public void logout() {
+        loggedInAccount= null;
+        DataManager.saveData();
+    }
+
+    public PurchaseLog purchaseLogForCustomerById(Customer customer, String id) {
+        return (PurchaseLog) allLogs.stream()
+                .filter(log -> log instanceof PurchaseLog && log.getId().equals(id)
+                        && ((PurchaseLog) log).getCustomer().getUsername().equals(customer.getUsername()))
+                .findFirst().orElse(null);
     }
 
     public void setAllLogs(ArrayList<Log> allLogs) {
@@ -147,7 +168,6 @@ public class DataManager {
         return DataManager.AccountType.NONE;
     }
 
-    // TODO: This admin registration problems...
     public boolean hasAnyAdminRegistered() {
         for (Account account : allAccounts) {
             if (account instanceof Administrator) return true;
@@ -198,8 +218,18 @@ public class DataManager {
         }
     }
 
+    public void addLog(Log log) {
+        allLogs.add(log);
+        saveData();
+    }
+
     public void addCoupon(Coupon coupon) {
         allCoupons.add(coupon);
+        saveData();
+    }
+
+    public void addCategory(Category category) {
+        allCategories.add(category);
         saveData();
     }
 

@@ -18,8 +18,8 @@ public class Sale {
     // TODO: enums in Gson??
     private DeliveryStatus deliveryStatus;
 
-    public Sale(String offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount,
-                LocalDateTime startTime, LocalDateTime endTime, Seller seller, DeliveryStatus deliveryStatus) {
+    // TODO: Where do we add Sales??
+    public Sale(String offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount, LocalDateTime startTime, LocalDateTime endTime, Seller seller, DeliveryStatus deliveryStatus) {
         this.offId = offId;
         this.products =  products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
         this.saleStatus = saleStatus;

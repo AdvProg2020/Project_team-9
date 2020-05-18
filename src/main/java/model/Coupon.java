@@ -11,18 +11,41 @@ public class Coupon {
     private String id;
     private ArrayList<String> products;
     // TODO: enums in Gson...
+    // TODO: The next one is not being used...
     private Status saleStatus;
     private int discountPercent;
     private int maximumDiscount;
     // TODO: LocalDateTime in Gson???
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private ArrayList<String> accountsPermittedToUseThisCoupon;
     private HashMap<String, Integer> remainingUsagesCount;
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public HashMap<String, Integer> getRemainingUsagesCount() {
+        return remainingUsagesCount;
+    }
 
     public Coupon(String id, ArrayList<Product> products) {
         this.id = id;
         this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Coupon(String id, ArrayList<Product> products, Status saleStatus, int discountPercent, int maximumDiscount, LocalDateTime startTime, LocalDateTime endTime, HashMap<String, Integer> remainingUsagesCount) {
+        this.id = id;
+        this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
+        this.saleStatus = saleStatus;
+        this.discountPercent = discountPercent;
+        this.maximumDiscount = maximumDiscount;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.remainingUsagesCount = remainingUsagesCount;
     }
 
     public String getId() {
@@ -63,9 +86,12 @@ public class Coupon {
         return endTime;
     }
 
-    public ArrayList<Account> getAccountsPermittedToUseThisCoupon() {
-        return accountsPermittedToUseThisCoupon.stream().map(id -> DataManager.shared().getAccountWithGivenUsername(id)).collect(Collectors.toCollection(ArrayList::new));
+    public void decrementRemainingUsagesCountForAccount(Account account) {
+        remainingUsagesCount.put(account.getUsername(), Math.max(remainingUsagesCount.get(account.getUsername()) - 1, 0));
+        DataManager.saveData();
     }
 
-    // TODO: getter for remaining usages count...
+    public int remainingUsageCountForAccount(Account account) {
+        return remainingUsagesCount.get(account.getUsername());
+    }
 }

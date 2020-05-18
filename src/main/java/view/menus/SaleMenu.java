@@ -4,6 +4,7 @@ import controller.DataManager;
 import model.Product;
 import model.Sale;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class SaleMenu extends Menu {
@@ -43,6 +44,8 @@ public class SaleMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        this.setSubMenus(subMenus);
     }
 
     private boolean showProductDetailsCommand() {
@@ -54,7 +57,9 @@ public class SaleMenu extends Menu {
             return false;
         }
         product.incrementVisitCount();
-        // TODO: Go to product details menu...
+        ProductDetailsMenu menu = new ProductDetailsMenu("Product Details", this, product);
+        menu.show();
+        menu.execute();
         return false;
     }
 
@@ -68,8 +73,9 @@ public class SaleMenu extends Menu {
                 System.out.println("\tPrevious price (with discount): " + price);
                 System.out.println("\tNew price (after sale): " + (price - sale.getDiscountAmount()));
             }
-            // TODO: Sale start and end time and delivery status...
             System.out.println("Sale status: " + sale.getSaleStatus().toString() + "\n");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            System.out.println("Starting from " + sale.getStartTime().format(dateFormatter) + " and ending in " + sale.getEndTime().format(dateFormatter));
         }
         return false;
     }

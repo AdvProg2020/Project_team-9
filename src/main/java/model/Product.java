@@ -2,6 +2,7 @@ package model;
 
 import controller.DataManager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,9 @@ public class Product {
     private String description;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
+    private LocalDateTime dateCreated;
 
-    public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description) {
+    public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated) {
         this.status = status;
         this.name = name;
         this.brand = brand;
@@ -31,6 +33,13 @@ public class Product {
         this.numberAvailable = numberAvailable;
         this.category = category.getId();
         this.description = description;
+        this.comments = new ArrayList<>();
+        this.scores = new ArrayList<>();
+        this.dateCreated = dateCreated;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
     }
 
     public Status getStatus() {
@@ -114,12 +123,12 @@ public class Product {
     }
 
     public void addComment(Comment comment) {
-
+        comments.add(comment);
         DataManager.saveData();
     }
 
-    public void addScore(Score score) {
-
+    public void addScore(int rating, Customer customer) {
+        scores.add(new Score(DataManager.getNewId(), customer, rating));
         DataManager.saveData();
     }
 
