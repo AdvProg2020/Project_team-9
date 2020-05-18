@@ -354,7 +354,9 @@ public class AllProductsMenu extends Menu {
             return false;
         }
         product.incrementVisitCount();
-        // TODO: Go to product details menu...
+        ProductDetailsMenu productDetailsMenu = new ProductDetailsMenu("Product Details", this, product);
+        productDetailsMenu.show();
+        productDetailsMenu.execute();
         return false;
     }
 
