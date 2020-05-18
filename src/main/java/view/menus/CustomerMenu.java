@@ -1,8 +1,10 @@
 package view.menus;
 
 import controller.DataManager;
+import controller.Validator;
 import model.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +14,103 @@ import java.util.stream.Collectors;
 public class CustomerMenu extends Menu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        subMenus.put(1, new Menu("View cart", this) {
+        subMenus.put(1, new Menu("View Personal Info", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewPersonalInfo();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(2, new Menu("Edit first name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editFirstName();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(3, new Menu("Edit last name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editLastName();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(4, new Menu("Edit email", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editEmail();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(5, new Menu("Edit phone number", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editPhoneNumber();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(6, new Menu("Change password", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                changePassword();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(7, new Menu("View cart", this) {
             @Override
             public void execute() {
                 viewCart();
@@ -24,7 +122,7 @@ public class CustomerMenu extends Menu {
             protected void showHelp() {
             }
         });
-        subMenus.put(2, new Menu("View Product Details", this) {
+        subMenus.put(8, new Menu("View Product Details", this) {
             @Override
             public void execute() {
                 showProduct();
@@ -35,7 +133,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(4, new Menu("Checkout", this) {
+        subMenus.put(9, new Menu("Checkout", this) {
             @Override
             public void execute() {
                 checkOut();
@@ -46,7 +144,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(5, new Menu("View balance", this) {
+        subMenus.put(10, new Menu("View balance", this) {
             @Override
             public void execute() {
                 viewBalance();
@@ -57,7 +155,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(6, new Menu("View usable coupons", this) {
+        subMenus.put(11, new Menu("View usable coupons", this) {
             @Override
             public void execute() {
                 viewUsableCoupons();
@@ -68,7 +166,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(7, new Menu("View all orders", this) {
+        subMenus.put(12, new Menu("View all orders", this) {
             @Override
             public void execute() {
                 viewOrders();
@@ -79,7 +177,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(8, new Menu("View order details", this) {
+        subMenus.put(13, new Menu("View order details", this) {
             @Override
             public void execute() {
                 viewOrderDetails();
@@ -90,7 +188,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(9, new Menu("Rate product", this) {
+        subMenus.put(14, new Menu("Rate product", this) {
             @Override
             public void execute() {
                 rateProduct();
@@ -101,7 +199,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(10, new Menu("Comment on product", this) {
+        subMenus.put(15, new Menu("Comment on product", this) {
             @Override
             public void execute() {
                 addCommentCommand();
@@ -112,7 +210,7 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(11, new Menu("Logout", this) {
+        subMenus.put(16, new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -132,6 +230,67 @@ public class CustomerMenu extends Menu {
         });
 
         this.setSubMenus(subMenus);
+    }
+
+    protected void viewPersonalInfo() {
+        Administrator administrator = (Administrator) DataManager.shared().getLoggedInAccount();
+        System.out.println(administrator.getFirstName() + " " + administrator.getLastName() + " - " + administrator.getUsername());
+        System.out.println("Email: " + administrator.getEmail());
+        System.out.println("Phone: " + administrator.getPhoneNumber());
+    }
+
+    protected void editEmail() {
+        System.out.print("Enter your new email address: ");
+        String email = scanner.nextLine();
+        if (Validator.shared().emailIsValid(email)) {
+            DataManager.shared().getLoggedInAccount().setEmail(email);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid email");
+        }
+    }
+
+    protected void editFirstName() {
+        System.out.print("Enter your new first name: ");
+        String firstName = scanner.nextLine();
+        DataManager.shared().getLoggedInAccount().setFirstName(firstName);
+        System.out.println("Done");
+    }
+
+    protected void editLastName() {
+        System.out.print("Enter your new last name: ");
+        String lastName = scanner.nextLine();
+        DataManager.shared().getLoggedInAccount().setLastName(lastName);
+        System.out.println("Done");
+    }
+
+    protected void editPhoneNumber() {
+        System.out.print("Enter your new phone number: ");
+        String phone = scanner.nextLine();
+        if (Validator.shared().phoneNumberIsValid(phone)) {
+            DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid phone number");
+        }
+    }
+
+    protected void changePassword() {
+        System.out.print("Enter your old password: ");
+        String oldPassword = scanner.nextLine();
+        if (!DataManager.shared().getLoggedInAccount().getPassword().equals(oldPassword)) {
+            System.out.println("Your password is wrong. Try again.");
+            return;
+        }
+        System.out.print("Enter your new password: ");
+        String newPassword = scanner.nextLine();
+        if (oldPassword.equals(newPassword)) {
+            System.out.println("Your new password should be different from the previous password. Try again.");
+            return;
+        }
+        DataManager.shared().getLoggedInAccount().setPassword(newPassword);
+        System.out.println("New password has been set");
+        return;
     }
 
     private boolean logoutCommand() {
@@ -224,6 +383,7 @@ public class CustomerMenu extends Menu {
     }
 
     private void viewOrderDetails() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Customer currentCustomer = (Customer) DataManager.shared().getLoggedInAccount();
         System.out.print("Enter order's ID: ");
         String orderID = scanner.nextLine();
@@ -233,7 +393,7 @@ public class CustomerMenu extends Menu {
             return;
         }
         System.out.println("Order #" + purchaseLog.getId());
-        System.out.println("Placed on " + purchaseLog.getDate().toString());
+        System.out.println("Placed on " + purchaseLog.getDate().format(dateFormatter));
         System.out.println("Delivery status: " + purchaseLog.getDeliveryStatus().toString());
         System.out.println("Total price paid: $" + purchaseLog.getPrice() + "(having $" + purchaseLog.getDiscountAmount() + " discount)");
         System.out.println("Purchased products: ");

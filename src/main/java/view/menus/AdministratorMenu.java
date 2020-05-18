@@ -1016,8 +1016,6 @@ public class AdministratorMenu extends UserMenu {
         } else {
             System.out.println("Invalid email");
         }
-
-        return false;
     }
 
     protected void editFirstName() {
@@ -1025,7 +1023,6 @@ public class AdministratorMenu extends UserMenu {
         String firstName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setFirstName(firstName);
         System.out.println("Done");
-        return false;
     }
 
     protected void editLastName() {
@@ -1033,7 +1030,6 @@ public class AdministratorMenu extends UserMenu {
         String lastName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setLastName(lastName);
         System.out.println("Done");
-        return false;
     }
 
     protected void editPhoneNumber() {
@@ -1045,7 +1041,6 @@ public class AdministratorMenu extends UserMenu {
         } else {
             System.out.println("Invalid phone number");
         }
-        return false;
     }
 
     protected void changePassword() {
@@ -1066,74 +1061,8 @@ public class AdministratorMenu extends UserMenu {
         return;
     }
 
-    private void seeAllRequests() {
-    }
-
-    private void fulfillRequest(Request request) {
-    }
-
-    private void seeAllCoupons() {
-    }
-
-    private void filterCouponsByName(String name) {
-    }
-
-    private void startEditingCoupon(Coupon coupon) {
-    }
-
-    private void startAddingCoupon() {
-    }
-
-    private void seeAllAccounts() {
-    }
-
-    private void seeAccountDetails(Account account) {
-    }
-
-    private void startDeletingAccount(Account account) {
-    }
-
-    private void startAddingNewAdministrator() {
-    }
-
-    private void seeAllCategories() {
-    }
-
-    private void filterCategoriesByName(String name) {
-    }
-
-    private void filterCategoriesByDescription(String description) {
-    }
-
-    private void startEditingCategoryName(Category category) {
-    }
-
-    private void startEditingCategoryDescription(Category category) {
-    }
-
-    private void startAddingProductToCategory(Category category) {
-    }
-
-    private void startRemovingProductOfCategory(Category category) {
-    }
-
-    private void startAddingSubCategoryToCategory(Category category) {
-    }
-
-    private void startAddingCategory() {
-    }
-
-    private void startEditingProduct(Product product) {
-    }
-
-    private void startRemovingProduct(Product product) {
-    }
-
     @Override
     protected void showHelp() {
 
-    }
-
-    private void logout() {
     }
 }

@@ -27,6 +27,7 @@ public class EditProductBySellerRequest extends Request {
 
     @Override
     public void fulfill() {
-
+        DataManager.shared().removeProduct(oldProduct);
+        DataManager.shared().addProduct(getNewProduct());
     }
 }

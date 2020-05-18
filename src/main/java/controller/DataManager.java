@@ -223,6 +223,16 @@ public class DataManager {
         saveData();
     }
 
+    public void addSale(Sale sale) {
+        allSales.add(sale);
+        saveData();
+    }
+
+    public void addProduct(Product product) {
+        allProducts.add(product);
+        saveData();
+    }
+
     public void addCoupon(Coupon coupon) {
         allCoupons.add(coupon);
         saveData();
@@ -240,6 +250,11 @@ public class DataManager {
 
     public void removeRequest(Request request) {
         allRequests.remove(request);
+        saveData();
+    }
+
+    public void removeSale(Sale sale) {
+        allSales.remove(sale);
         saveData();
     }
 
