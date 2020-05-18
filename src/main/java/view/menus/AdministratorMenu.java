@@ -656,7 +656,6 @@ public class AdministratorMenu extends UserMenu {
 
     private void showCouponDetails(Coupon coupon) {
         System.out.println("Coupon #" + coupon.getId());
-        //System.out.println("Sale status: " + coupon.getSaleStatus().toString());
         System.out.println("Discount percent: " + coupon.getDiscountPercent());
         System.out.println("Maximum possible discount: " + coupon.getDiscountPercent());
         System.out.println("Start time: " + coupon.getStartTime());
