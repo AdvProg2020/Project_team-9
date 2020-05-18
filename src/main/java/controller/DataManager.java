@@ -204,6 +204,11 @@ public class DataManager {
         }
     }
 
+    public void addLog(Log log) {
+        allLogs.add(log);
+        saveData();
+    }
+
     public void addCoupon(Coupon coupon) {
         allCoupons.add(coupon);
         saveData();

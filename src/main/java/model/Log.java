@@ -4,6 +4,8 @@ import controller.DataManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class Log {
@@ -12,7 +14,7 @@ public abstract class Log {
     private LocalDateTime date;
     private long price;
     private int discountAmount;
-    private ArrayList<String> products;
+    private HashMap<String, Integer> products;
     // TODO: Enum in Gson??
     private DeliveryStatus deliveryStatus;
 
@@ -32,20 +34,26 @@ public abstract class Log {
         return discountAmount;
     }
 
-    public ArrayList<Product> getProducts() {
-        return products.stream().map(id -> DataManager.shared().getProductWithId(id)).collect(Collectors.toCollection(ArrayList::new));
+    public HashMap<Product, Integer> getProducts() {
+        HashMap<Product, Integer> result = new HashMap<>();
+        for (Map.Entry<String, Integer> stringIntegerEntry : products.entrySet()) {
+            Map.Entry pair = stringIntegerEntry;
+            result.put(DataManager.shared().getProductWithId((String) pair.getKey()), (int) pair.getValue());
+        }
+        return result;
     }
 
     public DeliveryStatus getDeliveryStatus() {
         return deliveryStatus;
     }
 
-    public Log(String id, LocalDateTime date, long price, int discountAmount, ArrayList<Product> products, DeliveryStatus deliveryStatus) {
+    public Log(String id, LocalDateTime date, long price, int discountAmount, HashMap<Product, Integer> products, DeliveryStatus deliveryStatus) {
         this.id = id;
         this.date = date;
         this.price = price;
         this.discountAmount = discountAmount;
-        this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
+        this.products = new HashMap<>();
+        products.entrySet().forEach(productIntegerEntry -> this.products.put(((Product) (((Map.Entry) productIntegerEntry).getKey())).getProductId(), (int) ((Map.Entry) productIntegerEntry).getValue()));
         this.deliveryStatus = deliveryStatus;
     }
 }

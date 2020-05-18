@@ -4,6 +4,7 @@ import controller.DataManager;
 import jdk.jfr.DataAmount;
 import model.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,8 +63,8 @@ public class CheckOutMenu extends Menu {
             if (response.equalsIgnoreCase("yes")) {
                 customer.decreaseCredit((int)priceAfterDiscount);
                 coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
-                // TODO: Register a Log here!!!
-                DataManager.saveData();
+                PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int)totalPrice, (int)(totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
+                DataManager.shared().addLog(purchaseLog);
                 System.out.println("Thank you for your purchase!");
             }
         }
