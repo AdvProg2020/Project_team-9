@@ -119,8 +119,9 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
+            if (username.equals("-1")) return false;
             if (DataManager.shared().doesUserWithGivenUsernameExist(username)) {
-                System.out.print("User exists with the given username. Try a new one: ");
+                System.out.print("User exists with the given username. Try a new one or enter -1 to quit: ");
             } else break;
         }
         System.out.print("Password: ");

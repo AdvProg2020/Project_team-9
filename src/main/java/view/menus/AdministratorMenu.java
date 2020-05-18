@@ -545,6 +545,9 @@ public class AdministratorMenu extends UserMenu {
 
     private boolean logoutCommand() {
         DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
         return true;
     }
 

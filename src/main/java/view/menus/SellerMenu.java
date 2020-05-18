@@ -7,12 +7,14 @@ import model.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SellerMenu extends UserMenu {
     public SellerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
         int i = 0;
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(i, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -369,6 +371,34 @@ public class SellerMenu extends UserMenu {
             protected void showHelp() {
             }
         });
+        i++;
+        subMenus.put(i, new Menu("Logout", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+                if (logoutCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+        this.setSubMenus(subMenus);
+    }
+
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
+        return true;
     }
 
     private void viewPurchasorsOfAProduct() {

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class CustomerMenu extends Menu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -295,6 +296,9 @@ public class CustomerMenu extends Menu {
 
     private boolean logoutCommand() {
         DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
         return true;
     }
 
