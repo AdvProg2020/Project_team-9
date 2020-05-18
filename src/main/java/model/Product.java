@@ -116,6 +116,7 @@ public class Product {
     }
 
     public double getAverageScore() {
+        if (scores.size() == 0) return 0;
         int total = 0;
         for (Score score : scores) {
             total += score.getScore();

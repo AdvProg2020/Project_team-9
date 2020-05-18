@@ -5,16 +5,17 @@ import controller.DataManager;
 public class EditSaleBySellerRequest extends Request {
     private String seller;
     private String oldSale;
-    private String newSale;
+    private Sale newSale;
 
-    public EditSaleBySellerRequest(Seller seller, Sale oldSale, Sale newSale) {
+    public EditSaleBySellerRequest(String id, Seller seller, Sale oldSale, Sale newSale) {
+        super(id);
         this.seller = seller.getUsername();
         this.oldSale = oldSale.getOffId();
-        this.newSale = newSale.getOffId();
+        this.newSale = newSale;
     }
 
     public Sale getNewSale() {
-        return DataManager.shared().getSaleWithId(newSale);
+        return newSale;
     }
 
     public Sale getOldSale() {

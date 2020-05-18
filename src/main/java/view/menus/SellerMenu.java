@@ -7,12 +7,14 @@ import model.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SellerMenu extends UserMenu {
     public SellerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
         int i = 0;
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(i, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -369,6 +371,58 @@ public class SellerMenu extends UserMenu {
             protected void showHelp() {
             }
         });
+        i++;
+        subMenus.put(i, new Menu("All products in detail", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        i++;
+        subMenus.put(i, new Menu("Logout", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+                if (logoutCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+        this.setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
+    }
+
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
+        return true;
     }
 
     private void viewPurchasorsOfAProduct() {
@@ -457,7 +511,7 @@ public class SellerMenu extends UserMenu {
         String endInput = scanner.nextLine();
         LocalDateTime endTime = LocalDateTime.parse(endInput, dateFormatter);
         Sale newSale = new Sale(sale.getOffId(), products, SaleStatus.CONFIRMED, discountAmount, startTime, endTime, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
-        EditSaleBySellerRequest request = new EditSaleBySellerRequest((Seller) DataManager.shared().getLoggedInAccount(), sale, newSale);
+        EditSaleBySellerRequest request = new EditSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale, newSale);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");
     }
@@ -494,7 +548,7 @@ public class SellerMenu extends UserMenu {
         String endInput = scanner.nextLine();
         LocalDateTime endTime = LocalDateTime.parse(endInput, dateFormatter);
         Sale sale = new Sale(DataManager.getNewId(), products, SaleStatus.CONFIRMED, discountAmount, startTime, endTime, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
-        AddSaleBySellerRequest request = new AddSaleBySellerRequest((Seller) DataManager.shared().getLoggedInAccount(), sale);
+        AddSaleBySellerRequest request = new AddSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");
     }
@@ -555,7 +609,7 @@ public class SellerMenu extends UserMenu {
         ArrayList<Seller> sellers = new ArrayList<>();
         sellers.add((Seller) DataManager.shared().getLoggedInAccount());
         Product newProduct = new Product(product.getProductId(), Status.CONFIRMED, name, brand, price, discountPercent, sellers, availableNumber, category, description, LocalDateTime.now());
-        EditProductBySellerRequest request = new EditProductBySellerRequest((Seller) DataManager.shared().getLoggedInAccount(), product, newProduct);
+        EditProductBySellerRequest request = new EditProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product, newProduct);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");
     }
@@ -592,7 +646,7 @@ public class SellerMenu extends UserMenu {
         ArrayList<Seller> sellers = new ArrayList<>();
         sellers.add((Seller) DataManager.shared().getLoggedInAccount());
         Product product = new Product(DataManager.getNewId(), Status.CONFIRMED, name, brand, price, discountPercent, sellers, availableNumber, category, description, LocalDateTime.now());
-        AddProductBySellerRequest request = new AddProductBySellerRequest((Seller) DataManager.shared().getLoggedInAccount(), product);
+        AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");
     }
@@ -623,7 +677,6 @@ public class SellerMenu extends UserMenu {
                 System.out.println("\tPrevious price (with discount): " + price);
                 System.out.println("\tNew price (after sale): " + (price - sale.getDiscountAmount()));
             }
-            System.out.println("Sale status: " + sale.getSaleStatus().toString() + "\n");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             System.out.println("Starting from " + sale.getStartTime().format(dateFormatter) + " and ending in " + sale.getEndTime().format(dateFormatter));
         }
@@ -652,7 +705,7 @@ public class SellerMenu extends UserMenu {
 
     private void viewAllSellingProducts() {
         showString("Products:");
-        showString(((Seller) getCurrentUser()).getProducts());
+        DataManager.shared().getAllProducts().stream().map(product -> "#" + product.getProductId() + " - " + product.getName()).forEach(System.out::println);
     }
 
     @Override

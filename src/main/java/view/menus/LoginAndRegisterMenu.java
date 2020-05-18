@@ -4,6 +4,7 @@ import controller.DataManager;
 import model.Administrator;
 import model.Customer;
 import model.Seller;
+import model.SellerRegistrationRequest;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
@@ -50,7 +51,30 @@ public class LoginAndRegisterMenu extends Menu {
 
             }
         });
+        subMenus.put(3, new Menu("All products", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
         setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean loginCommand() {
@@ -119,8 +143,9 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
+            if (username.equals("-1")) return false;
             if (DataManager.shared().doesUserWithGivenUsernameExist(username)) {
-                System.out.print("User exists with the given username. Try a new one: ");
+                System.out.print("User exists with the given username. Try a new one or enter -1 to quit: ");
             } else break;
         }
         System.out.print("Password: ");
@@ -138,6 +163,8 @@ public class LoginAndRegisterMenu extends Menu {
             String companyDetails = scanner.nextLine();
             Seller seller = new Seller(username, password, email, phone, firstName, lastName, companyDetails);
             DataManager.shared().registerAccount(seller);
+            SellerRegistrationRequest request = new SellerRegistrationRequest(DataManager.getNewId(), seller);
+            DataManager.shared().addRequest(request);
             System.out.println("Account created");
         } else if (type.equalsIgnoreCase("customer")) {
             Customer customer = new Customer(username, password, email, phone, firstName, lastName);

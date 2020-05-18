@@ -5,12 +5,13 @@ import controller.DataManager;
 public class EditProductBySellerRequest extends Request {
     private String seller;
     private String oldProduct;
-    private String newProduct;
+    private Product newProduct;
 
-    public EditProductBySellerRequest(Seller seller, Product oldProduct, Product newProduct) {
+    public EditProductBySellerRequest(String id, Seller seller, Product oldProduct, Product newProduct) {
+        super(id);
         this.seller = seller.getUsername();
         this.oldProduct = oldProduct.getProductId();
-        this.newProduct = newProduct.getProductId();
+        this.newProduct = newProduct;
     }
 
     public Seller getSeller() {
@@ -22,7 +23,7 @@ public class EditProductBySellerRequest extends Request {
     }
 
     public Product getNewProduct() {
-        return DataManager.shared().getProductWithId(newProduct);
+        return newProduct;
     }
 
     @Override

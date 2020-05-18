@@ -485,7 +485,24 @@ public class AdministratorMenu extends UserMenu {
             }
         });
 
-        subMenus.put(29, new Menu("Logout", this) {
+        subMenus.put(29, new Menu("All products in detail", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(30, new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -505,6 +522,13 @@ public class AdministratorMenu extends UserMenu {
         });
 
         this.setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean acceptComment() {
@@ -545,6 +569,9 @@ public class AdministratorMenu extends UserMenu {
 
     private boolean logoutCommand() {
         DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
         return true;
     }
 
@@ -628,11 +655,12 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private void showCouponDetails(Coupon coupon) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         System.out.println("Coupon #" + coupon.getId());
         System.out.println("Discount percent: " + coupon.getDiscountPercent());
-        System.out.println("Maximum possible discount: " + coupon.getDiscountPercent());
-        System.out.println("Start time: " + coupon.getStartTime());
-        System.out.println("End time: " + coupon.getEndTime());
+        System.out.println("Maximum possible discount: " + coupon.getMaximumDiscount());
+        System.out.println("Start time: " + coupon.getStartTime().format(dateFormatter));
+        System.out.println("End time: " + coupon.getEndTime().format(dateFormatter));
     }
 
     private boolean removeCoupon() {
@@ -649,6 +677,10 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean viewAllCoupons() {
+        if (DataManager.shared().getAllCoupons().size() == 0) {
+            System.out.println("No coupon exists");
+            return false;
+        }
         System.out.println("All Coupons");
         for (Coupon coupon : DataManager.shared().getAllCoupons()) {
             System.out.println("#" + coupon.getId() + " - " + coupon.getDiscountPercent() + " percent discount");
@@ -677,7 +709,7 @@ public class AdministratorMenu extends UserMenu {
         while (true) {
             String username = scanner.nextLine();
             if (username.equals("-1")) break;
-            Account account = DataManager.shared().getLoggedInAccount();
+            Account account = DataManager.shared().getAccountWithGivenUsername(username);
             if (!(account instanceof Customer)) {
                 System.out.print("Invalid customer username. Enter again: ");
                 continue;
@@ -735,6 +767,7 @@ public class AdministratorMenu extends UserMenu {
         }
         if (shouldAccept) {
             request.fulfill();
+            DataManager.shared().removeRequest(request);
             System.out.println("Request Accepted");
         } else {
             DataManager.shared().removeRequest(request);
@@ -842,18 +875,19 @@ public class AdministratorMenu extends UserMenu {
         String description = scanner.nextLine();
         Category parent;
         while (true) {
-            System.out.print("Enter the ID of the parent category: ");
+            System.out.print("Enter the ID of the parent category (-1 for no parent): ");
             String parentID = scanner.nextLine();
             parent = DataManager.shared().getCategoryWithId(parentID);
-            if (parent == null) {
+            if (parent == null && !parentID.equals("-1")) {
                 System.out.print("Invalid category ID. Try again: ");
                 continue;
             }
             break;
         }
-        ArrayList<Product> products = getProductsListFromUser();
         String categoryID = DataManager.getNewId();
-        Category category = new Category(categoryID, name, description, parent.getId(), products);
+        String parentGetID = "";
+        if (parent != null) parentGetID = parent.getId();
+        Category category = new Category(categoryID, name, description, parentGetID);
         DataManager.shared().addCategory(category);
         System.out.println("Successfully added category with ID #" + categoryID);
         return false;
@@ -863,7 +897,7 @@ public class AdministratorMenu extends UserMenu {
         System.out.println("All Categories");
         for (Category category : DataManager.shared().getAllCategories()) {
             System.out.println("#" + category.getId() + " - " + category.getName());
-            System.out.println(category.getDescription());
+            System.out.println("\t" + category.getDescription());
         }
         return false;
     }
@@ -882,9 +916,7 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean summaryOfAllProducts() {
-        for (Product product : DataManager.shared().getAllProducts()) {
-            System.out.println("#" + product.getProductId() + " - " + product.getName());
-        }
+        DataManager.shared().getAllProducts().stream().map(product -> "#" + product.getProductId() + " - " + product.getName()).forEach(System.out::println);
         return false;
     }
 
@@ -928,6 +960,9 @@ public class AdministratorMenu extends UserMenu {
             System.out.println("No account with the given username exists");
             return;
         }
+        if (account instanceof Customer) System.out.println("Customer");
+        else if (account instanceof Administrator) System.out.println("Administrator");
+        else if (account instanceof Seller) System.out.println("Seller");
         System.out.println(account.getFirstName() + " " + account.getLastName());
         System.out.println("Email: " + account.getEmail());
         System.out.println("Phone: " + account.getPhoneNumber());

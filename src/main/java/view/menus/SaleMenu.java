@@ -45,7 +45,50 @@ public class SaleMenu extends Menu {
             }
         });
 
+        subMenus.put(3, new Menu("All products in detail", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(4, new Menu("Logout", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+                if (logoutCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+
         this.setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean showProductDetailsCommand() {
@@ -61,6 +104,14 @@ public class SaleMenu extends Menu {
         menu.show();
         menu.execute();
         return false;
+    }
+
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
+        return true;
     }
 
     private boolean showAllSalesCommand() {

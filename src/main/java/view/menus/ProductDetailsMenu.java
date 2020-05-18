@@ -152,6 +152,27 @@ public class ProductDetailsMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        subMenus.put(9, new Menu("Logout", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+                if (logoutCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+
+        this.setSubMenus(subMenus);
     }
 
     // TODO: Replace all scanner inputs with better equivalents
@@ -181,6 +202,14 @@ public class ProductDetailsMenu extends Menu {
                         + " said: \n" + comment.getTitle().toUpperCase() + "\n" + comment.getText())
                 .forEach(System.out::println);
         return false;
+    }
+
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
+        return true;
     }
 
     private boolean compareCommand() {

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class CustomerMenu extends Menu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -112,6 +113,9 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(7, new Menu("View cart", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 viewCart();
                 parentMenu.show();
@@ -124,8 +128,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(8, new Menu("View Product Details", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 showProduct();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -135,8 +144,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(9, new Menu("Checkout", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 checkOut();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -144,10 +158,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(10, new Menu("View balance", this) {
+        subMenus.put(10, new Menu("View credit", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 viewBalance();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -157,8 +176,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(11, new Menu("View usable coupons", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 viewUsableCoupons();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -168,8 +192,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(12, new Menu("View all orders", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 viewOrders();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -179,8 +208,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(13, new Menu("View order details", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 viewOrderDetails();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -190,8 +224,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(14, new Menu("Rate product", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 rateProduct();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -201,8 +240,13 @@ public class CustomerMenu extends Menu {
         });
         subMenus.put(15, new Menu("Comment on product", this) {
             @Override
+            public void show() {
+            }
+            @Override
             public void execute() {
                 addCommentCommand();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -210,7 +254,55 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(16, new Menu("Logout", this) {
+        subMenus.put(16, new Menu("Increase credit", this) {
+            @Override
+            public void show() {
+            }
+            @Override
+            public void execute() {
+                increaseCredit();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+        subMenus.put(17, new Menu("All products", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(18, new Menu("Total price of cart", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (totalPriceOfCart()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(19, new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -232,11 +324,41 @@ public class CustomerMenu extends Menu {
         this.setSubMenus(subMenus);
     }
 
+    private boolean totalPriceOfCart() {
+        Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
+        if (customer.getCart().getProducts().size() == 0) {
+            System.out.println("There is no product in your cart yet");
+            return false;
+        }
+        int totalPrice = 0;
+        for (Map.Entry<Product, Integer> entry : customer.getCart().getProducts().entrySet()) {
+            Product key = entry.getKey();
+            Integer value = entry.getValue();
+            totalPrice += key.getPrice() * (1 - (double)key.getDiscountPercent()/100) * value;
+        }
+        System.out.println("Total cart price, including discount: " + totalPrice);
+        return false;
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
+    }
+
+    private void increaseCredit() {
+        System.out.print("Enter a value to increase credit by that amount: ");
+        int amount = DataManager.nextInt(scanner);
+        DataManager.shared().getLoggedInAccount().increaseCredit(amount);
+        System.out.println("Done");
+    }
+
     protected void viewPersonalInfo() {
-        Administrator administrator = (Administrator) DataManager.shared().getLoggedInAccount();
-        System.out.println(administrator.getFirstName() + " " + administrator.getLastName() + " - " + administrator.getUsername());
-        System.out.println("Email: " + administrator.getEmail());
-        System.out.println("Phone: " + administrator.getPhoneNumber());
+        Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
+        System.out.println(customer.getFirstName() + " " + customer.getLastName() + " - " + customer.getUsername());
+        System.out.println("Email: " + customer.getEmail());
+        System.out.println("Phone: " + customer.getPhoneNumber());
     }
 
     protected void editEmail() {
@@ -290,11 +412,13 @@ public class CustomerMenu extends Menu {
         }
         DataManager.shared().getLoggedInAccount().setPassword(newPassword);
         System.out.println("New password has been set");
-        return;
     }
 
     private boolean logoutCommand() {
         DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
         return true;
     }
 

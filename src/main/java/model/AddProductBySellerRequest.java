@@ -4,13 +4,12 @@ import controller.DataManager;
 
 public class AddProductBySellerRequest extends Request {
     private String seller;
-    private String product;
+    private Product product;
 
-    // TODO: Fulfilling requests...
-
-    public AddProductBySellerRequest(Seller seller, Product product) {
+    public AddProductBySellerRequest(String id, Seller seller, Product product) {
+        super(id);
         this.seller = seller.getUsername();
-        this.product = product.getProductId();
+        this.product = product;
     }
 
     public Seller getSeller() {
@@ -18,7 +17,7 @@ public class AddProductBySellerRequest extends Request {
     }
 
     public Product getProduct() {
-        return DataManager.shared().getProductWithId(product);
+        return product;
     }
 
     @Override
