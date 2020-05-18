@@ -5,6 +5,8 @@ import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CustomerMenu extends Menu {
@@ -138,10 +140,10 @@ public class CustomerMenu extends Menu {
         return true;
     }
 
-    // TODO: Scanner.nextInt()s...
-
     private void checkOut() {
-        // TODO: Show CheckOutMenu
+        CheckOutMenu menu = new CheckOutMenu("Check out", this);
+        menu.show();
+        menu.execute();
     }
 
     private void rateProduct() {
@@ -154,7 +156,7 @@ public class CustomerMenu extends Menu {
             return;
         }
         System.out.print("Enter a rate from 1 to 5, or 0 to cancel rating: ");
-        int rating = scanner.nextInt();
+        int rating = DataManager.nextInt(scanner);
         if (rating == 0) {
             System.out.println("Rating canceled");
             return;
@@ -216,7 +218,9 @@ public class CustomerMenu extends Menu {
             return false;
         }
         product.incrementVisitCount();
-        // TODO: Go to product details menu...
+        ProductDetailsMenu menu = new ProductDetailsMenu("Product Details", this, product);
+        menu.show();
+        menu.execute();
         return false;
     }
 
@@ -234,10 +238,9 @@ public class CustomerMenu extends Menu {
         System.out.println("Delivery status: " + purchaseLog.getDeliveryStatus().toString());
         System.out.println("Total price paid: $" + purchaseLog.getPrice() + "(having $" + purchaseLog.getDiscountAmount() + " discount)");
         System.out.println("Purchased products: ");
-        // TODO: Repeated products in order???
-        purchaseLog.getProducts().stream()
-                .map(product -> "#" + product.getProductId() + " - " + product.getName())
-                .forEach(System.out::println);
+        for (Map.Entry<Product, Integer> productIntegerEntry : purchaseLog.getProducts().entrySet()) {
+            System.out.println(((Map.Entry) productIntegerEntry).getValue() + "x\t#" + ((Product) ((Map.Entry) productIntegerEntry).getKey()).getProductId() + " - " + ((Product) ((Map.Entry) productIntegerEntry).getKey()).getName());
+        }
     }
 
     private void viewOrders() {

@@ -15,7 +15,6 @@ public class ProductDetailsMenu extends Menu {
     public ProductDetailsMenu(String name, Menu parentMenu, Product currentProduct) {
         super(name, parentMenu);
         this.currentProduct = currentProduct;
-        // TODO: If no seller...???
         this.currentSeller = currentProduct.getSellers().get(0);
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("Digest", this) {
@@ -51,8 +50,6 @@ public class ProductDetailsMenu extends Menu {
             protected void showHelp() {
             }
         });
-
-        // TODO: Different count of one product in cart???
 
         subMenus.put(3, new Menu("Remove from cart", this) {
             @Override
@@ -142,12 +139,8 @@ public class ProductDetailsMenu extends Menu {
         this.setSubMenus(subMenus);
     }
 
-    // TODO: Replace all scanner inputs with better equivalents
-
     private boolean viewCommentsCommand() {
         System.out.println("All comments:");
-        // TODO: Should we only show the confirmed comments here??
-        // TODO: Where do we confirm comments??
         currentProduct.getComments().stream()
                 .filter(comment -> comment.getCommentStatus() == CommentStatus.CONFIRMED)
                 .map(comment -> comment.getCustomer().getFirstName() + " "
@@ -230,13 +223,8 @@ public class ProductDetailsMenu extends Menu {
     }
 
     private boolean addToCart() {
-        Cart cart = getCurrentCart();
-        if (cart.containsProduct(currentProduct)) {
-            System.out.println("Product is already added to cart");
-        } else {
-            cart.addProduct(currentProduct);
-            System.out.println("Product added to the cart successfully");
-        }
+        getCurrentCart().addProduct(currentProduct);
+        System.out.println("Product added to the cart successfully");
         return false;
     }
 

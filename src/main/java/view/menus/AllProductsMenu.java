@@ -13,7 +13,7 @@ public class AllProductsMenu extends Menu {
     private String descriptionFilter = "";
     private int priceFilter = 0;
 
-    private enum SortingMethod { VISIT_COUNT, NAME, PRICE }
+    private enum SortingMethod { VISIT_COUNT, NAME, PRICE, SCORE, TIME }
     private SortingMethod sortingMethod = SortingMethod.VISIT_COUNT;
 
     public AllProductsMenu(String name, Menu parentMenu) {
@@ -371,6 +371,12 @@ public class AllProductsMenu extends Menu {
             case PRICE:
                 System.out.println("Sorted by price");
                 break;
+            case SCORE:
+                System.out.println("Sorted by score");
+                break;
+            case TIME:
+                System.out.println("Sorted by date created");
+                break;
         }
         return false;
     }
@@ -413,6 +419,13 @@ public class AllProductsMenu extends Menu {
             case PRICE:
                 currentProducts.sort(Comparator.comparingInt(Product::getPrice));
                 break;
+            case SCORE:
+                currentProducts.sort(Comparator.comparingDouble(Product::getAverageScore).reversed());
+                break;
+            case TIME:
+                // TODO: Does the lambda structure work for date??
+                currentProducts.sort(Comparator.comparing(Product::getDateCreated).reversed());
+                break;
         }
     }
 
@@ -430,8 +443,6 @@ public class AllProductsMenu extends Menu {
             }
         }
     }
-
-    // TODO: Sort by time and score is not done
 
     private boolean removeCategoryFilter() {
         System.out.println("Current categories filtered by:");
@@ -471,7 +482,6 @@ public class AllProductsMenu extends Menu {
     }
 
     private boolean removePriceFilter() {
-        // TODO: Free products??
         priceFilter = 0;
         System.out.println("Price filter was successfully removed");
         return false;
@@ -530,7 +540,7 @@ public class AllProductsMenu extends Menu {
 
     private boolean filterByPriceCommand() {
         System.out.print("Enter a new price to only see products with that price: ");
-        priceFilter = scanner.nextInt();
+        priceFilter = DataManager.nextInt(scanner);
         System.out.println("Price filter was successfully set");
         return false;
     }
@@ -545,6 +555,7 @@ public class AllProductsMenu extends Menu {
     }
 
     // TODO: Multiple categories not implemented...
+    // TODO: Features in categories not implemented...
 
     private boolean showAvailableFiltersCommand() {
         System.out.println("You can type \"Filter by category\", \"Filter by name\", \"Filter by description\" and \"Filter by price\".");

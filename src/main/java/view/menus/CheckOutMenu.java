@@ -2,11 +2,9 @@ package view.menus;
 
 import controller.DataManager;
 import jdk.jfr.DataAmount;
-import model.Cart;
-import model.Coupon;
-import model.Customer;
-import model.Product;
+import model.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,23 +20,16 @@ public class CheckOutMenu extends Menu {
     private void startGettingCouponAndConfirmingPurchase() {
     }
 
-    // TODO: No usage of "Sale"s and "Log"s...!
-
-    // TODO: Create coupon with both desired and unique ID...
-
-    // TODO: Check data saving...
-
     @Override
     public void show() {
         if (!checkIfCustomer()) return;
-        // TODO: We assume by here the only cart is the user's cart...
         Cart cart = ((Customer)(DataManager.shared().getLoggedInAccount())).getCart();
         HashMap<Product, Integer> products = cart.getProducts();
         Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
         String address = getAddress(customer);
         String phoneNumber = getPhoneNumber(customer);
         String couponCode;
-        Coupon coupon = getCoupon(); // if null, there is no coupon code
+        Coupon coupon = getCoupon(customer); // if null, there is no coupon code
         String orderId = DataManager.getNewId();
         System.out.println("\nOrder #" + orderId);
         Iterator it = products.entrySet().iterator();
@@ -46,20 +37,24 @@ public class CheckOutMenu extends Menu {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             double price = ((Product)pair.getKey()).getPrice();
+            for (Sale sale : DataManager.shared().getAllSales()) {
+                // TODO: What is the next line's "suspicious code"??
+                if (sale.getProducts().contains(pair.getKey())) {
+                    price -= sale.getDiscountAmount();
+                    if (price < 1) price = 1;
+                }
+            }
             totalPrice += price;
             System.out.println(pair.getValue() + "x\t" + ((Product)pair.getKey()).getName() + "\t$" + price);
         }
         System.out.println("");
-        // TODO: Sale not used here...!
-        // TODO: Rounding prices...
-        System.out.println("Total price (before discount): $" + totalPrice);
+        System.out.println("Total price (before discount, with sales effected): $" + totalPrice);
         double priceAfterDiscount = totalPrice * (1 - (coupon.getDiscountPercent() / 100.0));
         if (totalPrice - priceAfterDiscount > coupon.getMaximumDiscount()) {
             priceAfterDiscount = totalPrice - coupon.getMaximumDiscount();
         }
         System.out.println("Amount of discount: -$" + (totalPrice - priceAfterDiscount));
         System.out.println("Price to pay: $" + priceAfterDiscount);
-        // TODO: Where to increase credit???
         if (customer.getCredit() < priceAfterDiscount) {
             System.out.println("You have $" + customer.getCredit() + " in your account; unfortunately, you're not able to purchase these products.");
         } else {
@@ -68,14 +63,14 @@ public class CheckOutMenu extends Menu {
             if (response.equalsIgnoreCase("yes")) {
                 customer.decreaseCredit((int)priceAfterDiscount);
                 coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
-                // TODO: Register a Log here!!!
-                DataManager.saveData();
+                PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int)totalPrice, (int)(totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
+                DataManager.shared().addLog(purchaseLog);
                 System.out.println("Thank you for your purchase!");
             }
         }
     }
 
-    private Coupon getCoupon() {
+    private Coupon getCoupon(Customer customer) {
         String couponCode;
         Coupon coupon = null;
         while (true) {
@@ -86,11 +81,14 @@ public class CheckOutMenu extends Menu {
                 break;
             }
             coupon = DataManager.shared().getCouponWithId(couponCode);
-            if (coupon == null) {
+            if (coupon == null || coupon.getStartTime().isAfter(LocalDateTime.now()) || coupon.getEndTime().isBefore(LocalDateTime.now())) {
                 System.out.println("Invalid coupon code");
                 continue;
             }
-            // TODO: Coupon remaining usage count, account is permitted or not, and start and date time are all unchecked...!!!
+            if (coupon.getRemainingUsagesCount().get(customer.getUsername()) < 1) {
+                System.out.println("You can't use this coupon code anymore");
+                continue;
+            }
             break;
         }
         return coupon;
