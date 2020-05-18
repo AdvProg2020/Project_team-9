@@ -432,7 +432,6 @@ public class AllProductsMenu extends Menu {
     }
 
     // TODO: Sort by time and score is not done
-    // TODO: Descending sort
 
     private boolean removeCategoryFilter() {
         System.out.println("Current categories filtered by:");

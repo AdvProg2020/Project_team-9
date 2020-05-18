@@ -1,6 +1,7 @@
 package view.menus;
 
 import controller.DataManager;
+import controller.Validator;
 import model.*;
 
 import javax.swing.text.DateFormatter;
@@ -599,22 +600,7 @@ public class AdministratorMenu extends UserMenu {
 
     private boolean createDiscountCode() {
         System.out.println("New coupon");
-        ArrayList<Product> products = new ArrayList<>();
-        System.out.println("Enter ID of the products you want to be included in the offer, one in a line, then enter -1 to continue:");
-        while (true) {
-            String id = scanner.nextLine();
-            if (id.equals("-1")) break;
-            Product product = DataManager.shared().getProductWithId(id);
-            if (product == null) {
-                System.out.print("Invalid product ID. Enter the last one correctly again: ");
-                continue;
-            }
-            if (products.contains(product)) {
-                System.out.println("Don't enter repeated IDs");
-                continue;
-            }
-            products.add(product);
-        }
+        ArrayList<Product> products = getProductsListFromUser();
         System.out.print("Enter coupon's discount percent (between 0 and 100): ");
         int discountPercent = scanner.nextInt();
         System.out.print("Enter coupon's maximum discount amount: ");
@@ -650,10 +636,31 @@ public class AdministratorMenu extends UserMenu {
             }
             remainingUsagesCount.put(account.getUsername(), numberOfTimes);
         }
-        Coupon coupon = new Coupon(DataManager.getNewId(), products, Status.CONFIRMED, discountPercent, maximumDiscount, startTime, endTime, remainingUsagesCount);
+        String couponID = DataManager.getNewId();
+        Coupon coupon = new Coupon(couponID, products, Status.CONFIRMED, discountPercent, maximumDiscount, startTime, endTime, remainingUsagesCount);
         DataManager.shared().addCoupon(coupon);
-        System.out.println("Coupon added successfully");
+        System.out.println("Coupon added successfully with code " + couponID);
         return false;
+    }
+
+    private ArrayList<Product> getProductsListFromUser() {
+        ArrayList<Product> products = new ArrayList<>();
+        System.out.println("Enter ID of the products you want to be included, one in a line, then enter -1 to continue:");
+        while (true) {
+            String id = scanner.nextLine();
+            if (id.equals("-1")) break;
+            Product product = DataManager.shared().getProductWithId(id);
+            if (product == null) {
+                System.out.print("Invalid product ID. Enter the last one correctly again: ");
+                continue;
+            }
+            if (products.contains(product)) {
+                System.out.println("Don't enter repeated IDs");
+                continue;
+            }
+            products.add(product);
+        }
+        return products;
     }
 
     private Request getRequestWithIDFromUser() {
@@ -771,7 +778,26 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean addCategory() {
-
+        System.out.print("Enter category's name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter a description for the category: ");
+        String description = scanner.nextLine();
+        Category parent;
+        while (true) {
+            System.out.print("Enter the ID of the parent category: ");
+            String parentID = scanner.nextLine();
+            parent = DataManager.shared().getCategoryWithId(parentID);
+            if (parent == null) {
+                System.out.print("Invalid category ID. Try again: ");
+                continue;
+            }
+            break;
+        }
+        ArrayList<Product> products = getProductsListFromUser();
+        String categoryID = DataManager.getNewId();
+        Category category = new Category(categoryID, name, description, parent.getId(), products);
+        DataManager.shared().addCategory(category);
+        System.out.println("Successfully added category with ID #" + categoryID);
         return false;
     }
 
@@ -902,8 +928,13 @@ public class AdministratorMenu extends UserMenu {
     private boolean editEmail() {
         System.out.print("Enter your new email address: ");
         String email = scanner.nextLine();
-        // TODO: Check regex!
-        DataManager.shared().getLoggedInAccount().setEmail(email);
+        if (Validator.shared().emailIsValid(email)) {
+            DataManager.shared().getLoggedInAccount().setEmail(email);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid email");
+        }
+
         return false;
     }
 
@@ -911,6 +942,7 @@ public class AdministratorMenu extends UserMenu {
         System.out.print("Enter your new first name: ");
         String firstName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setFirstName(firstName);
+        System.out.println("Done");
         return false;
     }
 
@@ -918,14 +950,19 @@ public class AdministratorMenu extends UserMenu {
         System.out.print("Enter your new last name: ");
         String lastName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setLastName(lastName);
+        System.out.println("Done");
         return false;
     }
 
     private boolean editPhoneNumber() {
         System.out.print("Enter your new phone number: ");
         String phone = scanner.nextLine();
-        // TODO: Check regex!
-        DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
+        if (Validator.shared().phoneNumberIsValid(phone)) {
+            DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid phone number");
+        }
         return false;
     }
 
