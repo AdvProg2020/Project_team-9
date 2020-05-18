@@ -28,6 +28,10 @@ public class Coupon {
         this.endTime = endTime;
     }
 
+    public HashMap<String, Integer> getRemainingUsagesCount() {
+        return remainingUsagesCount;
+    }
+
     public Coupon(String id, ArrayList<Product> products) {
         this.id = id;
         this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));

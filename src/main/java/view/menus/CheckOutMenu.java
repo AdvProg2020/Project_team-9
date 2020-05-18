@@ -29,7 +29,7 @@ public class CheckOutMenu extends Menu {
         String address = getAddress(customer);
         String phoneNumber = getPhoneNumber(customer);
         String couponCode;
-        Coupon coupon = getCoupon(); // if null, there is no coupon code
+        Coupon coupon = getCoupon(customer); // if null, there is no coupon code
         String orderId = DataManager.getNewId();
         System.out.println("\nOrder #" + orderId);
         Iterator it = products.entrySet().iterator();
@@ -70,7 +70,7 @@ public class CheckOutMenu extends Menu {
         }
     }
 
-    private Coupon getCoupon() {
+    private Coupon getCoupon(Customer customer) {
         String couponCode;
         Coupon coupon = null;
         while (true) {
@@ -81,11 +81,14 @@ public class CheckOutMenu extends Menu {
                 break;
             }
             coupon = DataManager.shared().getCouponWithId(couponCode);
-            if (coupon == null) {
+            if (coupon == null || coupon.getStartTime().isAfter(LocalDateTime.now()) || coupon.getEndTime().isBefore(LocalDateTime.now())) {
                 System.out.println("Invalid coupon code");
                 continue;
             }
-            // TODO: Coupon remaining usage count, account is permitted or not, and start and date time are all unchecked...!!!
+            if (coupon.getRemainingUsagesCount().get(customer.getUsername()) < 1) {
+                System.out.println("You can't use this coupon code anymore");
+                continue;
+            }
             break;
         }
         return coupon;
