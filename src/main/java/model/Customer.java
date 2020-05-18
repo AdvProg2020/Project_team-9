@@ -44,7 +44,7 @@ public class Customer extends Account {
         return DataManager.shared().getAllLogs().stream()
                 .anyMatch(log -> log instanceof PurchaseLog
                         && ((PurchaseLog) log).getCustomer().getUsername().equals(this.getUsername())
-                        && log.getProducts().contains(product));
+                        && log.getProducts().containsKey(product));
     }
 
     @Override

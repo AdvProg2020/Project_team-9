@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class LoginAndRegisterMenu extends Menu {
     public LoginAndRegisterMenu(Menu parentMenu) {
         super("Login and registration menu", parentMenu);
+        DataManager.loadData();
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("Create Account", this) {
             @Override
@@ -49,32 +50,6 @@ public class LoginAndRegisterMenu extends Menu {
 
             }
         });
-        subMenus.put(3, new Menu("MainMenu Help", this) {
-            @Override
-            public void show() {
-                System.out.println(this.getName() + " - Enter Back to return");
-            }
-
-            @Override
-            public void execute() {
-                System.out.println("Available Commands:");
-                System.out.println("Command one");
-                System.out.println("Command two");
-                while (true) {
-                    String input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
-                        this.parentMenu.show();
-                        this.parentMenu.execute();
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            protected void showHelp() {
-
-            }
-        });
         setSubMenus(subMenus);
     }
 
@@ -84,9 +59,9 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
+            if (username.equals("-1")) return false;
             if (!DataManager.shared().doesUserWithGivenUsernameExist(username)) {
-                System.out.print("User doesn't exists with the given username. Try again: ");
-                return false;
+                System.out.print("User doesn't exists with the given username. Try again (-1 to quit): ");
             } else break;
         }
         System.out.print("Password: ");
@@ -108,17 +83,17 @@ public class LoginAndRegisterMenu extends Menu {
             ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts().putAll(DataManager.shared().getTemporaryCart().getProducts());
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
             DataManager.saveData();
-            Menu menu = new CustomerMenu("Welcome", this);
+            Menu menu = new CustomerMenu("\nCustomer's main menu", this);
             menu.show();
             menu.execute();
             return true;
         } else if (result == DataManager.AccountType.ADMINISTRATOR) {
-            Menu menu = new AdministratorMenu("Welcome", this);
+            Menu menu = new AdministratorMenu("\nAdministrator's main menu", this);
             menu.show();
             menu.execute();
             return true;
         } else if (result == DataManager.AccountType.SELLER) {
-            Menu menu = new SellerMenu("Welcome", this);
+            Menu menu = new SellerMenu("\nSeller's main menu", this);
             menu.show();
             menu.execute();
             return true;

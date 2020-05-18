@@ -5,7 +5,7 @@ import controller.DataManager;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public abstract class Account {
+public class Account {
     private String username;
     private String password;
     private String email;

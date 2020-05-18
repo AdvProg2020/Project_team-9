@@ -46,8 +46,8 @@ public abstract class Menu {
         }
         if (this.parentMenu != null)
             System.out.println((subMenus.size() + 1) + ". Back");
-        else
-            System.out.println((subMenus.size() + 1) + ". Exit");
+        //else
+            //System.out.println((subMenus.size() + 1) + ". Exit");
     }
 
     public void execute() {
