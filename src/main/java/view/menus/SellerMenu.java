@@ -650,106 +650,13 @@ public class SellerMenu extends UserMenu {
         DataManager.shared().getAllCategories().stream().map(category -> "#" + category.getId() + " - " + category.getName()).forEach(System.out::println);
     }
 
-    private void viewSellLog() {
-        showString("Sale logs:");
-        showString(getCurrentUser().getLogs());
-    }
-
-    private void showProduct(Product product) {
-        showString("Product:");
-        showString(product);
-    }
-
-    private void seeCustomerOfProduct(Product product) {
-    }
-
     private void viewAllSellingProducts() {
         showString("Products:");
         showString(((Seller) getCurrentUser()).getProducts());
     }
 
-    private void startAddingProduct() {
-    }
-
-    private void startEditingProduct(Product product) {
-    }
-
-    private void requestEditingProductName(Product product) {
-    }
-
-    private void requestEditingProductBrand(Product product) {
-    }
-
-    private void requestEditingProductPrice(Product product) {
-    }
-
-    private void requestEditingProductCategory(Product product) {
-    }
-
-    private void requestEditingProductDescription(Product product) {
-    }
-
-    private void requestEditingProductNumberAvailable(Product product) {
-    }
-
-    private void requestRemovingProduct(Product product) {
-    }
-
-    private void showCategories() {
-    }
-
-    private void viewCurrentSales() {
-        showString("Current Sales:");
-
-    }
-
-    private void filterSalesByDiscountAmount(int discountAmount) {
-    }
-
-    private void filterSalesByTimeRange(LocalDateTime from, LocalDateTime to) {
-    }
-
-    private void startAddingSale() {
-    }
-
-    private void startEditingSale(Sale sale) {
-    }
-
-    private void requestAddingProduct(Product product) {
-    }
-
-    private void requestAddingSale(Sale sale) {
-    }
-
-    private void requestAddingProductToSale(Sale sale, int productId) {
-    }
-
-    private void requestRemovingProductFromSale(Sale sale, int productId) {
-    }
-
-    private void requestEditingSaleStatus(Sale sale) {
-    }
-
-    private void requestEditingSaleDiscountAmount(Sale sale) {
-    }
-
-    private void requestEditingSaleStartTime(Sale sale) {
-    }
-
-    private void requestEditingSaleEndTime(Sale sale) {
-    }
-
-    private void requestEditingSaleDeliveryStatus(Sale sale) {
-        showString("New status:");
-//        Sale newSale = new Sale(sale.getOffId(), sale.getProducts(), sale.getSaleStatus(), sale.getDiscountAmount(), sale.getStartTime(), sale.getEndTime(), sale.getSeller(),);
-//        DataManager.shared().addRequest(new EditSaleBySellerRequest(getCurrentUser(), sale, ));
-    }
-
     @Override
     protected void showHelp() {
 
-    }
-
-    private void logout() {
     }
 }
