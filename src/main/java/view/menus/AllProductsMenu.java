@@ -13,7 +13,7 @@ public class AllProductsMenu extends Menu {
     private String descriptionFilter = "";
     private int priceFilter = 0;
 
-    private enum SortingMethod { VISIT_COUNT, NAME, PRICE, SCORE }
+    private enum SortingMethod { VISIT_COUNT, NAME, PRICE, SCORE, TIME }
     private SortingMethod sortingMethod = SortingMethod.VISIT_COUNT;
 
     public AllProductsMenu(String name, Menu parentMenu) {
@@ -374,6 +374,9 @@ public class AllProductsMenu extends Menu {
             case SCORE:
                 System.out.println("Sorted by score");
                 break;
+            case TIME:
+                System.out.println("Sorted by date created");
+                break;
         }
         return false;
     }
@@ -418,6 +421,10 @@ public class AllProductsMenu extends Menu {
                 break;
             case SCORE:
                 currentProducts.sort(Comparator.comparingDouble(Product::getAverageScore).reversed());
+                break;
+            case TIME:
+                // TODO: Does the lambda structure work for date??
+                currentProducts.sort(Comparator.comparing(Product::getDateCreated).reversed());
                 break;
         }
     }
