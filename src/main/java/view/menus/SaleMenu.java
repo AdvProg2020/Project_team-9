@@ -56,7 +56,9 @@ public class SaleMenu extends Menu {
             return false;
         }
         product.incrementVisitCount();
-        // TODO: Go to product details menu...
+        ProductDetailsMenu menu = new ProductDetailsMenu("Product Details", this, product);
+        menu.show();
+        menu.execute();
         return false;
     }
 

@@ -141,8 +141,6 @@ public class ProductDetailsMenu extends Menu {
 
     private boolean viewCommentsCommand() {
         System.out.println("All comments:");
-        // TODO: Should we only show the confirmed comments here??
-        // TODO: Where do we confirm comments??
         currentProduct.getComments().stream()
                 .filter(comment -> comment.getCommentStatus() == CommentStatus.CONFIRMED)
                 .map(comment -> comment.getCustomer().getFirstName() + " "
