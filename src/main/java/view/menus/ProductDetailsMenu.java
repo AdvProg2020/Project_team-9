@@ -268,8 +268,6 @@ public class ProductDetailsMenu extends Menu {
         return false;
     }
 
-    // TODO: Select Seller not implemented
-
     @Override
     protected void showHelp() {
 
