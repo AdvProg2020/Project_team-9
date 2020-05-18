@@ -318,9 +318,105 @@ public class SellerMenu extends UserMenu {
             protected void showHelp() {
             }
         });
+        i++;
+        subMenus.put(i, new Menu("Add yourself as a seller for a product", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                addYourselfAsASeller();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        i++;
+        subMenus.put(i, new Menu("View product details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewProductDetails();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        i++;
+        subMenus.put(i, new Menu("View people who have purchased a product", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewPurchasorsOfAProduct();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
     }
 
-    // TODO: Add credit to seller... SellLog!!
+    private void viewPurchasorsOfAProduct() {
+        System.out.print("Enter the desired product's ID: ");
+        String id = scanner.nextLine();
+        Product product = DataManager.shared().getProductWithId(id);
+        if (product == null) {
+            System.out.print("No product with the given ID exists.");
+            return;
+        }
+        for (Log log : DataManager.shared().getAllLogs()) {
+            if (log instanceof PurchaseLog && log.getProducts().containsKey(product)) {
+                System.out.println(((PurchaseLog) log).getCustomer().getUsername() + " - " + ((PurchaseLog) log).getCustomer().getFirstName() + " " + ((PurchaseLog) log).getCustomer().getLastName());
+            }
+        }
+    }
+
+    private void viewProductDetails() {
+        System.out.print("Enter the desired product's ID to go into its details page: ");
+        String id = scanner.nextLine();
+        Product product = DataManager.shared().getProductWithId(id);
+        if (product == null) {
+            System.out.print("No product with the given ID exists.");
+            return;
+        }
+        product.incrementVisitCount();
+        ProductDetailsMenu menu = new ProductDetailsMenu("Product Details", this, product);
+        menu.show();
+        menu.execute();
+    }
+
+    private void addYourselfAsASeller() {
+        Account currentAccount = DataManager.shared().getLoggedInAccount();
+        if (!(currentAccount instanceof Seller) || !((Seller)currentAccount).isPermittedToSell()) {
+            System.out.println("You are not allowed to make actions by the admin yet");
+            return;
+        }
+        System.out.print("Enter the ID of the product: ");
+        String id = scanner.nextLine();
+        Product product = DataManager.shared().getProductWithId(id);
+        if (product == null) {
+            System.out.println("Invalid ID");
+            return;
+        }
+        product.addSeller((Seller) DataManager.shared().getLoggedInAccount());
+        DataManager.saveData();
+        System.out.println("Done");
+    }
 
     private void editSale() {
         Account currentAccount = DataManager.shared().getLoggedInAccount();
@@ -445,7 +541,6 @@ public class SellerMenu extends UserMenu {
             System.out.println("Invalid format");
             return;
         }
-        // TODO: Submit seller log + decrease available count in checkout (and check available number when adding to the cart...)
         System.out.print("Enter the available number of the product: ");
         int availableNumber = DataManager.nextInt(scanner);
         System.out.print("Enter the category ID of the product: ");
@@ -483,7 +578,6 @@ public class SellerMenu extends UserMenu {
             System.out.println("Invalid format");
             return;
         }
-        // TODO: Submit seller log + decrease available count in checkout (and check available number when adding to the cart...)
         System.out.print("Enter the available number of the product: ");
         int availableNumber = DataManager.nextInt(scanner);
         System.out.print("Enter the category ID of the product: ");
@@ -520,8 +614,19 @@ public class SellerMenu extends UserMenu {
     }
 
     private void viewOffSales() {
-        showString("Off sales:");
-        showString(((Seller) getCurrentUser()).getSales());
+        for (Sale sale : DataManager.shared().getAllSales()) {
+            System.out.println("Sale #" + sale.getOffId());
+            System.out.println("Products:");
+            for (Product product : sale.getProducts()) {
+                System.out.println("\t" + product.getName());
+                double price = (1 - (double)(product.getDiscountPercent())/100) * product.getPrice();
+                System.out.println("\tPrevious price (with discount): " + price);
+                System.out.println("\tNew price (after sale): " + (price - sale.getDiscountAmount()));
+            }
+            System.out.println("Sale status: " + sale.getSaleStatus().toString() + "\n");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            System.out.println("Starting from " + sale.getStartTime().format(dateFormatter) + " and ending in " + sale.getEndTime().format(dateFormatter));
+        }
     }
 
     private void viewCompanyInformation() {
@@ -541,12 +646,8 @@ public class SellerMenu extends UserMenu {
     }
 
     private void viewAllCategories() {
-        showString("Categories:");
-        ArrayList<Category> categories = DataManager.shared().getAllCategories();
-        int i = 1;
-        for (Category category : categories) {
-            showString(i + ") " + category);
-        }
+        showString("All categories:");
+        DataManager.shared().getAllCategories().stream().map(category -> "#" + category.getId() + " - " + category.getName()).forEach(System.out::println);
     }
 
     private void viewSellLog() {
