@@ -482,7 +482,6 @@ public class AllProductsMenu extends Menu {
     }
 
     private boolean removePriceFilter() {
-        // TODO: Free products??
         priceFilter = 0;
         System.out.println("Price filter was successfully removed");
         return false;
@@ -556,6 +555,7 @@ public class AllProductsMenu extends Menu {
     }
 
     // TODO: Multiple categories not implemented...
+    // TODO: Features in categories not implemented...
 
     private boolean showAvailableFiltersCommand() {
         System.out.println("You can type \"Filter by category\", \"Filter by name\", \"Filter by description\" and \"Filter by price\".");

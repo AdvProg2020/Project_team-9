@@ -2,10 +2,7 @@ package view.menus;
 
 import controller.DataManager;
 import jdk.jfr.DataAmount;
-import model.Cart;
-import model.Coupon;
-import model.Customer;
-import model.Product;
+import model.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,16 +19,9 @@ public class CheckOutMenu extends Menu {
     private void startGettingCouponAndConfirmingPurchase() {
     }
 
-    // TODO: No usage of "Sale"s and "Log"s...!
-
-    // TODO: Create coupon with both desired and unique ID...
-
-    // TODO: Check data saving...
-
     @Override
     public void show() {
         if (!checkIfCustomer()) return;
-        // TODO: We assume by here the only cart is the user's cart...
         Cart cart = ((Customer)(DataManager.shared().getLoggedInAccount())).getCart();
         HashMap<Product, Integer> products = cart.getProducts();
         Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
@@ -46,20 +36,24 @@ public class CheckOutMenu extends Menu {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             double price = ((Product)pair.getKey()).getPrice();
+            for (Sale sale : DataManager.shared().getAllSales()) {
+                // TODO: What is the next line's "suspicious code"??
+                if (sale.getProducts().contains(pair.getKey())) {
+                    price -= sale.getDiscountAmount();
+                    if (price < 1) price = 1;
+                }
+            }
             totalPrice += price;
             System.out.println(pair.getValue() + "x\t" + ((Product)pair.getKey()).getName() + "\t$" + price);
         }
         System.out.println("");
-        // TODO: Sale not used here...!
-        // TODO: Rounding prices...
-        System.out.println("Total price (before discount): $" + totalPrice);
+        System.out.println("Total price (before discount, with sales effected): $" + totalPrice);
         double priceAfterDiscount = totalPrice * (1 - (coupon.getDiscountPercent() / 100.0));
         if (totalPrice - priceAfterDiscount > coupon.getMaximumDiscount()) {
             priceAfterDiscount = totalPrice - coupon.getMaximumDiscount();
         }
         System.out.println("Amount of discount: -$" + (totalPrice - priceAfterDiscount));
         System.out.println("Price to pay: $" + priceAfterDiscount);
-        // TODO: Where to increase credit???
         if (customer.getCredit() < priceAfterDiscount) {
             System.out.println("You have $" + customer.getCredit() + " in your account; unfortunately, you're not able to purchase these products.");
         } else {
