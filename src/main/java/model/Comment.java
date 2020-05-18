@@ -21,6 +21,10 @@ public class Comment {
         this.commentStatus = CommentStatus.WAITING_FOR_REVIEW;
     }
 
+    public void setCommentStatus(CommentStatus commentStatus) {
+        this.commentStatus = commentStatus;
+    }
+
     public String getId() {
         return id;
     }

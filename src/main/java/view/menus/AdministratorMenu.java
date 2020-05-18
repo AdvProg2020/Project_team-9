@@ -4,12 +4,11 @@ import controller.DataManager;
 import controller.Validator;
 import model.*;
 
-import javax.swing.text.DateFormatter;
-import javax.xml.crypto.Data;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AdministratorMenu extends UserMenu {
     public AdministratorMenu(String name, Menu parentMenu) {
@@ -435,7 +434,58 @@ public class AdministratorMenu extends UserMenu {
             }
         });
 
-        subMenus.put(26, new Menu("Administrator Menu Help", this) {
+        subMenus.put(26, new Menu("Review comments", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (reviewComments()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(27, new Menu("Accept comment", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (acceptComment()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(28, new Menu("Decline comment", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (declineComment()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(29, new Menu("Administrator Menu Help", this) {
             @Override
             public void show() {
                 System.out.println(this.getName() + " - Enter Back to return");
@@ -462,7 +512,7 @@ public class AdministratorMenu extends UserMenu {
             }
         });
 
-        subMenus.put(27, new Menu("Logout", this) {
+        subMenus.put(30, new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -482,6 +532,42 @@ public class AdministratorMenu extends UserMenu {
         });
 
         this.setSubMenus(subMenus);
+    }
+
+    private boolean acceptComment() {
+        System.out.print("Enter the comment's ID to accept: ");
+        String id = scanner.nextLine();
+        AtomicBoolean hasFound = new AtomicBoolean(false);
+        DataManager.shared().getAllProducts().stream().flatMap(product -> product.getComments().stream()).filter(comment -> comment.getId().equals(id)).forEach(comment -> {
+            comment.setCommentStatus(CommentStatus.CONFIRMED);
+            System.out.println("Done");
+            hasFound.set(true);
+        });
+        if (!hasFound.get()) {
+            System.out.println("No comment exists with the given ID");
+        }
+        return false;
+    }
+
+    private boolean declineComment() {
+        System.out.print("Enter the comment's ID to decline: ");
+        String id = scanner.nextLine();
+        AtomicBoolean hasFound = new AtomicBoolean(false);
+        DataManager.shared().getAllProducts().stream().flatMap(product -> product.getComments().stream()).filter(comment -> comment.getId().equals(id)).forEach(comment -> {
+            comment.setCommentStatus(CommentStatus.DISALLOWED);
+            System.out.println("Done");
+            hasFound.set(true);
+        });
+        if (!hasFound.get()) {
+            System.out.println("No comment exists with the given ID");
+        }
+        return false;
+    }
+
+    private boolean reviewComments() {
+        System.out.println("All comments waiting for review:");
+        DataManager.shared().getAllProducts().stream().flatMap(product -> product.getComments().stream()).filter(comment -> comment.getCommentStatus() == CommentStatus.WAITING_FOR_REVIEW).map(comment -> "#" + comment.getId() + " - " + comment.getCustomer().getUsername() + " wrote about product " + comment.getProduct().getName() + ": *" + comment.getTitle() + "*: " + comment.getText()).forEach(System.out::println);
+        return false;
     }
 
     private boolean logoutCommand() {

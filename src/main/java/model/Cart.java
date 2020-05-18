@@ -47,6 +47,7 @@ public class Cart {
         }
         DataManager.saveData();
     }
+
     public void removeProduct(Product product) {
         removeProduct(product, 1);
     }
