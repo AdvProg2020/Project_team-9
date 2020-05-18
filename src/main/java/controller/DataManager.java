@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class DataManager {
@@ -24,6 +25,14 @@ public class DataManager {
     private ArrayList<Sale> allSales = new ArrayList<>();
     private ArrayList<Log> allLogs = new ArrayList<>();
     private Cart temporaryCart = new Cart();
+
+    public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
+        try {
+            return scanner.nextInt();
+        } catch (Exception ignored) {
+            return -1;
+        }
+    }
 
     public ArrayList<Log> getAllLogs() {
         return allLogs;

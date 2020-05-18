@@ -519,7 +519,7 @@ public class AdministratorMenu extends UserMenu {
         System.out.println("Current discount percent: " + coupon.getDiscountPercent());
         System.out.print("Enter a new value for discount percent (between 0 and 100): ");
         while (true) {
-            int newValue = scanner.nextInt();
+            int newValue = DataManager.nextInt(scanner);
             if (newValue < 0 || newValue > 100) {
                 System.out.print("Impossible value. Please enter a new value again: ");
                 continue;
@@ -532,7 +532,7 @@ public class AdministratorMenu extends UserMenu {
     private void editCouponMaximumDiscount(Coupon coupon) {
         System.out.println("Current maximum discount: " + coupon.getMaximumDiscount());
         System.out.print("Enter a new value for maximum discount: ");
-        int newValue = scanner.nextInt();
+        int newValue = DataManager.nextInt(scanner);
         coupon.setMaximumDiscount(newValue);
     }
 
@@ -602,9 +602,9 @@ public class AdministratorMenu extends UserMenu {
         System.out.println("New coupon");
         ArrayList<Product> products = getProductsListFromUser();
         System.out.print("Enter coupon's discount percent (between 0 and 100): ");
-        int discountPercent = scanner.nextInt();
+        int discountPercent = DataManager.nextInt(scanner);
         System.out.print("Enter coupon's maximum discount amount: ");
-        int maximumDiscount = scanner.nextInt();
+        int maximumDiscount = DataManager.nextInt(scanner);
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         System.out.print("Enter the coupon's start date in format of yyyy-MM-dd HH:mm: ");
         String startDateInput = scanner.nextLine();
@@ -629,7 +629,7 @@ public class AdministratorMenu extends UserMenu {
                 continue;
             }
             System.out.print("How many times do you want " + account.getFirstName() + " " + account.getLastName() + " to use this coupon? ");
-            int numberOfTimes = scanner.nextInt();
+            int numberOfTimes = DataManager.nextInt(scanner);
             if (numberOfTimes <= 0) {
                 System.out.print("Invalid number of times. Enter the customer's username again: ");
                 continue;
@@ -888,7 +888,7 @@ public class AdministratorMenu extends UserMenu {
         }
 
         System.out.print("Enter 1 to change user's type to customer, 2 to seller and 3 to administrator: ");
-        int result = scanner.nextInt();
+        int result = DataManager.nextInt(scanner);
         switch (result) {
             case 1:
                 Customer customer = new Customer(account);

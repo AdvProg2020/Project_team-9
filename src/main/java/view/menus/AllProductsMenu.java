@@ -540,7 +540,7 @@ public class AllProductsMenu extends Menu {
 
     private boolean filterByPriceCommand() {
         System.out.print("Enter a new price to only see products with that price: ");
-        priceFilter = scanner.nextInt();
+        priceFilter = DataManager.nextInt(scanner);
         System.out.println("Price filter was successfully set");
         return false;
     }

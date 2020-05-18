@@ -140,8 +140,6 @@ public class CustomerMenu extends Menu {
         return true;
     }
 
-    // TODO: Scanner.nextInt()s...
-
     private void checkOut() {
         CheckOutMenu menu = new CheckOutMenu("Check out", this);
         menu.show();
@@ -158,7 +156,7 @@ public class CustomerMenu extends Menu {
             return;
         }
         System.out.print("Enter a rate from 1 to 5, or 0 to cancel rating: ");
-        int rating = scanner.nextInt();
+        int rating = DataManager.nextInt(scanner);
         if (rating == 0) {
             System.out.println("Rating canceled");
             return;
