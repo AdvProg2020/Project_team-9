@@ -13,7 +13,7 @@ public class AllProductsMenu extends Menu {
     private String descriptionFilter = "";
     private int priceFilter = 0;
 
-    private enum SortingMethod { VISIT_COUNT, NAME, PRICE }
+    private enum SortingMethod { VISIT_COUNT, NAME, PRICE, SCORE }
     private SortingMethod sortingMethod = SortingMethod.VISIT_COUNT;
 
     public AllProductsMenu(String name, Menu parentMenu) {
@@ -371,6 +371,9 @@ public class AllProductsMenu extends Menu {
             case PRICE:
                 System.out.println("Sorted by price");
                 break;
+            case SCORE:
+                System.out.println("Sorted by score");
+                break;
         }
         return false;
     }
@@ -413,6 +416,9 @@ public class AllProductsMenu extends Menu {
             case PRICE:
                 currentProducts.sort(Comparator.comparingInt(Product::getPrice));
                 break;
+            case SCORE:
+                currentProducts.sort(Comparator.comparingDouble(Product::getAverageScore).reversed());
+                break;
         }
     }
 
@@ -430,8 +436,6 @@ public class AllProductsMenu extends Menu {
             }
         }
     }
-
-    // TODO: Sort by time and score is not done
 
     private boolean removeCategoryFilter() {
         System.out.println("Current categories filtered by:");
