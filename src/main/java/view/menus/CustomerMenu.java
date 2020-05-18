@@ -3,6 +3,7 @@ package view.menus;
 import controller.DataManager;
 import model.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -224,6 +225,7 @@ public class CustomerMenu extends Menu {
     }
 
     private void viewOrderDetails() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Customer currentCustomer = (Customer) DataManager.shared().getLoggedInAccount();
         System.out.print("Enter order's ID: ");
         String orderID = scanner.nextLine();
@@ -233,7 +235,7 @@ public class CustomerMenu extends Menu {
             return;
         }
         System.out.println("Order #" + purchaseLog.getId());
-        System.out.println("Placed on " + purchaseLog.getDate().toString());
+        System.out.println("Placed on " + purchaseLog.getDate().format(dateFormatter));
         System.out.println("Delivery status: " + purchaseLog.getDeliveryStatus().toString());
         System.out.println("Total price paid: $" + purchaseLog.getPrice() + "(having $" + purchaseLog.getDiscountAmount() + " discount)");
         System.out.println("Purchased products: ");

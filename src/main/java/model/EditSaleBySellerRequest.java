@@ -27,13 +27,7 @@ public class EditSaleBySellerRequest extends Request {
 
     @Override
     public void fulfill() {
-        try {
-            Sale oldSale = DataManager.shared().getSaleWithId(this.oldSale);
-            Sale newSale = DataManager.shared().getSaleWithId(this.oldSale);
-            DataManager.shared().getAllSales().add(newSale);
-            DataManager.shared().getAllSales().remove(oldSale);
-        } catch (Exception e) {
-
-        }
+        DataManager.shared().removeSale(getOldSale());
+        DataManager.shared().addSale(getNewSale());
     }
 }

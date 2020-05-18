@@ -4,18 +4,23 @@ import controller.DataManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Seller extends Account {
     private String companyDetails;
     private boolean isPermittedToSell;
-    private ArrayList<String> products;
-    private ArrayList<String> sales;
+
+    public boolean isPermittedToSell() {
+        return isPermittedToSell;
+    }
+
+    public void setPermittedToSell(boolean permittedToSell) {
+        isPermittedToSell = permittedToSell;
+    }
 
     public Seller(String username, String password, String email, String phone, String firstName, String lastName, String companyDetails) {
         super(username, password, email, phone, firstName, lastName);
         this.companyDetails = companyDetails;
-        products = new ArrayList<>();
-        sales = new ArrayList<>();
         isPermittedToSell = false;
     }
 
@@ -25,8 +30,6 @@ public class Seller extends Account {
 
     public Seller(Seller seller) {
         this(seller.getUsername(), seller.getPassword(), seller.getEmail(), seller.getPhoneNumber(), seller.getFirstName(), seller.getLastName(), seller.getCompanyDetails());
-        products = new ArrayList<>();
-        sales = new ArrayList<>();
         isPermittedToSell = false;
     }
 
@@ -34,41 +37,12 @@ public class Seller extends Account {
         return companyDetails;
     }
 
-    public void addProduct(Product product) {
-        products.add(product.getProductId());
-        DataManager.saveData();
-    }
-
     public ArrayList<Product> getProducts() {
-        ArrayList<Product> products = new ArrayList<>();
-        for (String productId : this.products) {
-            products.add(DataManager.shared().getProductWithId(productId));
-        }
-        return products;
+        return DataManager.shared().getAllProducts().stream().filter(product -> product.getSellers().contains(this)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Sale> getSales() {
-        ArrayList<Sale> sales = new ArrayList<>();
-        for (String saleId : this.sales) {
-            sales.add(DataManager.shared().getSaleWithId(saleId));
-        }
-        return sales;
-    }
-
-    public ArrayList<Sale> getCurrentSales() {
-        ArrayList<Sale> sales = new ArrayList<>();
-        Sale temporarySale;
-        for (String saleId : this.sales) {
-            temporarySale = DataManager.shared().getSaleWithId(saleId);
-            if (temporarySale.getEndTime().compareTo(LocalDateTime.now()) > 0)
-                sales.add(temporarySale);
-        }
-        return sales;
-    }
-
-    public void addSale(Sale sale) {
-        sales.add(sale.getOffId());
-        DataManager.saveData();
+        return DataManager.shared().getAllSales().stream().filter(sale -> sale.getSeller().equals(this)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

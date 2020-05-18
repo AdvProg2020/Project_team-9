@@ -23,7 +23,8 @@ public class Product {
     private ArrayList<Score> scores;
     private LocalDateTime dateCreated;
 
-    public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated) {
+    public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated) {
+        this.productId = productId;
         this.status = status;
         this.name = name;
         this.brand = brand;
