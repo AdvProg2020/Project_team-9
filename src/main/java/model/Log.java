@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class Log {
+public class Log {
     private String id;
     // TODO: Date in Gson??
     private LocalDateTime date;

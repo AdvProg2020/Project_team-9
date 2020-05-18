@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Request {
+public class Request {
     private String id;
 
     public Request() {
@@ -10,5 +10,5 @@ public abstract class Request {
         return id;
     }
 
-    public abstract void fulfill();
+    public void fulfill() {}
 }

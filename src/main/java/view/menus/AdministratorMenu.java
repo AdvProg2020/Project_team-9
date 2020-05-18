@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AdministratorMenu extends UserMenu {
     public AdministratorMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -484,34 +485,7 @@ public class AdministratorMenu extends UserMenu {
             }
         });
 
-        subMenus.put(29, new Menu("Administrator Menu Help", this) {
-            @Override
-            public void show() {
-                System.out.println(this.getName() + " - Enter Back to return");
-            }
-
-            @Override
-            public void execute() {
-                System.out.println("Available Commands:");
-                System.out.println("Command one");
-                System.out.println("Command two");
-                while (true) {
-                    String input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
-                        this.parentMenu.show();
-                        this.parentMenu.execute();
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            protected void showHelp() {
-
-            }
-        });
-
-        subMenus.put(30, new Menu("Logout", this) {
+        subMenus.put(29, new Menu("Logout", this) {
             @Override
             public void show() {
 
