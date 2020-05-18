@@ -1,9 +1,14 @@
 package view.menus;
 
 import controller.DataManager;
+import controller.Validator;
 import model.*;
 
+import javax.swing.text.DateFormatter;
 import javax.xml.crypto.Data;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AdministratorMenu extends UserMenu {
@@ -532,11 +537,23 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private void editCouponStartTime(Coupon coupon) {
-        // TODO: not implemented yet
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        System.out.println("Current coupon's start time: " + coupon.getStartTime().format(dateFormatter));
+        System.out.print("Enter a new start date in format of yyyy-MM-dd HH:mm: ");
+        String input = scanner.nextLine();
+        // TODO: Invalid date??
+        coupon.setStartTime(LocalDateTime.parse(input, dateFormatter));
+        System.out.println("New start time was set");
     }
 
     private void editCouponEndTime(Coupon coupon) {
-        // TODO: not implemented yet
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        System.out.println("Current coupon's end time: " + coupon.getEndTime().format(dateFormatter));
+        System.out.print("Enter a new end date in format of yyyy-MM-dd HH:mm: ");
+        String input = scanner.nextLine();
+        // TODO: Invalid date??
+        coupon.setEndTime(LocalDateTime.parse(input, dateFormatter));
+        System.out.println("New end time was set");
     }
 
     private Coupon viewCoupon() {
@@ -582,8 +599,68 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean createDiscountCode() {
-        // TODO: Not implemented!
+        System.out.println("New coupon");
+        ArrayList<Product> products = getProductsListFromUser();
+        System.out.print("Enter coupon's discount percent (between 0 and 100): ");
+        int discountPercent = scanner.nextInt();
+        System.out.print("Enter coupon's maximum discount amount: ");
+        int maximumDiscount = scanner.nextInt();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        System.out.print("Enter the coupon's start date in format of yyyy-MM-dd HH:mm: ");
+        String startDateInput = scanner.nextLine();
+        // TODO: Invalid date??
+        LocalDateTime startTime = LocalDateTime.parse(startDateInput, dateFormatter);
+        System.out.print("Enter the coupon's end date in format of yyyy-MM-dd HH:mm: ");
+        String endDateInput = scanner.nextLine();
+        // TODO: Invalid date??
+        LocalDateTime endTime = LocalDateTime.parse(endDateInput, dateFormatter);
+        System.out.println("Enter the username of customers who could use the coupon. After entering any of the usernames, you will be asked to enter how many times the user can use the coupon. After entering the users, to finalize the coupon generation, enter -1:");
+        HashMap<String, Integer> remainingUsagesCount = new HashMap<>();
+        while (true) {
+            String username = scanner.nextLine();
+            if (username.equals("-1")) break;
+            Account account = DataManager.shared().getLoggedInAccount();
+            if (!(account instanceof Customer)) {
+                System.out.print("Invalid customer username. Enter again: ");
+                continue;
+            }
+            if (remainingUsagesCount.containsKey(account.getUsername())) {
+                System.out.println("Don't enter repeated usernames");
+                continue;
+            }
+            System.out.print("How many times do you want " + account.getFirstName() + " " + account.getLastName() + " to use this coupon? ");
+            int numberOfTimes = scanner.nextInt();
+            if (numberOfTimes <= 0) {
+                System.out.print("Invalid number of times. Enter the customer's username again: ");
+                continue;
+            }
+            remainingUsagesCount.put(account.getUsername(), numberOfTimes);
+        }
+        String couponID = DataManager.getNewId();
+        Coupon coupon = new Coupon(couponID, products, Status.CONFIRMED, discountPercent, maximumDiscount, startTime, endTime, remainingUsagesCount);
+        DataManager.shared().addCoupon(coupon);
+        System.out.println("Coupon added successfully with code " + couponID);
         return false;
+    }
+
+    private ArrayList<Product> getProductsListFromUser() {
+        ArrayList<Product> products = new ArrayList<>();
+        System.out.println("Enter ID of the products you want to be included, one in a line, then enter -1 to continue:");
+        while (true) {
+            String id = scanner.nextLine();
+            if (id.equals("-1")) break;
+            Product product = DataManager.shared().getProductWithId(id);
+            if (product == null) {
+                System.out.print("Invalid product ID. Enter the last one correctly again: ");
+                continue;
+            }
+            if (products.contains(product)) {
+                System.out.println("Don't enter repeated IDs");
+                continue;
+            }
+            products.add(product);
+        }
+        return products;
     }
 
     private Request getRequestWithIDFromUser() {
@@ -701,7 +778,26 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean addCategory() {
-        // TODO: Not implemented
+        System.out.print("Enter category's name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter a description for the category: ");
+        String description = scanner.nextLine();
+        Category parent;
+        while (true) {
+            System.out.print("Enter the ID of the parent category: ");
+            String parentID = scanner.nextLine();
+            parent = DataManager.shared().getCategoryWithId(parentID);
+            if (parent == null) {
+                System.out.print("Invalid category ID. Try again: ");
+                continue;
+            }
+            break;
+        }
+        ArrayList<Product> products = getProductsListFromUser();
+        String categoryID = DataManager.getNewId();
+        Category category = new Category(categoryID, name, description, parent.getId(), products);
+        DataManager.shared().addCategory(category);
+        System.out.println("Successfully added category with ID #" + categoryID);
         return false;
     }
 
@@ -832,8 +928,13 @@ public class AdministratorMenu extends UserMenu {
     private boolean editEmail() {
         System.out.print("Enter your new email address: ");
         String email = scanner.nextLine();
-        // TODO: Check regex!
-        DataManager.shared().getLoggedInAccount().setEmail(email);
+        if (Validator.shared().emailIsValid(email)) {
+            DataManager.shared().getLoggedInAccount().setEmail(email);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid email");
+        }
+
         return false;
     }
 
@@ -841,6 +942,7 @@ public class AdministratorMenu extends UserMenu {
         System.out.print("Enter your new first name: ");
         String firstName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setFirstName(firstName);
+        System.out.println("Done");
         return false;
     }
 
@@ -848,14 +950,19 @@ public class AdministratorMenu extends UserMenu {
         System.out.print("Enter your new last name: ");
         String lastName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setLastName(lastName);
+        System.out.println("Done");
         return false;
     }
 
     private boolean editPhoneNumber() {
         System.out.print("Enter your new phone number: ");
         String phone = scanner.nextLine();
-        // TODO: Check regex!
-        DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
+        if (Validator.shared().phoneNumberIsValid(phone)) {
+            DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid phone number");
+        }
         return false;
     }
 

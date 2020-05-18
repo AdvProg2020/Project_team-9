@@ -354,7 +354,9 @@ public class AllProductsMenu extends Menu {
             return false;
         }
         product.incrementVisitCount();
-        // TODO: Go to product details menu...
+        ProductDetailsMenu productDetailsMenu = new ProductDetailsMenu("Product Details", this, product);
+        productDetailsMenu.show();
+        productDetailsMenu.execute();
         return false;
     }
 
@@ -430,7 +432,6 @@ public class AllProductsMenu extends Menu {
     }
 
     // TODO: Sort by time and score is not done
-    // TODO: Descending sort
 
     private boolean removeCategoryFilter() {
         System.out.println("Current categories filtered by:");

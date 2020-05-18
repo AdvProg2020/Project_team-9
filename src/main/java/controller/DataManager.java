@@ -209,6 +209,11 @@ public class DataManager {
         saveData();
     }
 
+    public void addCategory(Category category) {
+        allCategories.add(category);
+        saveData();
+    }
+
     public void removeCoupon(Coupon coupon) {
         allCoupons.remove(coupon);
         saveData();

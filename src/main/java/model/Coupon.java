@@ -11,6 +11,7 @@ public class Coupon {
     private String id;
     private ArrayList<String> products;
     // TODO: enums in Gson...
+    // TODO: The next one is not being used...
     private Status saleStatus;
     private int discountPercent;
     private int maximumDiscount;
@@ -19,9 +20,28 @@ public class Coupon {
     private LocalDateTime endTime;
     private HashMap<String, Integer> remainingUsagesCount;
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     public Coupon(String id, ArrayList<Product> products) {
         this.id = id;
         this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Coupon(String id, ArrayList<Product> products, Status saleStatus, int discountPercent, int maximumDiscount, LocalDateTime startTime, LocalDateTime endTime, HashMap<String, Integer> remainingUsagesCount) {
+        this.id = id;
+        this.products = products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
+        this.saleStatus = saleStatus;
+        this.discountPercent = discountPercent;
+        this.maximumDiscount = maximumDiscount;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.remainingUsagesCount = remainingUsagesCount;
     }
 
     public String getId() {
