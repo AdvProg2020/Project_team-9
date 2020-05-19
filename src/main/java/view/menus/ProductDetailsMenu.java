@@ -153,24 +153,26 @@ public class ProductDetailsMenu extends Menu {
             }
         });
 
-        subMenus.put(9, new Menu("Logout", this) {
-            @Override
-            public void show() {
+        if (DataManager.shared().getLoggedInAccount() != null) {
+            subMenus.put(20, new Menu("Logout", this) {
+                @Override
+                public void show() {
 
-            }
+                }
 
-            @Override
-            public void execute() {
-                if (logoutCommand()) return;
-                parentMenu.show();
-                parentMenu.execute();
-            }
+                @Override
+                public void execute() {
+                    if (logoutCommand()) return;
+                    parentMenu.show();
+                    parentMenu.execute();
+                }
 
-            @Override
-            protected void showHelp() {
+                @Override
+                protected void showHelp() {
 
-            }
-        });
+                }
+            });
+        }
 
         this.setSubMenus(subMenus);
     }
