@@ -9,10 +9,8 @@ public enum SaleStatus {
             return "Under review to make";
         } else if (this.equals(UNDER_REVIEW_TO_MODIFY)) {
             return "Under review to modify";
-        } else if (this.equals(CONFIRMED)) {
-            return "Confirmed";
         } else {
-            return "";
+            return "Confirmed";
         }
     }
 }

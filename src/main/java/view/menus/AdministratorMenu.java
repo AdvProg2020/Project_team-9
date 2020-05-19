@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AdministratorMenu extends UserMenu {
     public AdministratorMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View Personal Info", this) {
             @Override
             public void show() {
@@ -1117,7 +1116,6 @@ public class AdministratorMenu extends UserMenu {
         }
         DataManager.shared().getLoggedInAccount().setPassword(newPassword);
         System.out.println("New password has been set");
-        return;
     }
 
     @Override

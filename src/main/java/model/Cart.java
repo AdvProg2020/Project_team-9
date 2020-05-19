@@ -3,8 +3,8 @@ package model;
 import controller.DataManager;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class Cart {
     private HashMap<String, Integer> products;
@@ -36,6 +36,14 @@ public class Cart {
 
     public void addProduct(Product product) {
         addProduct(product, 1);
+    }
+
+    public int getProductCount() {
+        return products.size();
+    }
+
+    public Set<String> getProductIds() {
+        return products.keySet();
     }
 
     public void removeProduct(Product product, int quantity) {
