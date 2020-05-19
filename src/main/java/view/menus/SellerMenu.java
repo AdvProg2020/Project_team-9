@@ -13,7 +13,7 @@ import java.util.Map;
 public class SellerMenu extends UserMenu {
     public SellerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        int i = 0;
+        int i = 1;
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(i, new Menu("View Personal Info", this) {
             @Override

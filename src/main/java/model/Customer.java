@@ -3,6 +3,7 @@ package model;
 import controller.DataManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Customer extends Account {
     // TODO: Does containing cart make error for Gson??
@@ -33,6 +34,10 @@ public class Customer extends Account {
 
     public Cart getCart() {
         return cart;
+    }
+
+    public void emptyCart() {
+        cart.setProducts(new HashMap<>());
     }
 
     public void addProductToCart(Product product) {

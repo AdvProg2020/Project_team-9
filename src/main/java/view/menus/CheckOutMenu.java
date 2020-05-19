@@ -30,12 +30,12 @@ public class CheckOutMenu extends Menu {
         double totalPrice = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            double price = ((Product) pair.getKey()).getPrice();
+            double price = ((Product) pair.getKey()).getPrice() * (int) pair.getValue();
             if (((Product) pair.getKey()).getNumberAvailable() > 0) {
                 for (Sale sale : DataManager.shared().getAllSales()) {
                     // TODO: What is the next line's "suspicious code"??
                     if (sale.getProducts().contains(pair.getKey())) {
-                        price -= sale.getDiscountAmount();
+                        price -= sale.getDiscountAmount() * (int) pair.getValue();
                         if (price < 1) price = 1;
                     }
                 }
@@ -44,6 +44,11 @@ public class CheckOutMenu extends Menu {
             }
         }
         System.out.println("\nTotal price (before discount, with sales effected): $" + totalPrice);
+        if (coupon == null) {
+            coupon = new Coupon(DataManager.getNewId(), new ArrayList<>());
+            coupon.setDiscountPercent(0);
+            coupon.setMaximumDiscount(0);
+        }
         double priceAfterDiscount = totalPrice * (1 - (coupon.getDiscountPercent() / 100.0));
         if (totalPrice - priceAfterDiscount > coupon.getMaximumDiscount()) {
             priceAfterDiscount = totalPrice - coupon.getMaximumDiscount();
@@ -62,19 +67,25 @@ public class CheckOutMenu extends Menu {
                 DataManager.shared().addLog(purchaseLog);
                 Iterator it2 = products.entrySet().iterator();
                 while (it2.hasNext()) {
-                    Map.Entry pair = (Map.Entry) it.next();
+                    Map.Entry pair = (Map.Entry) it2.next();
                     if (((Product) pair.getKey()).getNumberAvailable() > 0) {
                         ((Product) pair.getKey()).decrementNumberAvailable();
                         HashMap<Product, Integer> productsHashMap = new HashMap<>();
                         productsHashMap.put((Product) pair.getKey(), 1);
-                        SellLog sellLog = new SellLog(LocalDateTime.now(), productsHashMap, DataManager.getNewId(), (int) totalPrice, ((Product) pair.getKey()).getCurrentSeller(), (int) (totalPrice - priceAfterDiscount), DeliveryStatus.ORDERED);
+                        for (int i = 0; i < (int) pair.getValue(); i++) {
+                            SellLog sellLog = new SellLog(LocalDateTime.now(), productsHashMap, DataManager.getNewId(), ((Product) pair.getKey()).getPrice(), ((Product) pair.getKey()).getCurrentSeller(), (int) ((totalPrice - priceAfterDiscount) / (double) products.size()), DeliveryStatus.ORDERED);
+                            DataManager.shared().addLog(sellLog);
+                        }
                         ((Product) pair.getKey()).getCurrentSeller().increaseCredit((int) priceAfterDiscount);
-                        DataManager.shared().addLog(sellLog);
                     }
                 }
+                ((Customer) DataManager.shared().getLoggedInAccount()).emptyCart();
+                DataManager.saveData();
                 System.out.println("Thank you for your purchase!");
             }
         }
+        parentMenu.show();
+        parentMenu.execute();
     }
 
     private Coupon getCoupon(Customer customer) {
@@ -119,6 +130,7 @@ public class CheckOutMenu extends Menu {
                 continue;
             }
             customer.setPhoneNumber(phoneNumber);
+            break;
         }
         return phoneNumber;
     }
@@ -141,6 +153,7 @@ public class CheckOutMenu extends Menu {
                 continue;
             }
             customer.setAddress(address);
+            break;
         }
         return address;
     }

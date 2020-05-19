@@ -463,7 +463,10 @@ public class AllProductsMenu extends Menu {
             if (!nameFilter.equals("") && !product.getName().contains(nameFilter)) continue;
             if (!descriptionFilter.equals("") && !product.getDescription().contains(descriptionFilter)) continue;
             if (priceFilter != 0 && product.getPrice() != priceFilter) continue;
-            if (filteredCategories.isEmpty()) continue;
+            if (filteredCategories.isEmpty())  {
+                currentProducts.add(product);
+                continue;
+            }
             for (Category category : filteredCategories) {
                 if (product.getCategory() == category) {
                     currentProducts.add(product);
