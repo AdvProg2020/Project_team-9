@@ -153,4 +153,11 @@ public class Product {
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Product))
+            return false;
+        return this.productId.equals(((Product) obj).productId);
+    }
 }
