@@ -9,22 +9,24 @@ public class Category {
     private String id;
     private String name;
     private String description;
-    // TODO: By filtering by category, we don't consider subcats and parents!
     // TODO: All lists should have filter/search
     private String parentCategory;
+    private ArrayList<String> uniqueFeatures;
 
-    public Category(String id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    public ArrayList<String> getUniqueFeatures() {
+        return uniqueFeatures;
     }
 
-    // TODO: subCategories in intializer??
-    public Category(String id, String name, String description, String parentCategory) {
+    public void setUniqueFeatures(ArrayList<String> uniqueFeatures) {
+        this.uniqueFeatures = uniqueFeatures;
+    }
+
+    public Category(String id, String name, String description, String parentCategory, ArrayList<String> uniqueFeatures) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
+        this.uniqueFeatures = uniqueFeatures;
     }
 
     public String getId() {

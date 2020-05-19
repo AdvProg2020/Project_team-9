@@ -23,6 +23,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewPersonalInfo();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -40,6 +41,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 editEmail();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -57,6 +59,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 editFirstName();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -74,6 +77,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 editLastName();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -90,7 +94,8 @@ public class SellerMenu extends UserMenu {
 
             @Override
             public void execute() {
-                viewPersonalInfo();
+                editPhoneNumber();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -108,6 +113,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 editCompanyInformation();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -125,6 +131,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 changePassword();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -142,6 +149,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewCompanyInformation();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -159,6 +167,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewAllSells();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -176,6 +185,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewAllSellingProducts();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -193,6 +203,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 addProductCommand();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -210,6 +221,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 editProductCommand();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -227,6 +239,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 removeProductCommand();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -244,6 +257,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewAllCategories();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -261,6 +275,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewOffSales();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -278,6 +293,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 addSale();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -295,6 +311,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 editSale();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -304,7 +321,7 @@ public class SellerMenu extends UserMenu {
             }
         });
         i++;
-        subMenus.put(i, new Menu("View balance", this) {
+        subMenus.put(i, new Menu("View credit", this) {
             @Override
             public void show() {
             }
@@ -312,6 +329,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewBalance();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -329,6 +347,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 addYourselfAsASeller();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -346,6 +365,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewProductDetails();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -363,6 +383,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 viewPurchasorsOfAProduct();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -380,6 +401,7 @@ public class SellerMenu extends UserMenu {
             @Override
             public void execute() {
                 if (allProducts()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -411,7 +433,7 @@ public class SellerMenu extends UserMenu {
     }
 
     private boolean allProducts() {
-        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        AllProductsMenu menu = new AllProductsMenu("All Products", this, false);
         menu.show();
         menu.execute();
         return false;
@@ -604,11 +626,17 @@ public class SellerMenu extends UserMenu {
             System.out.println("Invalid category ID");
             return;
         }
+        HashMap<String, String> features = new HashMap<>();
+        for (String feature : category.getUniqueFeatures()) {
+            System.out.print("Enter value for the feature " + feature + ": ");
+            String value = scanner.nextLine();
+            features.put(feature, value);
+        }
         System.out.print("Enter the description of the product: ");
         String description = scanner.nextLine();
         ArrayList<Seller> sellers = new ArrayList<>();
         sellers.add((Seller) DataManager.shared().getLoggedInAccount());
-        Product newProduct = new Product(product.getProductId(), Status.CONFIRMED, name, brand, price, discountPercent, sellers, availableNumber, category, description, LocalDateTime.now());
+        Product newProduct = new Product(product.getProductId(), Status.CONFIRMED, name, brand, price, discountPercent, sellers, availableNumber, category, description, LocalDateTime.now(), features);
         EditProductBySellerRequest request = new EditProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product, newProduct);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");
@@ -641,11 +669,17 @@ public class SellerMenu extends UserMenu {
             System.out.println("Invalid category ID");
             return;
         }
+        HashMap<String, String> features = new HashMap<>();
+        for (String feature : category.getUniqueFeatures()) {
+            System.out.print("Enter value for the feature " + feature + ": ");
+            String value = scanner.nextLine();
+            features.put(feature, value);
+        }
         System.out.print("Enter the description of the product: ");
         String description = scanner.nextLine();
         ArrayList<Seller> sellers = new ArrayList<>();
         sellers.add((Seller) DataManager.shared().getLoggedInAccount());
-        Product product = new Product(DataManager.getNewId(), Status.CONFIRMED, name, brand, price, discountPercent, sellers, availableNumber, category, description, LocalDateTime.now());
+        Product product = new Product(DataManager.getNewId(), Status.CONFIRMED, name, brand, price, discountPercent, sellers, availableNumber, category, description, LocalDateTime.now(), features);
         AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");

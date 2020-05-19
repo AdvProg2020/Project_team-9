@@ -69,7 +69,7 @@ public class LoginAndRegisterMenu extends Menu {
     }
 
     private boolean allProducts() {
-        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        AllProductsMenu menu = new AllProductsMenu("All Products", this, false);
         menu.show();
         menu.execute();
         return false;

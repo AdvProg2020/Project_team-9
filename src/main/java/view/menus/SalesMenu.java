@@ -19,6 +19,7 @@ public class SalesMenu extends Menu {
             @Override
             public void execute() {
                 if (showAllSalesCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -36,6 +37,7 @@ public class SalesMenu extends Menu {
             @Override
             public void execute() {
                 if (showProductDetailsCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -45,14 +47,15 @@ public class SalesMenu extends Menu {
             }
         });
 
-        subMenus.put(3, new Menu("All products in detail", this) {
+        subMenus.put(3, new Menu("View all products in sale", this) {
             @Override
             public void show() {
             }
 
             @Override
             public void execute() {
-                if (allProducts()) return;
+                if (viewAllProductsInSale()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -84,8 +87,8 @@ public class SalesMenu extends Menu {
         this.setSubMenus(subMenus);
     }
 
-    private boolean allProducts() {
-        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+    private boolean viewAllProductsInSale() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this, true);
         menu.show();
         menu.execute();
         return false;
@@ -117,15 +120,15 @@ public class SalesMenu extends Menu {
     private boolean showAllSalesCommand() {
         for (Sale sale : DataManager.shared().getAllSales()) {
             System.out.println("Sale #" + sale.getOffId());
-            System.out.println("Products:");
+            System.out.println("- Products:");
             for (Product product : sale.getProducts()) {
-                System.out.println("\t" + product.getName());
+                System.out.println("\t#" + product.getProductId() + " - " + product.getName());
                 double price = (1 - (double)(product.getDiscountPercent())/100) * product.getPrice();
-                System.out.println("\tPrevious price (with discount): " + price);
-                System.out.println("\tNew price (after sale): " + (price - sale.getDiscountAmount()));
+                System.out.println("\t\tPrevious price (with discount): " + price);
+                System.out.println("\t\tNew price (after sale): " + (price - sale.getDiscountAmount()));
             }
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            System.out.println("Starting from " + sale.getStartTime().format(dateFormatter) + " and ending in " + sale.getEndTime().format(dateFormatter));
+            System.out.println("- Starting from " + sale.getStartTime().format(dateFormatter) + " and ending in " + sale.getEndTime().format(dateFormatter));
         }
         return false;
     }
