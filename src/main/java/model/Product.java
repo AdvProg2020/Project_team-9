@@ -4,6 +4,7 @@ import controller.DataManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class Product {
@@ -23,8 +24,17 @@ public class Product {
     private ArrayList<Score> scores;
     private LocalDateTime dateCreated;
     private String currentSeller = "";
+    private HashMap<String, String> features;
 
-    public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated) {
+    public HashMap<String, String> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(HashMap<String, String> features) {
+        this.features = features;
+    }
+
+    public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
         this.productId = productId;
         this.status = status;
         this.name = name;
@@ -38,6 +48,7 @@ public class Product {
         this.comments = new ArrayList<>();
         this.scores = new ArrayList<>();
         this.dateCreated = dateCreated;
+        this.features = features;
     }
 
     public Seller getCurrentSeller() {

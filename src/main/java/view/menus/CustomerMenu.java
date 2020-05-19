@@ -23,6 +23,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 viewPersonalInfo();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -39,6 +40,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 editFirstName();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -55,6 +57,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 editLastName();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -71,6 +74,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 editEmail();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -87,6 +91,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 editPhoneNumber();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -103,6 +108,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 changePassword();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -118,6 +124,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 viewCart();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -133,6 +140,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 showProduct();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -149,6 +157,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 checkOut();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -165,6 +174,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 viewBalance();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -181,6 +191,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 viewUsableCoupons();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -197,6 +208,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 viewOrders();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -213,6 +225,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 viewOrderDetails();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -229,6 +242,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 rateProduct();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -245,6 +259,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 addCommentCommand();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -261,6 +276,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 increaseCredit();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -278,6 +294,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 if (allProducts()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -294,6 +311,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 if (totalPriceOfCart()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -310,6 +328,7 @@ public class CustomerMenu extends Menu {
             @Override
             public void execute() {
                 if (allSales()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -364,7 +383,7 @@ public class CustomerMenu extends Menu {
     }
 
     private boolean allProducts() {
-        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        AllProductsMenu menu = new AllProductsMenu("All Products", this, false);
         menu.show();
         menu.execute();
         return false;

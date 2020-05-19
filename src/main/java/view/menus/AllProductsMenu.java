@@ -5,19 +5,38 @@ import model.Category;
 import model.Product;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AllProductsMenu extends Menu {
 
+    private ArrayList<Product> currentProducts = new ArrayList<>();
+
+    private void initProducts() {
+        if (shouldOnlyShowOnSaleProducts) {
+            currentProducts = DataManager.shared().getAllSales().stream().flatMap(sale -> sale.getProducts().stream()).distinct().collect(Collectors.toCollection(ArrayList::new));
+        } else {
+            currentProducts = DataManager.shared().getAllProducts();
+        }
+    }
+
     private ArrayList<Category> filteredCategories = new ArrayList<>();
+    private HashMap<String, String> filteredAttributes = new HashMap<>();
     private String nameFilter = "";
     private String descriptionFilter = "";
     private int priceFilter = 0;
+    private String brandFilter = "";
+    private String sellerFilter = "";
+    private String availabilityFilter = ""; // "" / "available" / "notAvailable"
+    private boolean shouldOnlyShowOnSaleProducts;
 
-    private enum SortingMethod { VISIT_COUNT, NAME, PRICE, SCORE, TIME }
+    private enum SortingMethod {VISIT_COUNT, NAME, PRICE, SCORE, TIME}
+
     private SortingMethod sortingMethod = SortingMethod.VISIT_COUNT;
 
-    public AllProductsMenu(String name, Menu parentMenu) {
+    public AllProductsMenu(String name, Menu parentMenu, boolean shouldOnlyShowOnSaleProducts) {
         super(name, parentMenu);
+        this.shouldOnlyShowOnSaleProducts = shouldOnlyShowOnSaleProducts;
+        initProducts();
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("View Main Categories", this) {
             @Override
@@ -27,6 +46,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (viewMainCategoriesCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -44,6 +64,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (viewAllProductsCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -61,6 +82,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (showAvailableFiltersCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -78,6 +100,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (showCurrentFiltersCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -95,6 +118,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (filterByCategoryCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -112,6 +136,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (filterByNameCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -129,6 +154,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (filterByDescriptionCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -146,6 +172,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (filterByPriceCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -155,7 +182,97 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(9, new Menu("Remove name filter", this) {
+        subMenus.put(9, new Menu("Filter by brand", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (filterByBrandCommand()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(10, new Menu("Filter by seller", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (filterBySellerCommand()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(11, new Menu("Filter by availability", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (filterByAvailabilityCommand()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(12, new Menu("Filter by attributes", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (filterByAttributes()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(13, new Menu("Remove attributes filter", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeFilterByAttributes()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(14, new Menu("Remove name filter", this) {
             @Override
             public void show() {
             }
@@ -163,6 +280,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (removeNameFilter()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -172,7 +290,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(10, new Menu("Remove description filter", this) {
+        subMenus.put(15, new Menu("Remove description filter", this) {
             @Override
             public void show() {
             }
@@ -180,6 +298,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (removeDescriptionFilter()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -189,7 +308,61 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(11, new Menu("Remove price filter", this) {
+        subMenus.put(16, new Menu("Remove brand filter", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeBrandFilter()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(17, new Menu("Remove Seller filter", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeSellerFilter()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(18, new Menu("Remove availability filter", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeAvailabilityFilter()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(19, new Menu("Remove price filter", this) {
             @Override
             public void show() {
             }
@@ -197,6 +370,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (removePriceFilter()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -206,7 +380,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(12, new Menu("Remove category filter", this) {
+        subMenus.put(20, new Menu("Remove category filter", this) {
             @Override
             public void show() {
             }
@@ -214,6 +388,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (removeCategoryFilter()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -223,7 +398,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(13, new Menu("Show available sorting methods", this) {
+        subMenus.put(21, new Menu("Show available sorting methods", this) {
             @Override
             public void show() {
             }
@@ -231,6 +406,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (showAvailableSortingMethods()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -240,7 +416,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(14, new Menu("Sort by visit count", this) {
+        subMenus.put(22, new Menu("Sort by visit count", this) {
             @Override
             public void show() {
             }
@@ -248,6 +424,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (setSortingMethod(SortingMethod.VISIT_COUNT)) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -257,7 +434,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(15, new Menu("Sort by name", this) {
+        subMenus.put(23, new Menu("Sort by name", this) {
             @Override
             public void show() {
             }
@@ -265,6 +442,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (setSortingMethod(SortingMethod.NAME)) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -274,7 +452,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(16, new Menu("Sort by price", this) {
+        subMenus.put(24, new Menu("Sort by price", this) {
             @Override
             public void show() {
             }
@@ -282,6 +460,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (setSortingMethod(SortingMethod.PRICE)) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -291,7 +470,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(17, new Menu("View current sort method", this) {
+        subMenus.put(25, new Menu("View current sort method", this) {
             @Override
             public void show() {
             }
@@ -299,6 +478,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (viewCurrentSortMethod()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -308,7 +488,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(18, new Menu("Disable sort method", this) {
+        subMenus.put(26, new Menu("Disable sort method", this) {
             @Override
             public void show() {
             }
@@ -316,6 +496,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (setSortingMethod(SortingMethod.VISIT_COUNT)) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -325,7 +506,7 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(19, new Menu("Show product details", this) {
+        subMenus.put(27, new Menu("Show product details", this) {
             @Override
             public void show() {
             }
@@ -333,6 +514,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 if (showProductDetailsCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -343,7 +525,7 @@ public class AllProductsMenu extends Menu {
         });
 
         if (DataManager.shared().getLoggedInAccount() != null) {
-            subMenus.put(20, new Menu("Logout", this) {
+            subMenus.put(28, new Menu("Logout", this) {
                 @Override
                 public void show() {
 
@@ -364,6 +546,22 @@ public class AllProductsMenu extends Menu {
         }
 
         this.setSubMenus(subMenus);
+    }
+
+    private boolean filterByAttributes() {
+        System.out.print("To filter by one of the category attributes, enter its name: ");
+        String feature = scanner.nextLine();
+        System.out.print("Enter the desired value: ");
+        String value = scanner.nextLine();
+        filteredAttributes.put(feature, value);
+        System.out.println("Filtered by the attribute");
+        return false;
+    }
+
+    private boolean removeFilterByAttributes() {
+        filteredAttributes = new HashMap<>();
+        System.out.println("Done");
+        return false;
     }
 
     private boolean logoutCommand() {
@@ -459,17 +657,39 @@ public class AllProductsMenu extends Menu {
     }
 
     private void findFilteredProducts(ArrayList<Product> currentProducts) {
-        addToCurrentProducts: for (Product product : DataManager.shared().getAllProducts()) {
+        addToCurrentProducts:
+        for (Product product : this.currentProducts) {
             if (!nameFilter.equals("") && !product.getName().contains(nameFilter)) continue;
             if (!descriptionFilter.equals("") && !product.getDescription().contains(descriptionFilter)) continue;
+            if (!brandFilter.equals("") && !product.getBrand().equals(brandFilter)) continue;
+            if (!availabilityFilter.equals("")) {
+                if (availabilityFilter.equals("available") && product.getNumberAvailable() == 0 || availabilityFilter.equals("notAvailable") && product.getNumberAvailable() != 0)
+                    continue;
+            }
+            if (!sellerFilter.equals("") && product.getSellers().stream().noneMatch(seller -> seller.getUsername().equals(sellerFilter)))
+                continue;
             if (priceFilter != 0 && product.getPrice() != priceFilter) continue;
-            if (filteredCategories.isEmpty())  {
-                currentProducts.add(product);
+            if (filteredCategories.isEmpty()) {
+                if (filteredAttributes.isEmpty()) {
+                    currentProducts.add(product);
+                } else {
+                    boolean flag = true;
+                    for (Map.Entry<String, String> stringStringEntry : filteredAttributes.entrySet()) {
+                        Map.Entry pair = stringStringEntry;
+                        if (!product.getFeatures().get(pair.getKey()).equals(pair.getValue())) flag = false;
+                    }
+                    if (flag) currentProducts.add(product);
+                }
                 continue;
             }
             for (Category category : filteredCategories) {
                 if (product.getCategory() == category) {
-                    currentProducts.add(product);
+                    boolean flag = true;
+                    for (Map.Entry<String, String> stringStringEntry : filteredAttributes.entrySet()) {
+                        Map.Entry pair = stringStringEntry;
+                        if (!product.getFeatures().get(pair.getKey()).equals(pair.getValue())) flag = false;
+                    }
+                    if (flag) currentProducts.add(product);
                     continue addToCurrentProducts;
                 }
             }
@@ -513,6 +733,24 @@ public class AllProductsMenu extends Menu {
         return false;
     }
 
+    private boolean removeBrandFilter() {
+        brandFilter = "";
+        System.out.println("Brand filter was successfully removed");
+        return false;
+    }
+
+    private boolean removeSellerFilter() {
+        sellerFilter = "";
+        System.out.println("Seller filter was successfully removed");
+        return false;
+    }
+
+    private boolean removeAvailabilityFilter() {
+        availabilityFilter = "";
+        System.out.println("Availability filter was successfully removed");
+        return false;
+    }
+
     private boolean removePriceFilter() {
         priceFilter = 0;
         System.out.println("Price filter was successfully removed");
@@ -526,9 +764,21 @@ public class AllProductsMenu extends Menu {
         if (!descriptionFilter.equals("")) {
             System.out.println("Filtered by description = " + descriptionFilter);
         }
+        if (!brandFilter.equals("")) {
+            System.out.println("Filtered by brand = " + brandFilter);
+        }
+        if (!sellerFilter.equals("")) {
+            System.out.println("Filtered by seller's username = " + sellerFilter);
+        }
+        if (!availabilityFilter.equals("")) {
+            System.out.println("Filtered by availability = " + availabilityFilter);
+        }
         if (priceFilter != 0) {
             System.out.println("Filtered by price = " + priceFilter);
         }
+        if (filteredAttributes.size() == 0) return false;
+        System.out.println("Filtered by attributes:");
+        filteredAttributes.entrySet().stream().map(stringStringEntry -> ((Map.Entry) stringStringEntry).getKey() + " = " + ((Map.Entry) stringStringEntry).getValue()).forEach(System.out::println);
         if (filteredCategories.size() == 0) return false;
         if (filteredCategories.size() == 1)
             System.out.println("Filtered by category = " + filteredCategories.get(0).getName());
@@ -570,6 +820,31 @@ public class AllProductsMenu extends Menu {
         return false;
     }
 
+    private boolean filterByBrandCommand() {
+        System.out.print("Enter a new brand name to only see products with that brand: ");
+        brandFilter = scanner.nextLine();
+        System.out.println("Brand filter was successfully set");
+        return false;
+    }
+
+    private boolean filterBySellerCommand() {
+        System.out.print("Enter a seller's username to only see the products by that seller: ");
+        sellerFilter = scanner.nextLine();
+        System.out.println("Seller filter was successfully set");
+        return false;
+    }
+
+    private boolean filterByAvailabilityCommand() {
+        System.out.print("Enter \"available\" or \"notAvailable\": ");
+        availabilityFilter = scanner.nextLine();
+        if (!availabilityFilter.equals("available") && !availabilityFilter.equals("notAvailable")) {
+            System.out.println("Invalid value");
+            return false;
+        }
+        System.out.println("Availability filter was successfully set");
+        return false;
+    }
+
     private boolean filterByPriceCommand() {
         System.out.print("Enter a new price to only see products with that price: ");
         priceFilter = DataManager.nextInt(scanner);
@@ -594,47 +869,8 @@ public class AllProductsMenu extends Menu {
         return false;
     }
 
-    private void searchByInputCommand() {
-    }
-
-    private void filterByBrand(String filter) {
-    }
-
-    private void removeFilterByBrand() {
-    }
-
-    private void filterByAvailability(boolean shouldBeAvailable) {
-    }
-
-    private void removeFilterByAvailability() {
-    }
-
-    private void filterByPriceRange(int from, int to) {
-    }
-
-    private void filterByName(String name) {
-    }
-
-    private void showProduct(Product product) {
-    }
-
-    private void startComparingProducts(int firstProductId, int secondProductId) {
-    }
-
-    private void showProductDigest(Product product) {
-    }
-
-    private void showProductAttributes(Product product) {
-    }
-
-    private void addProductToCart(Product product) {
-    }
-
     @Override
     protected void showHelp() {
 
-    }
-
-    private void checkOut() {
     }
 }

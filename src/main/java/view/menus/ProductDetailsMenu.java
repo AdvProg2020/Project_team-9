@@ -4,6 +4,8 @@ import controller.DataManager;
 import model.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ProductDetailsMenu extends Menu {
@@ -25,6 +27,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (digestCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -42,6 +45,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (addToCart()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -59,6 +63,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (removeFromCart()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -76,6 +81,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (selectSeller()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -85,7 +91,7 @@ public class ProductDetailsMenu extends Menu {
             }
         });
 
-        subMenus.put(5, new Menu("Attributes", this) {
+        subMenus.put(5, new Menu("Filter by attributes", this) {
             @Override
             public void show() {
             }
@@ -93,6 +99,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (attributesCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -110,6 +117,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (compareCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -127,6 +135,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (viewCommentsCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -144,6 +153,7 @@ public class ProductDetailsMenu extends Menu {
             @Override
             public void execute() {
                 if (addCommentCommand()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -222,6 +232,11 @@ public class ProductDetailsMenu extends Menu {
             System.out.println("No such product exists");
             return false;
         }
+        Category category = product.getCategory();
+        if (!category.equals(currentProduct.getCategory())) {
+            System.out.println("You can only compare products from the same category");
+            return false;
+        }
         System.out.println("#" + currentProduct.getProductId());
         System.out.println("#" + product.getProductId());
         System.out.println();
@@ -245,6 +260,11 @@ public class ProductDetailsMenu extends Menu {
         System.out.println(currentProduct.getNumberAvailable());
         System.out.println(product.getNumberAvailable());
         System.out.println();
+        for (String feature : category.getUniqueFeatures()) {
+            System.out.println(feature + ": ");
+            System.out.println(currentProduct.getFeatures().get(feature));
+            System.out.println(product.getFeatures().get(feature) + "\n");
+        }
         System.out.println("Description: ");
         System.out.println(currentProduct.getDescription());
         System.out.println(product.getDescription());
@@ -260,6 +280,8 @@ public class ProductDetailsMenu extends Menu {
         System.out.println("Discount percent: " + currentProduct.getDiscountPercent());
         System.out.println("Status: " + currentProduct.getStatus().toString());
         System.out.println("Number available: " + currentProduct.getNumberAvailable());
+        System.out.println("Category attributes:");
+        currentProduct.getCategory().getUniqueFeatures().stream().map(feature -> feature + ": " + currentProduct.getFeatures().get(feature)).forEach(System.out::println);
         return false;
     }
 
