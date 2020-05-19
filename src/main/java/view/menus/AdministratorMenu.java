@@ -13,524 +13,56 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AdministratorMenu extends UserMenu {
     public AdministratorMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        subMenus.put(1, new Menu("View Personal Info", this) {
-            @Override
-            public void show() {
-            }
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
+        subMenus.put(1, viewPersonalInfoMenu());
+        subMenus.put(2, editFirstNameMenu());
+        subMenus.put(3, editLastNameMenu());
+        subMenus.put(4, editEmailMenu());
+        subMenus.put(5, editPhoneNumberMenu());
+        subMenus.put(6, changePasswordMenu());
+        subMenus.put(7, viewUserInfoMenu());
+        subMenus.put(8, changeUserTypeMenu());
+        subMenus.put(9, deleteUserMenu());
+        subMenus.put(10, addAdminMenu());
+        subMenus.put(11, summaryOfAllProductsMenu());
+        subMenus.put(12, removeProductMenu());
+        subMenus.put(13, createDiscountCodeMenu());
+        subMenus.put(14, viewAllCouponsMenu());
+        subMenus.put(15, removeCouponMenu());
+        subMenus.put(16, viewCouponMenu());
+        subMenus.put(17, editCouponMenu());
 
-            @Override
-            public void execute() {
-                viewPersonalInfo();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        subMenus.put(18, viewAllRequestsMenu());
 
-            @Override
-            protected void showHelp() {
-            }
-        });
-        subMenus.put(2, new Menu("Edit first name", this) {
-            @Override
-            public void show() {
-            }
+        subMenus.put(19, viewRequestDetailsMenu());
 
-            @Override
-            public void execute() {
-                editFirstName();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        subMenus.put(20, resolveRequestTrueMenu());
 
-            @Override
-            protected void showHelp() {
-            }
-        });
-        subMenus.put(3, new Menu("Edit last name", this) {
-            @Override
-            public void show() {
-            }
+        subMenus.put(21, resolveRequestFalseMenu());
 
-            @Override
-            public void execute() {
-                editLastName();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        subMenus.put(22, viewAllCategoriesMenu());
 
-            @Override
-            protected void showHelp() {
-            }
-        });
-        subMenus.put(4, new Menu("Edit email", this) {
-            @Override
-            public void show() {
-            }
+        subMenus.put(23, editCategoryMenu());
 
-            @Override
-            public void execute() {
-                editEmail();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        subMenus.put(24, addCategoryMenu());
 
-            @Override
-            protected void showHelp() {
-            }
-        });
-        subMenus.put(5, new Menu("Edit phone number", this) {
-            @Override
-            public void show() {
-            }
+        subMenus.put(25, removeCategoryMenu());
 
-            @Override
-            public void execute() {
-                editPhoneNumber();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        subMenus.put(26, reviewCommentsMenu());
 
-            @Override
-            protected void showHelp() {
-            }
-        });
-        subMenus.put(6, new Menu("Change password", this) {
-            @Override
-            public void show() {
-            }
+        subMenus.put(27, acceptCommentMenu());
 
-            @Override
-            public void execute() {
-                changePassword();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        subMenus.put(28, declineCommentMenu());
 
-            @Override
-            protected void showHelp() {
-            }
-        });
+        subMenus.put(29, allProductsMenu());
 
-        subMenus.put(7, new Menu("View User Info", this) {
-            @Override
-            public void show() {
-            }
+        subMenus.put(30, logoutCommandMenu());
 
-            @Override
-            public void execute() {
-                viewUserInfo();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
+        this.setSubMenus(subMenus);
+    }
 
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(8, new Menu("Change user role", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (changeUserType()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(9, new Menu("Remove user", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (deleteUser()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(10, new Menu("Add admin", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (addAdmin()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(11, new Menu("Summary of all products", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (summaryOfAllProducts()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(12, new Menu("Remove Product", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (removeProduct()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(13, new Menu("Create Coupon", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (createDiscountCode()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(14, new Menu("View All Coupons", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (viewAllCoupons()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(15, new Menu("Remove Coupon", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (removeCoupon()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(16, new Menu("View Coupon Details", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                viewCoupon();
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(17, new Menu("Edit Coupon Details", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (editCoupon()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(18, new Menu("View all requests", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (viewAllRequests()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(19, new Menu("View request details", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (viewRequestDetails()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(20, new Menu("Accept request", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (resolveRequest(true)) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(21, new Menu("Decline request", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (resolveRequest(false)) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(22, new Menu("View all categories", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (viewAllCategories()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(23, new Menu("Edit category details", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (editCategory()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(24, new Menu("Add category", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (addCategory()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(25, new Menu("Remove category", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (removeCategory()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(26, new Menu("Review comments", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (reviewComments()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(27, new Menu("Accept comment", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (acceptComment()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(28, new Menu("Decline comment", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (declineComment()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(29, new Menu("All products in detail", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-                if (allProducts()) return;
-                scanner.nextLine();
-                parentMenu.show();
-                parentMenu.execute();
-            }
-
-            @Override
-            protected void showHelp() {
-            }
-        });
-
-        subMenus.put(30, new Menu("Logout", this) {
+    private Menu logoutCommandMenu() {
+        return new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -547,9 +79,587 @@ public class AdministratorMenu extends UserMenu {
             protected void showHelp() {
 
             }
-        });
+        };
+    }
 
-        this.setSubMenus(subMenus);
+    private Menu allProductsMenu() {
+        return new Menu("All products in detail", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu declineCommentMenu() {
+        return new Menu("Decline comment", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (declineComment()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu acceptCommentMenu() {
+        return new Menu("Accept comment", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (acceptComment()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu reviewCommentsMenu() {
+        return new Menu("Review comments", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (reviewComments()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu removeCategoryMenu() {
+        return new Menu("Remove category", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeCategory()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu addCategoryMenu() {
+        return new Menu("Add category", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (addCategory()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu editCategoryMenu() {
+        return new Menu("Edit category details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (editCategory()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewAllCategoriesMenu() {
+        return new Menu("View all categories", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewAllCategories()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu resolveRequestFalseMenu() {
+        return new Menu("Decline request", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (resolveRequest(false)) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu resolveRequestTrueMenu() {
+        return new Menu("Accept request", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (resolveRequest(true)) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewRequestDetailsMenu() {
+        return new Menu("View request details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewRequestDetails()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewAllRequestsMenu() {
+        return new Menu("View all requests", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewAllRequests()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu editCouponMenu() {
+        return new Menu("Edit Coupon Details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (editCoupon()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewCouponMenu() {
+        return new Menu("View Coupon Details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewCoupon();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu removeCouponMenu() {
+        return new Menu("Remove Coupon", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeCoupon()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewAllCouponsMenu() {
+        return new Menu("View All Coupons", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (viewAllCoupons()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu createDiscountCodeMenu() {
+        return new Menu("Create Coupon", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (createDiscountCode()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu removeProductMenu() {
+        return new Menu("Remove Product", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (removeProduct()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu summaryOfAllProductsMenu() {
+        return new Menu("Summary of all products", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (summaryOfAllProducts()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu addAdminMenu() {
+        return new Menu("Add admin", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (addAdmin()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu deleteUserMenu() {
+        return new Menu("Remove user", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (deleteUser()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu changeUserTypeMenu() {
+        return new Menu("Change user role", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (changeUserType()) return;
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewUserInfoMenu() {
+        return new Menu("View User Info", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewUserInfo();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu changePasswordMenu() {
+        return new Menu("Change password", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                changePassword();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu editPhoneNumberMenu() {
+        return new Menu("Edit phone number", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editPhoneNumber();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu editEmailMenu() {
+        return new Menu("Edit email", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editEmail();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu editLastNameMenu() {
+        return new Menu("Edit last name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editLastName();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu editFirstNameMenu() {
+        return new Menu("Edit first name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editFirstName();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
+    }
+
+    private Menu viewPersonalInfoMenu() {
+        return new Menu("View Personal Info", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewPersonalInfo();
+                scanner.nextLine();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        };
     }
 
     private boolean allProducts() {
