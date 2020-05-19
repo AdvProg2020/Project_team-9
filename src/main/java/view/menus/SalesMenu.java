@@ -7,8 +7,8 @@ import model.Sale;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
-public class SaleMenu extends Menu {
-    public SaleMenu(String name, Menu parentMenu) {
+public class SalesMenu extends Menu {
+    public SalesMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("Show all sales", this) {
@@ -45,7 +45,50 @@ public class SaleMenu extends Menu {
             }
         });
 
+        subMenus.put(3, new Menu("All products in detail", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+
+        subMenus.put(4, new Menu("Logout", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+                if (logoutCommand()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+
         this.setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean showProductDetailsCommand() {
@@ -63,6 +106,14 @@ public class SaleMenu extends Menu {
         return false;
     }
 
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
+        return true;
+    }
+
     private boolean showAllSalesCommand() {
         for (Sale sale : DataManager.shared().getAllSales()) {
             System.out.println("Sale #" + sale.getOffId());
@@ -73,7 +124,6 @@ public class SaleMenu extends Menu {
                 System.out.println("\tPrevious price (with discount): " + price);
                 System.out.println("\tNew price (after sale): " + (price - sale.getDiscountAmount()));
             }
-            System.out.println("Sale status: " + sale.getSaleStatus().toString() + "\n");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             System.out.println("Starting from " + sale.getStartTime().format(dateFormatter) + " and ending in " + sale.getEndTime().format(dateFormatter));
         }

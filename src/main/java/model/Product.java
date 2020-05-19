@@ -22,8 +22,10 @@ public class Product {
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
     private LocalDateTime dateCreated;
+    private String currentSeller = "";
 
-    public Product(Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated) {
+    public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated) {
+        this.productId = productId;
         this.status = status;
         this.name = name;
         this.brand = brand;
@@ -36,6 +38,15 @@ public class Product {
         this.comments = new ArrayList<>();
         this.scores = new ArrayList<>();
         this.dateCreated = dateCreated;
+    }
+
+    public Seller getCurrentSeller() {
+        if (currentSeller.equals("") && sellers.size() > 0) return (Seller) DataManager.shared().getAccountWithGivenUsername(sellers.get(0));
+        return (Seller) DataManager.shared().getAccountWithGivenUsername(currentSeller);
+    }
+
+    public void setCurrentSeller(Seller currentSeller) {
+        this.currentSeller = currentSeller.getUsername();
     }
 
     public LocalDateTime getDateCreated() {
@@ -105,6 +116,7 @@ public class Product {
     }
 
     public double getAverageScore() {
+        if (scores.size() == 0) return 0;
         int total = 0;
         for (Score score : scores) {
             total += score.getScore();
@@ -130,6 +142,11 @@ public class Product {
     public void addScore(int rating, Customer customer) {
         scores.add(new Score(DataManager.getNewId(), customer, rating));
         DataManager.saveData();
+    }
+
+    public void decrementNumberAvailable() {
+        if (numberAvailable > 0) numberAvailable -= 1;
+        else numberAvailable = 0;
     }
 
     @Override

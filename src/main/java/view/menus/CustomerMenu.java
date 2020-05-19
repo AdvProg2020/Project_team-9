@@ -1,8 +1,10 @@
 package view.menus;
 
 import controller.DataManager;
+import controller.Validator;
 import model.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +14,107 @@ import java.util.stream.Collectors;
 public class CustomerMenu extends Menu {
     public CustomerMenu(String name, Menu parentMenu) {
         super(name, parentMenu);
-        subMenus.put(1, new Menu("View cart", this) {
+        HashMap<Integer, Menu> subMenus = new HashMap<>();
+        subMenus.put(1, new Menu("View Personal Info", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                viewPersonalInfo();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(2, new Menu("Edit first name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editFirstName();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(3, new Menu("Edit last name", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editLastName();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(4, new Menu("Edit email", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editEmail();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(5, new Menu("Edit phone number", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                editPhoneNumber();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(6, new Menu("Change password", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                changePassword();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(7, new Menu("View cart", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 viewCart();
@@ -24,10 +126,15 @@ public class CustomerMenu extends Menu {
             protected void showHelp() {
             }
         });
-        subMenus.put(2, new Menu("View Product Details", this) {
+        subMenus.put(8, new Menu("View Product Details", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 showProduct();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -35,10 +142,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(4, new Menu("Checkout", this) {
+        subMenus.put(9, new Menu("Checkout", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 checkOut();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -46,10 +158,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(5, new Menu("View balance", this) {
+        subMenus.put(10, new Menu("View credit", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 viewBalance();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -57,10 +174,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(6, new Menu("View usable coupons", this) {
+        subMenus.put(11, new Menu("View usable coupons", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 viewUsableCoupons();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -68,10 +190,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(7, new Menu("View all orders", this) {
+        subMenus.put(12, new Menu("View all orders", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 viewOrders();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -79,10 +206,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(8, new Menu("View order details", this) {
+        subMenus.put(13, new Menu("View order details", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 viewOrderDetails();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -90,10 +222,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(9, new Menu("Rate product", this) {
+        subMenus.put(14, new Menu("Rate product", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 rateProduct();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -101,10 +238,15 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(10, new Menu("Comment on product", this) {
+        subMenus.put(15, new Menu("Comment on product", this) {
+            @Override
+            public void show() {
+            }
             @Override
             public void execute() {
                 addCommentCommand();
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
@@ -112,7 +254,71 @@ public class CustomerMenu extends Menu {
 
             }
         });
-        subMenus.put(11, new Menu("Logout", this) {
+        subMenus.put(16, new Menu("Increase credit", this) {
+            @Override
+            public void show() {
+            }
+            @Override
+            public void execute() {
+                increaseCredit();
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+
+            }
+        });
+        subMenus.put(17, new Menu("All products", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(18, new Menu("Total price of cart", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (totalPriceOfCart()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(19, new Menu("All sales currently running", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allSales()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(20, new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -134,12 +340,116 @@ public class CustomerMenu extends Menu {
         this.setSubMenus(subMenus);
     }
 
+    private boolean allSales() {
+        SalesMenu menu = new SalesMenu("All Sales", this);
+        menu.show();
+        menu.execute();
+        return false;
+    }
+
+    private boolean totalPriceOfCart() {
+        Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
+        if (customer.getCart().getProducts().size() == 0) {
+            System.out.println("There is no product in your cart yet");
+            return false;
+        }
+        int totalPrice = 0;
+        for (Map.Entry<Product, Integer> entry : customer.getCart().getProducts().entrySet()) {
+            Product key = entry.getKey();
+            Integer value = entry.getValue();
+            totalPrice += key.getPrice() * (1 - (double)key.getDiscountPercent()/100) * value;
+        }
+        System.out.println("Total cart price, including discount: " + totalPrice);
+        return false;
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
+    }
+
+    private void increaseCredit() {
+        System.out.print("Enter a value to increase credit by that amount: ");
+        int amount = DataManager.nextInt(scanner);
+        DataManager.shared().getLoggedInAccount().increaseCredit(amount);
+        System.out.println("Done");
+    }
+
+    protected void viewPersonalInfo() {
+        Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
+        System.out.println(customer.getFirstName() + " " + customer.getLastName() + " - " + customer.getUsername());
+        System.out.println("Email: " + customer.getEmail());
+        System.out.println("Phone: " + customer.getPhoneNumber());
+    }
+
+    protected void editEmail() {
+        System.out.print("Enter your new email address: ");
+        String email = scanner.nextLine();
+        if (Validator.shared().emailIsValid(email)) {
+            DataManager.shared().getLoggedInAccount().setEmail(email);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid email");
+        }
+    }
+
+    protected void editFirstName() {
+        System.out.print("Enter your new first name: ");
+        String firstName = scanner.nextLine();
+        DataManager.shared().getLoggedInAccount().setFirstName(firstName);
+        System.out.println("Done");
+    }
+
+    protected void editLastName() {
+        System.out.print("Enter your new last name: ");
+        String lastName = scanner.nextLine();
+        DataManager.shared().getLoggedInAccount().setLastName(lastName);
+        System.out.println("Done");
+    }
+
+    protected void editPhoneNumber() {
+        System.out.print("Enter your new phone number: ");
+        String phone = scanner.nextLine();
+        if (Validator.shared().phoneNumberIsValid(phone)) {
+            DataManager.shared().getLoggedInAccount().setPhoneNumber(phone);
+            System.out.println("Done");
+        } else {
+            System.out.println("Invalid phone number");
+        }
+    }
+
+    protected void changePassword() {
+        System.out.print("Enter your old password: ");
+        String oldPassword = scanner.nextLine();
+        if (!DataManager.shared().getLoggedInAccount().getPassword().equals(oldPassword)) {
+            System.out.println("Your password is wrong. Try again.");
+            return;
+        }
+        System.out.print("Enter your new password: ");
+        String newPassword = scanner.nextLine();
+        if (oldPassword.equals(newPassword)) {
+            System.out.println("Your new password should be different from the previous password. Try again.");
+            return;
+        }
+        DataManager.shared().getLoggedInAccount().setPassword(newPassword);
+        System.out.println("New password has been set");
+    }
+
     private boolean logoutCommand() {
         DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
         return true;
     }
 
     private void checkOut() {
+        if (((Customer) DataManager.shared().getLoggedInAccount()).getCart().getProducts().size() == 0) {
+            System.out.println("There is no product in your cart yet");
+            return;
+        }
         CheckOutMenu menu = new CheckOutMenu("Check out", this);
         menu.show();
         menu.execute();
@@ -205,7 +515,7 @@ public class CustomerMenu extends Menu {
             System.out.println("There is no product in your cart yet");
             return;
         }
-        customer.getCart().getProducts().forEach((key, value) -> System.out.println(value + "x " + key.getName() + "\t$" + key.getPrice()));
+        customer.getCart().getProducts().forEach((key, value) -> System.out.println(value + "x " + key.getName() + "\t$" + key.getPrice() + (value > 1 ? " each" : "")));
     }
 
     private boolean showProduct() {
@@ -224,6 +534,7 @@ public class CustomerMenu extends Menu {
     }
 
     private void viewOrderDetails() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Customer currentCustomer = (Customer) DataManager.shared().getLoggedInAccount();
         System.out.print("Enter order's ID: ");
         String orderID = scanner.nextLine();
@@ -233,9 +544,9 @@ public class CustomerMenu extends Menu {
             return;
         }
         System.out.println("Order #" + purchaseLog.getId());
-        System.out.println("Placed on " + purchaseLog.getDate().toString());
+        System.out.println("Placed on " + purchaseLog.getDate().format(dateFormatter));
         System.out.println("Delivery status: " + purchaseLog.getDeliveryStatus().toString());
-        System.out.println("Total price paid: $" + purchaseLog.getPrice() + "(having $" + purchaseLog.getDiscountAmount() + " discount)");
+        System.out.println("Total price paid: $" + purchaseLog.getPrice() + " (having $" + purchaseLog.getDiscountAmount() + " discount)");
         System.out.println("Purchased products: ");
         for (Map.Entry<Product, Integer> productIntegerEntry : purchaseLog.getProducts().entrySet()) {
             System.out.println(((Map.Entry) productIntegerEntry).getValue() + "x\t#" + ((Product) ((Map.Entry) productIntegerEntry).getKey()).getProductId() + " - " + ((Product) ((Map.Entry) productIntegerEntry).getKey()).getName());

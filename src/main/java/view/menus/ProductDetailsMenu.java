@@ -152,12 +152,35 @@ public class ProductDetailsMenu extends Menu {
             protected void showHelp() {
             }
         });
+
+        if (DataManager.shared().getLoggedInAccount() != null) {
+            subMenus.put(9, new Menu("Logout", this) {
+                @Override
+                public void show() {
+
+                }
+
+                @Override
+                public void execute() {
+                    if (logoutCommand()) return;
+                    parentMenu.show();
+                    parentMenu.execute();
+                }
+
+                @Override
+                protected void showHelp() {
+
+                }
+            });
+        }
+
+        this.setSubMenus(subMenus);
     }
 
     // TODO: Replace all scanner inputs with better equivalents
 
     private boolean addCommentCommand() {
-        if (DataManager.shared().getLoggedInAccount() != null || !(DataManager.shared().getLoggedInAccount() instanceof Customer)) {
+        if (DataManager.shared().getLoggedInAccount() == null || !(DataManager.shared().getLoggedInAccount() instanceof Customer)) {
             System.out.println("You should log in as a customer to post comments");
             return false;
         }
@@ -177,10 +200,18 @@ public class ProductDetailsMenu extends Menu {
         currentProduct.getComments().stream()
                 .filter(comment -> comment.getCommentStatus() == CommentStatus.CONFIRMED)
                 .map(comment -> comment.getCustomer().getFirstName() + " "
-                + comment.getCustomer().getLastName() + "(has" + (comment.hasUserPurchasedProduct() ? "n't" : "") + " purchased the product)"
+                + comment.getCustomer().getLastName() + " (has" + (comment.hasUserPurchasedProduct() ? "n't" : "") + " purchased the product)"
                         + " said: \n" + comment.getTitle().toUpperCase() + "\n" + comment.getText())
                 .forEach(System.out::println);
         return false;
+    }
+
+    private boolean logoutCommand() {
+        DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
+        return true;
     }
 
     private boolean compareCommand() {
@@ -209,10 +240,6 @@ public class ProductDetailsMenu extends Menu {
         System.out.println("Discount percent: ");
         System.out.println(currentProduct.getDiscountPercent());
         System.out.println(product.getDiscountPercent());
-        System.out.println();
-        System.out.println("Status: ");
-        System.out.println(currentProduct.getStatus().toString());
-        System.out.println(product.getStatus().toString());
         System.out.println();
         System.out.println("Number available: ");
         System.out.println(currentProduct.getNumberAvailable());
@@ -256,7 +283,9 @@ public class ProductDetailsMenu extends Menu {
     }
 
     private boolean addToCart() {
+        currentProduct.setCurrentSeller(currentSeller);
         getCurrentCart().addProduct(currentProduct);
+        DataManager.saveData();
         System.out.println("Product added to the cart successfully");
         return false;
     }

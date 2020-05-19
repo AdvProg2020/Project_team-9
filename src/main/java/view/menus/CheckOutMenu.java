@@ -5,6 +5,7 @@ import jdk.jfr.DataAmount;
 import model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,41 +15,40 @@ public class CheckOutMenu extends Menu {
         super(name, parentMenu);
     }
 
-    private void startGettingShippingDetails() {
-    }
-
-    private void startGettingCouponAndConfirmingPurchase() {
-    }
-
     @Override
     public void show() {
         if (!checkIfCustomer()) return;
-        Cart cart = ((Customer)(DataManager.shared().getLoggedInAccount())).getCart();
+        Cart cart = ((Customer) (DataManager.shared().getLoggedInAccount())).getCart();
         HashMap<Product, Integer> products = cart.getProducts();
         Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
-        String address = getAddress(customer);
-        String phoneNumber = getPhoneNumber(customer);
-        String couponCode;
+        getAddress(customer);
+        getPhoneNumber(customer);
         Coupon coupon = getCoupon(customer); // if null, there is no coupon code
         String orderId = DataManager.getNewId();
         System.out.println("\nOrder #" + orderId);
         Iterator it = products.entrySet().iterator();
         double totalPrice = 0;
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            double price = ((Product)pair.getKey()).getPrice();
-            for (Sale sale : DataManager.shared().getAllSales()) {
-                // TODO: What is the next line's "suspicious code"??
-                if (sale.getProducts().contains(pair.getKey())) {
-                    price -= sale.getDiscountAmount();
-                    if (price < 1) price = 1;
+            Map.Entry pair = (Map.Entry) it.next();
+            double price = ((Product) pair.getKey()).getPrice() * (int) pair.getValue();
+            if (((Product) pair.getKey()).getNumberAvailable() > 0) {
+                for (Sale sale : DataManager.shared().getAllSales()) {
+                    // TODO: What is the next line's "suspicious code"??
+                    if (sale.getProducts().contains(pair.getKey())) {
+                        price -= sale.getDiscountAmount() * (int) pair.getValue();
+                        if (price < 1) price = 1;
+                    }
                 }
+                totalPrice += price;
+                System.out.println(pair.getValue() + "x\t" + ((Product) pair.getKey()).getName() + "\t$" + price);
             }
-            totalPrice += price;
-            System.out.println(pair.getValue() + "x\t" + ((Product)pair.getKey()).getName() + "\t$" + price);
         }
-        System.out.println("");
-        System.out.println("Total price (before discount, with sales effected): $" + totalPrice);
+        System.out.println("\nTotal price (before discount, with sales effected): $" + totalPrice);
+        if (coupon == null) {
+            coupon = new Coupon(DataManager.getNewId(), new ArrayList<>());
+            coupon.setDiscountPercent(0);
+            coupon.setMaximumDiscount(0);
+        }
         double priceAfterDiscount = totalPrice * (1 - (coupon.getDiscountPercent() / 100.0));
         if (totalPrice - priceAfterDiscount > coupon.getMaximumDiscount()) {
             priceAfterDiscount = totalPrice - coupon.getMaximumDiscount();
@@ -61,13 +61,31 @@ public class CheckOutMenu extends Menu {
             System.out.print("If you are sure you want to purchase these products, type \"yes\"; anything else will be regarded as a discard message: ");
             String response = scanner.nextLine().trim();
             if (response.equalsIgnoreCase("yes")) {
-                customer.decreaseCredit((int)priceAfterDiscount);
+                customer.decreaseCredit((int) priceAfterDiscount);
                 coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
-                PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int)totalPrice, (int)(totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
+                PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int) totalPrice, (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
                 DataManager.shared().addLog(purchaseLog);
+                Iterator it2 = products.entrySet().iterator();
+                while (it2.hasNext()) {
+                    Map.Entry pair = (Map.Entry) it2.next();
+                    if (((Product) pair.getKey()).getNumberAvailable() > 0) {
+                        ((Product) pair.getKey()).decrementNumberAvailable();
+                        HashMap<Product, Integer> productsHashMap = new HashMap<>();
+                        productsHashMap.put((Product) pair.getKey(), 1);
+                        for (int i = 0; i < (int) pair.getValue(); i++) {
+                            SellLog sellLog = new SellLog(LocalDateTime.now(), productsHashMap, DataManager.getNewId(), ((Product) pair.getKey()).getPrice(), ((Product) pair.getKey()).getCurrentSeller(), (int) ((totalPrice - priceAfterDiscount) / (double) products.size()), DeliveryStatus.ORDERED);
+                            DataManager.shared().addLog(sellLog);
+                        }
+                        ((Product) pair.getKey()).getCurrentSeller().increaseCredit((int) priceAfterDiscount);
+                    }
+                }
+                ((Customer) DataManager.shared().getLoggedInAccount()).emptyCart();
+                DataManager.saveData();
                 System.out.println("Thank you for your purchase!");
             }
         }
+        parentMenu.show();
+        parentMenu.execute();
     }
 
     private Coupon getCoupon(Customer customer) {
@@ -112,6 +130,7 @@ public class CheckOutMenu extends Menu {
                 continue;
             }
             customer.setPhoneNumber(phoneNumber);
+            break;
         }
         return phoneNumber;
     }
@@ -134,6 +153,7 @@ public class CheckOutMenu extends Menu {
                 continue;
             }
             customer.setAddress(address);
+            break;
         }
         return address;
     }

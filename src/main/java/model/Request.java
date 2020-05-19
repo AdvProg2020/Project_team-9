@@ -1,14 +1,15 @@
 package model;
 
-public abstract class Request {
+public class Request {
     private String id;
 
-    public Request() {
+    public Request(String id) {
+        this.id = id;
     }
 
     public String getId() {
         return id;
     }
 
-    public abstract void fulfill();
+    public void fulfill() {}
 }

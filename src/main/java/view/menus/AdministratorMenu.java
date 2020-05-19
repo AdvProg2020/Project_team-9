@@ -484,30 +484,20 @@ public class AdministratorMenu extends UserMenu {
             }
         });
 
-        subMenus.put(29, new Menu("Administrator Menu Help", this) {
+        subMenus.put(29, new Menu("All products in detail", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " - Enter Back to return");
             }
 
             @Override
             public void execute() {
-                System.out.println("Available Commands:");
-                System.out.println("Command one");
-                System.out.println("Command two");
-                while (true) {
-                    String input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
-                        this.parentMenu.show();
-                        this.parentMenu.execute();
-                        break;
-                    }
-                }
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
             protected void showHelp() {
-
             }
         });
 
@@ -531,6 +521,13 @@ public class AdministratorMenu extends UserMenu {
         });
 
         this.setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean acceptComment() {
@@ -571,6 +568,9 @@ public class AdministratorMenu extends UserMenu {
 
     private boolean logoutCommand() {
         DataManager.shared().logout();
+        LoginAndRegisterMenu menu = new LoginAndRegisterMenu(null);
+        menu.show();
+        menu.execute();
         return true;
     }
 
@@ -654,11 +654,12 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private void showCouponDetails(Coupon coupon) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         System.out.println("Coupon #" + coupon.getId());
         System.out.println("Discount percent: " + coupon.getDiscountPercent());
-        System.out.println("Maximum possible discount: " + coupon.getDiscountPercent());
-        System.out.println("Start time: " + coupon.getStartTime());
-        System.out.println("End time: " + coupon.getEndTime());
+        System.out.println("Maximum possible discount: " + coupon.getMaximumDiscount());
+        System.out.println("Start time: " + coupon.getStartTime().format(dateFormatter));
+        System.out.println("End time: " + coupon.getEndTime().format(dateFormatter));
     }
 
     private boolean removeCoupon() {
@@ -675,6 +676,10 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean viewAllCoupons() {
+        if (DataManager.shared().getAllCoupons().size() == 0) {
+            System.out.println("No coupon exists");
+            return false;
+        }
         System.out.println("All Coupons");
         for (Coupon coupon : DataManager.shared().getAllCoupons()) {
             System.out.println("#" + coupon.getId() + " - " + coupon.getDiscountPercent() + " percent discount");
@@ -703,7 +708,7 @@ public class AdministratorMenu extends UserMenu {
         while (true) {
             String username = scanner.nextLine();
             if (username.equals("-1")) break;
-            Account account = DataManager.shared().getLoggedInAccount();
+            Account account = DataManager.shared().getAccountWithGivenUsername(username);
             if (!(account instanceof Customer)) {
                 System.out.print("Invalid customer username. Enter again: ");
                 continue;
@@ -761,6 +766,7 @@ public class AdministratorMenu extends UserMenu {
         }
         if (shouldAccept) {
             request.fulfill();
+            DataManager.shared().removeRequest(request);
             System.out.println("Request Accepted");
         } else {
             DataManager.shared().removeRequest(request);
@@ -868,18 +874,19 @@ public class AdministratorMenu extends UserMenu {
         String description = scanner.nextLine();
         Category parent;
         while (true) {
-            System.out.print("Enter the ID of the parent category: ");
+            System.out.print("Enter the ID of the parent category (-1 for no parent): ");
             String parentID = scanner.nextLine();
             parent = DataManager.shared().getCategoryWithId(parentID);
-            if (parent == null) {
+            if (parent == null && !parentID.equals("-1")) {
                 System.out.print("Invalid category ID. Try again: ");
                 continue;
             }
             break;
         }
-        ArrayList<Product> products = getProductsListFromUser();
         String categoryID = DataManager.getNewId();
-        Category category = new Category(categoryID, name, description, parent.getId(), products);
+        String parentGetID = "";
+        if (parent != null) parentGetID = parent.getId();
+        Category category = new Category(categoryID, name, description, parentGetID);
         DataManager.shared().addCategory(category);
         System.out.println("Successfully added category with ID #" + categoryID);
         return false;
@@ -889,7 +896,7 @@ public class AdministratorMenu extends UserMenu {
         System.out.println("All Categories");
         for (Category category : DataManager.shared().getAllCategories()) {
             System.out.println("#" + category.getId() + " - " + category.getName());
-            System.out.println(category.getDescription());
+            System.out.println("\t" + category.getDescription());
         }
         return false;
     }
@@ -908,9 +915,7 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean summaryOfAllProducts() {
-        for (Product product : DataManager.shared().getAllProducts()) {
-            System.out.println("#" + product.getProductId() + " - " + product.getName());
-        }
+        DataManager.shared().getAllProducts().stream().map(product -> "#" + product.getProductId() + " - " + product.getName()).forEach(System.out::println);
         return false;
     }
 
@@ -926,13 +931,27 @@ public class AdministratorMenu extends UserMenu {
         System.out.print("Password: ");
         String password = scanner.nextLine();
         System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String email;
+        while (true) {
+            email = scanner.nextLine();
+            if (email.equals("-1")) return false;
+            if (!Validator.shared().emailIsValid(email)) {
+                System.out.print("Invalid email. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         System.out.print("First name: ");
         String firstName = scanner.nextLine();
         System.out.print("Last name: ");
         String lastName = scanner.nextLine();
         System.out.print("Phone number: ");
-        String phone = scanner.nextLine();
+        String phone;
+        while (true) {
+            phone = scanner.nextLine();
+            if (phone.equals("-1")) return false;
+            if (!Validator.shared().phoneNumberIsValid(phone)) {
+                System.out.print("Invalid phone number. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName);
         DataManager.shared().registerAccount(administrator);
         System.out.println("Account created");
@@ -954,6 +973,9 @@ public class AdministratorMenu extends UserMenu {
             System.out.println("No account with the given username exists");
             return;
         }
+        if (account instanceof Customer) System.out.println("Customer");
+        else if (account instanceof Administrator) System.out.println("Administrator");
+        else if (account instanceof Seller) System.out.println("Seller");
         System.out.println(account.getFirstName() + " " + account.getLastName());
         System.out.println("Email: " + account.getEmail());
         System.out.println("Phone: " + account.getPhoneNumber());
@@ -1016,7 +1038,6 @@ public class AdministratorMenu extends UserMenu {
         } else {
             System.out.println("Invalid email");
         }
-
     }
 
     protected void editFirstName() {
@@ -1061,74 +1082,8 @@ public class AdministratorMenu extends UserMenu {
         System.out.println("New password has been set");
     }
 
-    private void seeAllRequests() {
-    }
-
-    private void fulfillRequest(Request request) {
-    }
-
-    private void seeAllCoupons() {
-    }
-
-    private void filterCouponsByName(String name) {
-    }
-
-    private void startEditingCoupon(Coupon coupon) {
-    }
-
-    private void startAddingCoupon() {
-    }
-
-    private void seeAllAccounts() {
-    }
-
-    private void seeAccountDetails(Account account) {
-    }
-
-    private void startDeletingAccount(Account account) {
-    }
-
-    private void startAddingNewAdministrator() {
-    }
-
-    private void seeAllCategories() {
-    }
-
-    private void filterCategoriesByName(String name) {
-    }
-
-    private void filterCategoriesByDescription(String description) {
-    }
-
-    private void startEditingCategoryName(Category category) {
-    }
-
-    private void startEditingCategoryDescription(Category category) {
-    }
-
-    private void startAddingProductToCategory(Category category) {
-    }
-
-    private void startRemovingProductOfCategory(Category category) {
-    }
-
-    private void startAddingSubCategoryToCategory(Category category) {
-    }
-
-    private void startAddingCategory() {
-    }
-
-    private void startEditingProduct(Product product) {
-    }
-
-    private void startRemovingProduct(Product product) {
-    }
-
     @Override
     protected void showHelp() {
 
-    }
-
-    private void logout() {
     }
 }

@@ -4,11 +4,12 @@ import controller.DataManager;
 
 public class AddSaleBySellerRequest extends Request {
     private String seller;
-    private String sale;
+    private Sale sale;
 
-    public AddSaleBySellerRequest(Seller seller, Sale sale) {
+    public AddSaleBySellerRequest(String id, Seller seller, Sale sale) {
+        super(id);
         this.seller = seller.getUsername();
-        this.sale = sale.getOffId();
+        this.sale = sale;
     }
 
     public Seller getSeller() {
@@ -16,11 +17,11 @@ public class AddSaleBySellerRequest extends Request {
     }
 
     public Sale getSale() {
-        return DataManager.shared().getSaleWithId(sale);
+        return sale;
     }
 
     @Override
     public void fulfill() {
-
+        DataManager.shared().addSale(getSale());
     }
 }

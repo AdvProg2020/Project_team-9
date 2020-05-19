@@ -5,7 +5,8 @@ import controller.DataManager;
 public class SellerRegistrationRequest extends Request {
     private String seller;
 
-    public SellerRegistrationRequest(Seller seller) {
+    public SellerRegistrationRequest(String id, Seller seller) {
+        super(id);
         this.seller = seller.getUsername();
     }
 
@@ -15,6 +16,7 @@ public class SellerRegistrationRequest extends Request {
 
     @Override
     public void fulfill() {
-
+        getSeller().setPermittedToSell(true);
+        DataManager.saveData();
     }
 }

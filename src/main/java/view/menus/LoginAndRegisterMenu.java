@@ -1,9 +1,8 @@
 package view.menus;
 
 import controller.DataManager;
-import model.Administrator;
-import model.Customer;
-import model.Seller;
+import controller.Validator;
+import model.*;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.HashMap;
 public class LoginAndRegisterMenu extends Menu {
     public LoginAndRegisterMenu(Menu parentMenu) {
         super("Login and registration menu", parentMenu);
+        DataManager.loadData();
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("Create Account", this) {
             @Override
@@ -49,33 +49,30 @@ public class LoginAndRegisterMenu extends Menu {
 
             }
         });
-        subMenus.put(3, new Menu("MainMenu Help", this) {
+        subMenus.put(3, new Menu("All products", this) {
             @Override
             public void show() {
-                System.out.println(this.getName() + " - Enter Back to return");
             }
 
             @Override
             public void execute() {
-                System.out.println("Available Commands:");
-                System.out.println("Command one");
-                System.out.println("Command two");
-                while (true) {
-                    String input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("back")) {
-                        this.parentMenu.show();
-                        this.parentMenu.execute();
-                        break;
-                    }
-                }
+                if (allProducts()) return;
+                parentMenu.show();
+                parentMenu.execute();
             }
 
             @Override
             protected void showHelp() {
-
             }
         });
         setSubMenus(subMenus);
+    }
+
+    private boolean allProducts() {
+        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean loginCommand() {
@@ -84,9 +81,9 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
+            if (username.equals("-1")) return false;
             if (!DataManager.shared().doesUserWithGivenUsernameExist(username)) {
-                System.out.print("User doesn't exists with the given username. Try again: ");
-                return false;
+                System.out.print("User doesn't exists with the given username. Try again (-1 to quit): ");
             } else break;
         }
         System.out.print("Password: ");
@@ -105,20 +102,22 @@ public class LoginAndRegisterMenu extends Menu {
         System.out.println("Login Successful");
         if (result == DataManager.AccountType.CUSTOMER) {
             // TODO: Does it work??
-            ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts().putAll(DataManager.shared().getTemporaryCart().getProducts());
+            HashMap<Product, Integer> prods = ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts();
+            prods.putAll(DataManager.shared().getTemporaryCart().getProducts());
+            ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().setProducts(prods);
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
             DataManager.saveData();
-            Menu menu = new CustomerMenu("Welcome", this);
+            Menu menu = new CustomerMenu("\nCustomer's main menu", this);
             menu.show();
             menu.execute();
             return true;
         } else if (result == DataManager.AccountType.ADMINISTRATOR) {
-            Menu menu = new AdministratorMenu("Welcome", this);
+            Menu menu = new AdministratorMenu("\nAdministrator's main menu", this);
             menu.show();
             menu.execute();
             return true;
         } else if (result == DataManager.AccountType.SELLER) {
-            Menu menu = new SellerMenu("Welcome", this);
+            Menu menu = new SellerMenu("\nSeller's main menu", this);
             menu.show();
             menu.execute();
             return true;
@@ -144,25 +143,42 @@ public class LoginAndRegisterMenu extends Menu {
         String username;
         while (true) {
             username = scanner.nextLine();
+            if (username.equals("-1")) return false;
             if (DataManager.shared().doesUserWithGivenUsernameExist(username)) {
-                System.out.print("User exists with the given username. Try a new one: ");
+                System.out.print("User exists with the given username. Try a new one or enter -1 to quit: ");
             } else break;
         }
         System.out.print("Password: ");
         String password = scanner.nextLine();
         System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String email;
+        while (true) {
+            email = scanner.nextLine();
+            if (email.equals("-1")) return false;
+            if (!Validator.shared().emailIsValid(email)) {
+                System.out.print("Invalid email. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         System.out.print("First name: ");
         String firstName = scanner.nextLine();
         System.out.print("Last name: ");
         String lastName = scanner.nextLine();
         System.out.print("Phone number: ");
-        String phone = scanner.nextLine();
+        String phone;
+        while (true) {
+            phone = scanner.nextLine();
+            if (phone.equals("-1")) return false;
+            if (!Validator.shared().phoneNumberIsValid(phone)) {
+                System.out.print("Invalid phone number. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         if (type.equalsIgnoreCase("seller")) {
             System.out.print("Company name: ");
             String companyDetails = scanner.nextLine();
             Seller seller = new Seller(username, password, email, phone, firstName, lastName, companyDetails);
             DataManager.shared().registerAccount(seller);
+            SellerRegistrationRequest request = new SellerRegistrationRequest(DataManager.getNewId(), seller);
+            DataManager.shared().addRequest(request);
             System.out.println("Account created");
         } else if (type.equalsIgnoreCase("customer")) {
             Customer customer = new Customer(username, password, email, phone, firstName, lastName);
