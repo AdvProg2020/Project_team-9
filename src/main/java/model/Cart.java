@@ -38,6 +38,10 @@ public class Cart {
         addProduct(product, 1);
     }
 
+    public int getProductCount() {
+        return products.size();
+    }
+
     public Set<String> getProductIds() {
         return products.keySet();
     }
