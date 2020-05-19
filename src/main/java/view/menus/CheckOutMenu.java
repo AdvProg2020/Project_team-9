@@ -5,10 +5,7 @@ import jdk.jfr.DataAmount;
 import model.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class CheckOutMenu extends Menu {
     public CheckOutMenu(String name, Menu parentMenu) {
@@ -53,6 +50,10 @@ public class CheckOutMenu extends Menu {
         if (totalPrice - priceAfterDiscount > coupon.getMaximumDiscount()) {
             priceAfterDiscount = totalPrice - coupon.getMaximumDiscount();
         }
+        if (totalPrice > 1000) {
+            priceAfterDiscount -= 100;
+            System.out.println("There is an extra $100 discount for you, because you've purchased more than $1000!");
+        }
         System.out.println("Amount of discount: -$" + (totalPrice - priceAfterDiscount));
         System.out.println("Price to pay: $" + priceAfterDiscount);
         if (customer.getCredit() < priceAfterDiscount) {
@@ -92,11 +93,26 @@ public class CheckOutMenu extends Menu {
         String couponCode;
         Coupon coupon = null;
         while (true) {
-            System.out.print("Enter a coupon code if you have one, or only enter if you don't have any: ");
+            System.out.print("Enter a coupon code if you have one, or only enter if you don't have any (try entering \"chance\" too, you may have had a secret coupon code!): ");
             couponCode = scanner.nextLine();
             if (couponCode.equals("")) {
                 System.out.println("Proceeding purchase with no coupon code");
                 break;
+            }
+            if (couponCode.equals("chance")) {
+                Random random = new Random();
+                int r = random.nextInt(10);
+                if (r == 2) {
+                    int percent = random.nextInt(90);
+                    System.out.println("Congratulations! You are rewarded a coupon with " + percent + " percent discount!");
+                    coupon = new Coupon(DataManager.getNewId(), new ArrayList<>());
+                    coupon.setDiscountPercent(percent);
+                    coupon.setMaximumDiscount(1000);
+                    return coupon;
+                } else {
+                    System.out.println("Sorry... :(\nProceeding purchase with no coupon code");
+                    break;
+                }
             }
             coupon = DataManager.shared().getCouponWithId(couponCode);
             if (coupon == null || coupon.getStartTime().isAfter(LocalDateTime.now()) || coupon.getEndTime().isBefore(LocalDateTime.now())) {
