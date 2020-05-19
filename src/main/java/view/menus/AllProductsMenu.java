@@ -3,8 +3,6 @@ package view.menus;
 import controller.DataManager;
 import model.Category;
 import model.Product;
-import model.Sale;
-import model.Seller;
 
 import java.util.*;
 import java.util.stream.Collectors;
