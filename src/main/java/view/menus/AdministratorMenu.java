@@ -1017,7 +1017,6 @@ public class AdministratorMenu extends UserMenu {
             System.out.println("Invalid email");
         }
 
-        return false;
     }
 
     protected void editFirstName() {
@@ -1025,7 +1024,6 @@ public class AdministratorMenu extends UserMenu {
         String firstName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setFirstName(firstName);
         System.out.println("Done");
-        return false;
     }
 
     protected void editLastName() {
@@ -1033,7 +1031,6 @@ public class AdministratorMenu extends UserMenu {
         String lastName = scanner.nextLine();
         DataManager.shared().getLoggedInAccount().setLastName(lastName);
         System.out.println("Done");
-        return false;
     }
 
     protected void editPhoneNumber() {
@@ -1045,7 +1042,6 @@ public class AdministratorMenu extends UserMenu {
         } else {
             System.out.println("Invalid phone number");
         }
-        return false;
     }
 
     protected void changePassword() {
@@ -1063,7 +1059,6 @@ public class AdministratorMenu extends UserMenu {
         }
         DataManager.shared().getLoggedInAccount().setPassword(newPassword);
         System.out.println("New password has been set");
-        return;
     }
 
     private void seeAllRequests() {
