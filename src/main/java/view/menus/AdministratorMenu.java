@@ -22,6 +22,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 viewPersonalInfo();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -38,6 +39,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 editFirstName();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -54,6 +56,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 editLastName();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -70,6 +73,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 editEmail();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -86,6 +90,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 editPhoneNumber();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -102,6 +107,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 changePassword();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -119,6 +125,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 viewUserInfo();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -136,6 +143,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (changeUserType()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -153,6 +161,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (deleteUser()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -170,6 +179,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (addAdmin()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -187,6 +197,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (summaryOfAllProducts()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -204,6 +215,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (removeProduct()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -221,6 +233,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (createDiscountCode()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -238,6 +251,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (viewAllCoupons()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -255,6 +269,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (removeCoupon()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -272,6 +287,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 viewCoupon();
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -289,6 +305,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (editCoupon()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -306,6 +323,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (viewAllRequests()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -323,6 +341,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (viewRequestDetails()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -340,6 +359,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (resolveRequest(true)) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -357,6 +377,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (resolveRequest(false)) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -374,6 +395,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (viewAllCategories()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -391,6 +413,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (editCategory()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -408,6 +431,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (addCategory()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -425,6 +449,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (removeCategory()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -442,6 +467,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (reviewComments()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -459,6 +485,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (acceptComment()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -476,6 +503,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (declineComment()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -493,6 +521,7 @@ public class AdministratorMenu extends UserMenu {
             @Override
             public void execute() {
                 if (allProducts()) return;
+                scanner.nextLine();
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -525,7 +554,7 @@ public class AdministratorMenu extends UserMenu {
     }
 
     private boolean allProducts() {
-        AllProductsMenu menu = new AllProductsMenu("All Products", this);
+        AllProductsMenu menu = new AllProductsMenu("All Products", this, false);
         menu.show();
         menu.execute();
         return false;
@@ -884,10 +913,17 @@ public class AdministratorMenu extends UserMenu {
             }
             break;
         }
+        System.out.println("Enter unique features of the category (-1 to continue):");
+        ArrayList<String> features = new ArrayList<>();
+        while (true) {
+            String feature = scanner.nextLine();
+            if (feature.equals("-1")) break;
+            features.add(feature);
+        }
         String categoryID = DataManager.getNewId();
         String parentGetID = "";
         if (parent != null) parentGetID = parent.getId();
-        Category category = new Category(categoryID, name, description, parentGetID);
+        Category category = new Category(categoryID, name, description, parentGetID, features);
         DataManager.shared().addCategory(category);
         System.out.println("Successfully added category with ID #" + categoryID);
         return false;

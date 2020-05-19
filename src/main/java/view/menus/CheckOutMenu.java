@@ -34,7 +34,7 @@ public class CheckOutMenu extends Menu {
             if (((Product) pair.getKey()).getNumberAvailable() > 0) {
                 for (Sale sale : DataManager.shared().getAllSales()) {
                     // TODO: What is the next line's "suspicious code"??
-                    if (sale.getProducts().contains(pair.getKey())) {
+                    if (sale.getProducts().contains(pair.getKey()) && sale.getStartTime().isBefore(LocalDateTime.now()) && sale.getEndTime().isAfter(LocalDateTime.now())) {
                         price -= sale.getDiscountAmount() * (int) pair.getValue();
                         if (price < 1) price = 1;
                     }
