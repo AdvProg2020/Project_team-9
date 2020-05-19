@@ -87,6 +87,7 @@ public class Coupon {
     }
 
     public void decrementRemainingUsagesCountForAccount(Account account) {
+        if (remainingUsagesCount == null) return;
         remainingUsagesCount.put(account.getUsername(), Math.max(remainingUsagesCount.get(account.getUsername()) - 1, 0));
         DataManager.saveData();
     }

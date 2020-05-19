@@ -342,24 +342,26 @@ public class AllProductsMenu extends Menu {
             }
         });
 
-        subMenus.put(20, new Menu("Logout", this) {
-            @Override
-            public void show() {
+        if (DataManager.shared().getLoggedInAccount() != null) {
+            subMenus.put(20, new Menu("Logout", this) {
+                @Override
+                public void show() {
 
-            }
+                }
 
-            @Override
-            public void execute() {
-                if (logoutCommand()) return;
-                parentMenu.show();
-                parentMenu.execute();
-            }
+                @Override
+                public void execute() {
+                    if (logoutCommand()) return;
+                    parentMenu.show();
+                    parentMenu.execute();
+                }
 
-            @Override
-            protected void showHelp() {
+                @Override
+                protected void showHelp() {
 
-            }
-        });
+                }
+            });
+        }
 
         this.setSubMenus(subMenus);
     }
@@ -461,7 +463,10 @@ public class AllProductsMenu extends Menu {
             if (!nameFilter.equals("") && !product.getName().contains(nameFilter)) continue;
             if (!descriptionFilter.equals("") && !product.getDescription().contains(descriptionFilter)) continue;
             if (priceFilter != 0 && product.getPrice() != priceFilter) continue;
-            if (filteredCategories.isEmpty()) continue;
+            if (filteredCategories.isEmpty())  {
+                currentProducts.add(product);
+                continue;
+            }
             for (Category category : filteredCategories) {
                 if (product.getCategory() == category) {
                     currentProducts.add(product);

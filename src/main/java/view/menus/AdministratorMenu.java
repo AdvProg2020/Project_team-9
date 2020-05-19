@@ -932,13 +932,27 @@ public class AdministratorMenu extends UserMenu {
         System.out.print("Password: ");
         String password = scanner.nextLine();
         System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String email;
+        while (true) {
+            email = scanner.nextLine();
+            if (email.equals("-1")) return false;
+            if (!Validator.shared().emailIsValid(email)) {
+                System.out.print("Invalid email. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         System.out.print("First name: ");
         String firstName = scanner.nextLine();
         System.out.print("Last name: ");
         String lastName = scanner.nextLine();
         System.out.print("Phone number: ");
-        String phone = scanner.nextLine();
+        String phone;
+        while (true) {
+            phone = scanner.nextLine();
+            if (phone.equals("-1")) return false;
+            if (!Validator.shared().phoneNumberIsValid(phone)) {
+                System.out.print("Invalid phone number. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName);
         DataManager.shared().registerAccount(administrator);
         System.out.println("Account created");

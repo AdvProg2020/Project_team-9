@@ -302,7 +302,23 @@ public class CustomerMenu extends Menu {
             protected void showHelp() {
             }
         });
-        subMenus.put(19, new Menu("Logout", this) {
+        subMenus.put(19, new Menu("All sales currently running", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                if (allSales()) return;
+                parentMenu.show();
+                parentMenu.execute();
+            }
+
+            @Override
+            protected void showHelp() {
+            }
+        });
+        subMenus.put(20, new Menu("Logout", this) {
             @Override
             public void show() {
 
@@ -322,6 +338,13 @@ public class CustomerMenu extends Menu {
         });
 
         this.setSubMenus(subMenus);
+    }
+
+    private boolean allSales() {
+        SalesMenu menu = new SalesMenu("All Sales", this);
+        menu.show();
+        menu.execute();
+        return false;
     }
 
     private boolean totalPriceOfCart() {
@@ -423,6 +446,10 @@ public class CustomerMenu extends Menu {
     }
 
     private void checkOut() {
+        if (((Customer) DataManager.shared().getLoggedInAccount()).getCart().getProducts().size() == 0) {
+            System.out.println("There is no product in your cart yet");
+            return;
+        }
         CheckOutMenu menu = new CheckOutMenu("Check out", this);
         menu.show();
         menu.execute();
@@ -488,7 +515,7 @@ public class CustomerMenu extends Menu {
             System.out.println("There is no product in your cart yet");
             return;
         }
-        customer.getCart().getProducts().forEach((key, value) -> System.out.println(value + "x " + key.getName() + "\t$" + key.getPrice()));
+        customer.getCart().getProducts().forEach((key, value) -> System.out.println(value + "x " + key.getName() + "\t$" + key.getPrice() + (value > 1 ? " each" : "")));
     }
 
     private boolean showProduct() {
@@ -519,7 +546,7 @@ public class CustomerMenu extends Menu {
         System.out.println("Order #" + purchaseLog.getId());
         System.out.println("Placed on " + purchaseLog.getDate().format(dateFormatter));
         System.out.println("Delivery status: " + purchaseLog.getDeliveryStatus().toString());
-        System.out.println("Total price paid: $" + purchaseLog.getPrice() + "(having $" + purchaseLog.getDiscountAmount() + " discount)");
+        System.out.println("Total price paid: $" + purchaseLog.getPrice() + " (having $" + purchaseLog.getDiscountAmount() + " discount)");
         System.out.println("Purchased products: ");
         for (Map.Entry<Product, Integer> productIntegerEntry : purchaseLog.getProducts().entrySet()) {
             System.out.println(((Map.Entry) productIntegerEntry).getValue() + "x\t#" + ((Product) ((Map.Entry) productIntegerEntry).getKey()).getProductId() + " - " + ((Product) ((Map.Entry) productIntegerEntry).getKey()).getName());

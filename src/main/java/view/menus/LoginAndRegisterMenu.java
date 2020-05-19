@@ -1,10 +1,8 @@
 package view.menus;
 
 import controller.DataManager;
-import model.Administrator;
-import model.Customer;
-import model.Seller;
-import model.SellerRegistrationRequest;
+import controller.Validator;
+import model.*;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
@@ -104,7 +102,9 @@ public class LoginAndRegisterMenu extends Menu {
         System.out.println("Login Successful");
         if (result == DataManager.AccountType.CUSTOMER) {
             // TODO: Does it work??
-            ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts().putAll(DataManager.shared().getTemporaryCart().getProducts());
+            HashMap<Product, Integer> prods = ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().getProducts();
+            prods.putAll(DataManager.shared().getTemporaryCart().getProducts());
+            ((Customer)(DataManager.shared().getLoggedInAccount())).getCart().setProducts(prods);
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
             DataManager.saveData();
             Menu menu = new CustomerMenu("\nCustomer's main menu", this);
@@ -151,13 +151,27 @@ public class LoginAndRegisterMenu extends Menu {
         System.out.print("Password: ");
         String password = scanner.nextLine();
         System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String email;
+        while (true) {
+            email = scanner.nextLine();
+            if (email.equals("-1")) return false;
+            if (!Validator.shared().emailIsValid(email)) {
+                System.out.print("Invalid email. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         System.out.print("First name: ");
         String firstName = scanner.nextLine();
         System.out.print("Last name: ");
         String lastName = scanner.nextLine();
         System.out.print("Phone number: ");
-        String phone = scanner.nextLine();
+        String phone;
+        while (true) {
+            phone = scanner.nextLine();
+            if (phone.equals("-1")) return false;
+            if (!Validator.shared().phoneNumberIsValid(phone)) {
+                System.out.print("Invalid phone number. Try a new one or enter -1 to quit: ");
+            } else break;
+        }
         if (type.equalsIgnoreCase("seller")) {
             System.out.print("Company name: ");
             String companyDetails = scanner.nextLine();
