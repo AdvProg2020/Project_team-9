@@ -20,11 +20,21 @@ public class Product {
     private int numberAvailable;
     private String category;
     private String description;
+    private String imageURL;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
     private LocalDateTime dateCreated;
     private String currentSeller = "";
+    private boolean isSelected = false;
     private HashMap<String, String> features;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public HashMap<String, String> getFeatures() {
         return features;
@@ -32,6 +42,14 @@ public class Product {
 
     public void setFeatures(HashMap<String, String> features) {
         this.features = features;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
