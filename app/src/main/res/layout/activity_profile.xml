@@ -64,7 +64,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="20dp"
-        android:text="اعتبار: " />
+        android:text="اعتبار: "
+        tools:ignore="RtlHardcoded" />
 
     <LinearLayout
         android:id="@+id/profile_log_root"
@@ -74,7 +75,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:onClick="logTapped">
 
         <TextView
             android:id="@+id/fragment_profile_log_txt"
@@ -96,6 +98,37 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/profile_coupons_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:onClick="seeAllCouponsTapped"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/fragment_profile_coupons_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:padding="5dp"
+            android:theme="@style/usualTexts"
+            android:layout_marginRight="5dp"
+
+            android:text="مشاهده کدهای تخفیف" />
+
+        <ImageView
+            android:id="@+id/fragment_profile_coupon_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/profile_logout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,7 +136,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:onClick="logoutTapped">
 
         <TextView
             android:id="@+id/fragment_profile_logout_txt"

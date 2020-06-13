@@ -54,4 +54,9 @@ public class Log {
         products.entrySet().forEach(productIntegerEntry -> this.products.put(((Product) (((Map.Entry) productIntegerEntry).getKey())).getProductId(), (int) ((Map.Entry) productIntegerEntry).getValue()));
         this.deliveryStatus = deliveryStatus;
     }
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }

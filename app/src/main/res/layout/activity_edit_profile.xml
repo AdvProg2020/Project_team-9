@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sasp.saspstore.ui.home.EditProfileActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/fragment_editprofile_firstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/titleTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="نام" />
+
+    <EditText
+        android:id="@+id/editprofile_txtFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/titleTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:autofillHints="نام"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/fragment_editprofile_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/usualTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="نام خانوادگی" />
+
+    <EditText
+        android:id="@+id/editprofile_txtLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/titleTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:autofillHints="نام خانوادگی"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/fragment_editprofile_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/usualTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="ایمیل" />
+
+    <EditText
+        android:id="@+id/editprofile_txtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/titleTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:autofillHints="ایمیل"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/fragment_editprofile_phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/usualTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="شماره تماس" />
+
+    <EditText
+        android:id="@+id/editprofile_txtPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/titleTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:autofillHints="شماره تماس"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/editprofile_submitChanged"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="ثبت تغییرات"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="submitTapped"/>
+
+</LinearLayout>
