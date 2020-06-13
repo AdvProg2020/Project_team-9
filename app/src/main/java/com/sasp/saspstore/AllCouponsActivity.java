@@ -1,11 +1,15 @@
 package com.sasp.saspstore;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Log;
+import com.sasp.saspstore.ui.home.EditProfileActivity;
 
 import java.time.format.DateTimeFormatter;
 
@@ -60,6 +65,7 @@ public class AllCouponsActivity extends AppCompatActivity {
                     if (discountPercent >= 0 && discountPercent <= 100) {
                         coupon.setDiscountPercent(discountPercent);
                         coupon.setMaximumDiscount(maximumDiscount);
+                        adapter.notifyDataSetChanged();
                     } else {
                         // TODO: ??
                     }
@@ -68,9 +74,25 @@ public class AllCouponsActivity extends AppCompatActivity {
                 }
             }).setNegativeButton("حذف کد تخفیف", (dialog, whichButton) -> {
                 DataManager.shared().removeCoupon((Coupon) listView.getItemAtPosition(position));
+                adapter.notifyDataSetChanged();
             }).setNeutralButton("بازگشت", null);
             AlertDialog b = dialogBuilder.create();
             b.show();
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.allcoupons_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.allcouponsmenu_btnAdd) {
+            startActivity(new Intent(this, AddCouponActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -130,11 +130,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Username: " + username + '\n' +
-                "Email: " + email + '\n' +
-                "PhoneNumber: " + phoneNumber + '\n' +
-                "FirstName: " + firstName + '\n' +
-                "LastName: " + lastName;
+        return username;
     }
 
     @Override
