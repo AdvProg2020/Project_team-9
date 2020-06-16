@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UsersListActivity"></activity>
+        <activity android:name=".CommentsListActivity"></activity>
+        <activity android:name=".EachProductActivity" />
+        <activity android:name=".AddSaleActivity" />
+        <activity android:name=".SalesListActivity" />
+        <activity android:name=".AddProductActivity" />
+        <activity android:name=".AdministratorRequestsActivity" />
+        <activity android:name=".CategoriesActivity" />
+        <activity android:name=".UsersListActivity" />
         <activity android:name=".ProductListActivity" />
         <activity android:name=".AddCouponActivity" />
         <activity android:name=".AllCouponsActivity" />

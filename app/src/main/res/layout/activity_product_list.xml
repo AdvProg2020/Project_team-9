@@ -16,5 +16,6 @@
         android:horizontalSpacing="10dp"
         android:stretchMode="spacingWidthUniform"
         android:paddingTop="10pt"
+        android:longClickable="true"
         />
 </RelativeLayout>

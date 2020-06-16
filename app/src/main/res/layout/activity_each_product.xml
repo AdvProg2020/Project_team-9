@@ -3,49 +3,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sasp.saspstore.AddCouponActivity"
+    tools:context="com.sasp.saspstore.EachProductActivity"
     android:orientation="vertical">
 
-    <TextView
+    <ImageView
+        android:id="@+id/eachProductImageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="ساخت کد تخفیف" />
+        android:layout_height="wrap_content"/>
 
     <TextView
+        android:id="@+id/eachProductTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text=" " />
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
 
     <TextView
+        android:id="@+id/eachProductBrand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="درصد تخفیف" />
-
-    <!-- TODO: Illegal things (like string instead of number) in Java code...?? -->
-
-    <EditText
-        android:id="@+id/addCoupon_discountPercent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="درصد تخفیف" />
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
 
     <TextView
+        android:id="@+id/eachProductPriceAndDiscountPercent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="حداکثر مبلغ تخفیف" />
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
 
-    <EditText
-        android:id="@+id/addCoupon_maximumDiscount"
+    <TextView
+        android:id="@+id/eachProductNumberAvailable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="حداکثر مبلغ تخفیف" />
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/eachProductDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/eachProductDateCreated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/eachProductScore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textAlignment="textEnd" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,8 +68,7 @@
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:onClick="setStartTimeTapped">
+        android:onClick="showCommentsTapped">
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,13 +79,14 @@
             android:theme="@style/usualTexts"
             android:layout_marginRight="5dp"
 
-            android:text="تنظیم تاریخ شروع" />
+            android:text="مشاهده نظرات" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,8 +95,7 @@
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:onClick="setEndTimeTapped">
+        android:onClick="submitCommentTapped">
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,13 +106,14 @@
             android:theme="@style/usualTexts"
             android:layout_marginRight="5dp"
 
-            android:text="تنظیم تاریخ پایان" />
+            android:text="ثبت نظر برای کالا" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,34 +122,7 @@
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:onClick="selectProductsTapped">
-
-        <TextView
-            android:id="@+id/addCoupon_txtChooseProducts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:padding="5dp"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="5dp"
-            android:text="انتخاب محصولات (0 عدد انتخاب شده‌اند)" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:onClick="submitScoreTapped">
 
         <TextView
             android:layout_width="wrap_content"
@@ -146,13 +132,13 @@
             android:padding="5dp"
             android:theme="@style/usualTexts"
             android:layout_marginRight="5dp"
-            android:onClick="selectUserCountTapped"
 
-            android:text="انتخاب دسترسی کاربران (0 کاربر تاکنون تنظیم شده است)" />
+            android:text="ثبت امتیاز برای کالا" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
 </LinearLayout>

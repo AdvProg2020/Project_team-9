@@ -22,6 +22,11 @@ public class ProductListActivity extends AppCompatActivity {
 
     ArrayList<Product> selectedProducts = new ArrayList<>();
 
+    // TODO: Open or select....!!!!
+    // TODO: Get category name too... needed in adding a product...
+
+    // TODO: Edit and Delete Product (needed long press) not done yet. Better to use create product activity to achieve the tasks. + fab for adding product (and reloadData after adding or editing or...)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,7 @@ public class ProductListActivity extends AppCompatActivity {
         } else products = DataManager.shared().getAllProducts();
 
         GridView gridView = (GridView)findViewById(R.id.productsListGridView);
+        // TODO: Product images here...?
         // TODO: Does the second line work in converting array???
         Product[] productsArray = products.toArray(new Product[0]);
         final ProductsAdapter productsAdapter = new ProductsAdapter(this, productsArray);
