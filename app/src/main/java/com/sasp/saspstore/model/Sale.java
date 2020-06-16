@@ -3,22 +3,20 @@ package com.sasp.saspstore.model;
 import com.sasp.saspstore.controller.DataManager;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Sale {
     private String offId;
     private ArrayList<String> products;
-    // TODO: enums in Gson??
     private SaleStatus saleStatus;
     private int discountAmount;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String seller;
-    // TODO: enums in Gson??
     private DeliveryStatus deliveryStatus;
 
-    // TODO: Where do we add Sales??
     public Sale(String offId, ArrayList<Product> products, SaleStatus saleStatus, int discountAmount, LocalDateTime startTime, LocalDateTime endTime, Seller seller, DeliveryStatus deliveryStatus) {
         this.offId = offId;
         this.products =  products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
@@ -65,5 +63,20 @@ public class Sale {
     public void addProduct(Product product) {
         products.add(product.getProductId());
         DataManager.saveData();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("حراج " + offId + "\n\n");
+        result.append("محصولات:" + "\n");
+        for (String product : products) {
+            result.append(DataManager.shared().getProductWithId(product).getName()).append("\n");
+        }
+        result.append("میزان تخفیف: ").append(discountAmount).append("\n");
+        result.append("زمان شروع حراج: ").append(startTime.format(DateTimeFormatter.BASIC_ISO_DATE)).append("\n");
+        result.append("زمان پایان حراج: ").append(endTime.format(DateTimeFormatter.BASIC_ISO_DATE)).append("\n");
+        result.append("فروشنده: ").append(DataManager.shared().getAccountWithGivenUsername(seller).getFirstName()).append(" ")
+                .append(DataManager.shared().getAccountWithGivenUsername(seller).getLastName()).append("\n");
+        return result.toString();
     }
 }

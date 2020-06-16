@@ -26,7 +26,12 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtEmail;
     TextView txtPhoneNumber;
     TextView txtCredit;
+    TextView txtCompanyDetails;
     ViewGroup vgSeeAllCoupons;
+    ViewGroup vgSeeAllUsers;
+    ViewGroup vgSeeAllCategories;
+
+    // TODO: Add another administrator is not implemented yet... waiting for login page
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -39,10 +44,17 @@ public class ProfileActivity extends AppCompatActivity {
         txtEmail = (TextView) findViewById(R.id.fragment_profile_email);
         txtPhoneNumber = (TextView) findViewById(R.id.fragment_profile_phoneNumber);
         txtCredit = (TextView) findViewById(R.id.fragment_profile_credit);
+        txtCompanyDetails = (TextView) findViewById(R.id.fragment_profile_companyDetails);
         vgSeeAllCoupons = (ViewGroup) findViewById(R.id.profile_coupons_root);
+        vgSeeAllUsers = (ViewGroup) findViewById(R.id.profile_allusers_root);
+        vgSeeAllCategories = (ViewGroup) findViewById(R.id.profile_allcategories_root);
 
         Account account = DataManager.shared().getLoggedInAccount();
         vgSeeAllCoupons.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        vgSeeAllUsers.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        vgSeeAllCategories.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
+        txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
             txtName.setText(account.getFirstName() + " " + account.getLastName());
             String role = "";
@@ -78,6 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void logoutTapped(View view) {
+        DataManager.shared().logout();
         // TODO: Here!
     }
 
@@ -87,5 +100,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void seeAllCouponsTapped(View view) {
         startActivity(new Intent(this, AllCouponsActivity.class));
+    }
+
+    public void seeAllUsersTapped(View view) {
+        Intent intent = new Intent(this, UsersListActivity.class);
+        intent.putExtra("sender", "administratorProfile");
+        startActivity(intent);
+    }
+
+    public void seeAllCategoriesTapped(View view) {
+        Intent intent = new Intent(this, CategoriesActivity.class);
+        startActivity(intent);
     }
 }

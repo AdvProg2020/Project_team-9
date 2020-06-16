@@ -46,7 +46,6 @@ public class AllCouponsActivity extends AppCompatActivity {
             final TextView firstTextView = (TextView) dialogView.findViewById(R.id.couponAlertTextView);
             final TextView secondTextView = (TextView) dialogView.findViewById(R.id.couponAlertProductsTextView);
 
-            firstTextView.setText( "کد: " + coupon.getId());
             StringBuilder first = new StringBuilder( "کد: " + coupon.getId());
             first.append("\n");
             first.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.BASIC_ISO_DATE));
@@ -57,7 +56,8 @@ public class AllCouponsActivity extends AppCompatActivity {
 
             final EditText editDiscountPercent = (EditText) dialogView.findViewById(R.id.editDiscountPercent);
             final EditText editMaximumDiscount = (EditText) dialogView.findViewById(R.id.editMaximumDiscount);
-
+            editDiscountPercent.setText(coupon.getDiscountPercent());
+            editMaximumDiscount.setText(coupon.getMaximumDiscount());
             dialogBuilder.setTitle("ویرایش کد تخفیف").setMessage("").setPositiveButton("ثبت تغییرات", (dialog, whichButton) -> {
                 try {
                     int discountPercent = Integer.parseInt(editDiscountPercent.getText().toString());
@@ -65,6 +65,7 @@ public class AllCouponsActivity extends AppCompatActivity {
                     if (discountPercent >= 0 && discountPercent <= 100) {
                         coupon.setDiscountPercent(discountPercent);
                         coupon.setMaximumDiscount(maximumDiscount);
+                        DataManager.saveData();
                         adapter.notifyDataSetChanged();
                     } else {
                         // TODO: ??

@@ -56,7 +56,6 @@ public class Category {
 
     @Override
     public String toString() {
-        return "id: " + id + '\n' +
-                "name: " + name + '\n';
+        return name;
     }
 }

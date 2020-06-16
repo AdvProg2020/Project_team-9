@@ -6,8 +6,7 @@
     tools:context="com.sasp.saspstore.ProfileActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/fragment_profile_name"
+    <TextView android:id="@+id/fragment_profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
@@ -18,8 +17,7 @@
         android:layout_marginBottom="20dp"
         android:text="" />
 
-    <TextView
-        android:id="@+id/fragment_profile_usernameAndRole"
+    <TextView android:id="@+id/fragment_profile_usernameAndRole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
@@ -30,8 +28,7 @@
         android:layout_marginBottom="20dp"
         android:text="" />
 
-    <TextView
-        android:id="@+id/fragment_profile_email"
+    <TextView android:id="@+id/fragment_profile_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
@@ -42,8 +39,7 @@
         android:layout_marginBottom="20dp"
         android:text="" />
 
-    <TextView
-        android:id="@+id/fragment_profile_phoneNumber"
+    <TextView android:id="@+id/fragment_profile_phoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
@@ -54,8 +50,19 @@
         android:layout_marginBottom="20dp"
         android:text="" />
 
-    <TextView
-        android:id="@+id/fragment_profile_credit"
+    <TextView android:id="@+id/fragment_profile_companyDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/usualTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:text=""
+        android:visibility="gone"/>
+
+    <TextView android:id="@+id/fragment_profile_credit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
@@ -65,6 +72,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="20dp"
         android:text="اعتبار: "
+        android:visibility="gone"
         tools:ignore="RtlHardcoded" />
 
     <LinearLayout
@@ -123,6 +131,68 @@
 
         <ImageView
             android:id="@+id/fragment_profile_coupon_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile_allusers_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:onClick="seeAllUsersTapped"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/fragment_profile_allusers_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:padding="5dp"
+            android:theme="@style/usualTexts"
+            android:layout_marginRight="5dp"
+
+            android:text="مشاهده لیست کاربران" />
+
+        <ImageView
+            android:id="@+id/fragment_profile_allusers_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile_allcategories_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:onClick="seeAllCategoriesTapped"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/fragment_profile_allcategories_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:padding="5dp"
+            android:theme="@style/usualTexts"
+            android:layout_marginRight="5dp"
+
+            android:text="مشاهده لیست دسته‌بندی‌ها" />
+
+        <ImageView
+            android:id="@+id/fragment_profile_allcategories_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

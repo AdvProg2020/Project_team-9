@@ -52,4 +52,10 @@ public class Comment {
     public boolean hasUserPurchasedProduct() {
         return getCustomer().hasPurchasedProduct(getProduct());
     }
+
+    @Override
+    public String toString() {
+        return "کاربر " + getCustomer().getFirstName() + " " + getCustomer().getLastName() + " نوشته است: "
+                + "\n" + getTitle() + "\n\n" + getText();
+    }
 }
