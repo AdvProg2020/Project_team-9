@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,6 +34,7 @@ public class AddProductActivity extends AppCompatActivity {
     EditText txtDiscountPercent;
     EditText txtAvailableCount;
     EditText txtProductDescription;
+    ImageView selectedImageView;
     String productID = "";
     String categoryID = "";
 

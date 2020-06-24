@@ -82,7 +82,12 @@
         android:layout_gravity="center"
         android:text="انتخاب عکس"
         android:onClick="selectPictureTapped" />
-    <!-- TODO: Features + image + video -->
+    <ImageView
+        android:id="@+id/selectedImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+    <!-- TODO: Features + video -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/submitAddProduct_fab"
         android:layout_width="wrap_content"
