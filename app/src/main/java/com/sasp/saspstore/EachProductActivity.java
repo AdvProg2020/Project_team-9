@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,6 +24,7 @@ import com.sasp.saspstore.model.Comment;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
 
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -43,7 +46,7 @@ public class EachProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_product);
 
-        eachProductImageView = (ImageView) findViewById(R.id.eachProductImageView);
+        eachProductImageView = findViewById(R.id.eachProductImageView);
         eachProductTitle = (TextView) findViewById(R.id.eachProductTitle);
         eachProductBrand = (TextView) findViewById(R.id.eachProductBrand);
         eachProductPriceAndDiscountPercent = (TextView) findViewById(R.id.eachProductPriceAndDiscountPercent);
@@ -57,7 +60,12 @@ public class EachProductActivity extends AppCompatActivity {
         if (productID == null || productID.equals("")) return;
         currentProduct = DataManager.shared().getProductWithId(productID);
 
-        // TODO: ImageView...
+        // TODO: ImageView file source??
+        File imgFile = new File(productID + ".png");
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            eachProductImageView.setImageBitmap(myBitmap);
+        }
         eachProductTitle.setText(currentProduct.getName());
         eachProductBrand.setText(currentProduct.getName());
         if (currentProduct.getDiscountPercent() != 0) {
