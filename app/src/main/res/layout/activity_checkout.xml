@@ -12,6 +12,8 @@
         android:text="شماره تلفن"
         android:layout_gravity="right"
         android:gravity="right"
+        android:fontFamily="@font/yekan"
+        android:textSize="25sp"
         android:textAlignment="gravity" />
     <EditText
         android:id="@+id/checkout_txtPhoneNumber"
@@ -19,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:gravity="right"
+        android:fontFamily="@font/yekan"
+        android:textSize="25sp"
         android:autofillHints="شماره تلفن" />
 
     <TextView
@@ -27,6 +31,8 @@
         android:text="آدرس"
         android:layout_gravity="right"
         android:gravity="right"
+        android:fontFamily="@font/yekan"
+        android:textSize="25sp"
         android:textAlignment="gravity" />
     <EditText
         android:id="@+id/checkout_txtAddress"
@@ -34,11 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:gravity="right"
+        android:fontFamily="@font/yekan"
+        android:textSize="25sp"
         android:autofillHints="آدرس" />
     <TextView
         android:id="@+id/checkout_totalPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/yekan"
+        android:textSize="25sp"
         android:text="هزینه کل:" />
     <EditText
         android:id="@+id/checkout_txtCoupon"
@@ -49,17 +59,21 @@
         android:autofillHints="کد تخفیف" />
     <Button
         android:id="@+id/checkout_checkCouponButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_margin="20dp"
         android:text="بررسی کد تخفیف"
-        android:onClick="checkCouponTapped" />
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="checkCouponTapped"/>
     <Button
         android:id="@+id/checkout_finishButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_margin="20dp"
         android:text="پرداخت"
-        android:onClick="finishTapped" />
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="finishTapped"/>
 
 </LinearLayout>

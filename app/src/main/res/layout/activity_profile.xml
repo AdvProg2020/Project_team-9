@@ -88,6 +88,16 @@
             android:onClick="seeCartTapped"/>
 
         <Button
+            android:id="@+id/addCreditButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="افزایش ۵ تومانی اعتبار حساب"
+            android:background="@drawable/buttons"
+            android:theme="@style/buttonTexts"
+            android:onClick="addCreditTapped"/>
+
+        <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
