@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sasp.saspstore.CartActivity">
+    tools:context="com.sasp.saspstore.CartActivity"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/cartListView"
@@ -11,5 +12,12 @@
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp" />
+
+    <Button
+        android:id="@+id/cartBtnPurchase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="خرید"
+        android:onClick="purchaseTapped"/>
 
 </LinearLayout>

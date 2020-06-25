@@ -17,6 +17,15 @@ public class CartItem extends Product {
         this.count = count;
     }
 
+    public CartItem(Product product, int count) {
+        super(product.getProductId(), product.getStatus(), product.getName(), product.getBrand(), product.getPrice(), product.getDiscountPercent(), product.getSellers(), product.getNumberAvailable(), product.getCategory(), product.getDescription(), product.getDateCreated(), product.getFeatures());
+        this.count = count;
+    }
+
+    public int getTotalPrice() {
+        return getPrice() * count;
+    }
+
     public int getCount() {
         return count;
     }

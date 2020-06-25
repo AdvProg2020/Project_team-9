@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sasp.saspstore.CheckoutActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="شماره تلفن"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:textAlignment="gravity" />
+    <EditText
+        android:id="@+id/checkout_txtPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:autofillHints="شماره تلفن" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="آدرس"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:textAlignment="gravity" />
+    <EditText
+        android:id="@+id/checkout_txtAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:autofillHints="آدرس" />
+    <TextView
+        android:id="@+id/checkout_totalPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="هزینه کل:" />
+    <EditText
+        android:id="@+id/checkout_txtCoupon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:autofillHints="کد تخفیف" />
+    <Button
+        android:id="@+id/checkout_checkCouponButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="بررسی کد تخفیف"
+        android:onClick="checkCouponTapped" />
+    <Button
+        android:id="@+id/checkout_finishButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="پرداخت"
+        android:onClick="finishTapped" />
+
+</LinearLayout>
