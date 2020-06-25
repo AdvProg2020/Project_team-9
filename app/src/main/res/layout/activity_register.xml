@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sasp.saspstore.RegisterActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/register_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="نام"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <EditText
+                android:id="@+id/register_lname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="نام خانوادگی"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <EditText
+                android:id="@+id/register_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="ایمیل"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <EditText
+                android:id="@+id/register_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="نام کاربری"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <EditText
+                android:id="@+id/register_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="رمزعبور"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <EditText
+                android:id="@+id/register_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="شماره تلفن"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+            <EditText
+                android:id="@+id/register_companyDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:ems="10"
+                android:fontFamily="@font/yekan"
+                android:gravity="center"
+                android:hint="اطلاعات شرکت"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                />
+
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioGroup"
+                android:checkedButton="@id/radioButton_customer">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:text="خریدار"
+                    android:id="@+id/radioButton_customer"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:textSize="25dp" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:text="فروشنده"
+                    android:id="@+id/radioButton_seller"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:textSize="25dp" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:text="مدیر"
+                    android:id="@+id/radioButton_admin"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:textSize="25dp" />
+            </RadioGroup>
+
+
+
+            <Button
+                android:id="@+id/register_bt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="ثبت نام"
+                android:background="@drawable/buttons"
+                android:theme="@style/buttonTexts"
+                android:onClick="registerTapped"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
