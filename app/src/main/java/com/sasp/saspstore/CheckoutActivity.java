@@ -203,7 +203,7 @@ public class CheckoutActivity extends AppCompatActivity {
         alertDialog.setTitle("پرداخت با موفقیت انجام شد");
         StringBuilder message = new StringBuilder("با تشکر از خرید شما");
         message.append("\n").append("اطلاعات خرید:").append("\n").append("تاریخ و زمان خرید: ")
-                .append(LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE))
+                .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .append("\n").append("تعداد گزارشات فروش ثبت شده: ").append(countOfSellLogsAdded)
                 .append("\n").append("قیمت: ").append((int) (totalPrice - priceAfterDiscount));
         alertDialog.setMessage(message);

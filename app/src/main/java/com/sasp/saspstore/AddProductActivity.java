@@ -61,9 +61,9 @@ public class AddProductActivity extends AppCompatActivity {
             if (product != null) {
                 txtProductName.setText(product.getName());
                 txtBrandName.setText(product.getBrand());
-                txtPrice.setText(product.getPrice());
-                txtDiscountPercent.setText(product.getDiscountPercent());
-                txtAvailableCount.setText(product.getNumberAvailable());
+                txtPrice.setText(Integer.toString(product.getPrice()));
+                txtDiscountPercent.setText(Integer.toString(product.getDiscountPercent()));
+                txtAvailableCount.setText(Integer.toString(product.getNumberAvailable()));
                 txtProductDescription.setText(product.getDescription());
             } else productID = "";
         } else productID = "";
@@ -77,13 +77,7 @@ public class AddProductActivity extends AppCompatActivity {
             String newProductID = DataManager.getNewId();
             Drawable drawable = Drawable.createFromStream(imageInputStream, newProductID);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            try {
-                // TODO: File extension in the name in the next line??
-                FileOutputStream out = openFileOutput(newProductID + ".png", Context.MODE_PRIVATE);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            new ImageSaver(this).setFileName(newProductID + ".png").setDirectoryName("images").save(bitmap);
             if (productID.equals("")) {
                 // TODO: Integer validation...!
                 // TODO: Validation of discount percent!

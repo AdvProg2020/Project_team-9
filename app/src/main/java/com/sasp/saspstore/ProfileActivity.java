@@ -30,6 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeAllCouponsButton;
     Button seeAllUsersButton;
     Button seeAllCategoriesButton;
+    Button seeAllRequestsButton;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
 
@@ -48,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCouponsButton =  findViewById(R.id.seeAllCouponsButton);
         seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
         seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
+        seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
 
         populateData();
     }
@@ -57,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCouponsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllUsersButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
@@ -101,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void logoutTapped(View view) {
         DataManager.shared().logout();
-        // TODO: Here!
+        finish();
     }
 
     public void logTapped(View view) {
@@ -120,6 +123,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void seeAllCategoriesTapped(View view) {
         Intent intent = new Intent(this, CategoriesActivity.class);
+        startActivity(intent);
+    }
+
+    public void seeAllRequestsTapped(View view) {
+        Intent intent = new Intent(this, AdministratorRequestsActivity.class);
         startActivity(intent);
     }
 }

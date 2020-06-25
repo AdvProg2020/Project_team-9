@@ -23,7 +23,7 @@ public class CommentsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments_list);
 
-        listView = (ListView) findViewById(R.id.log_list);
+        listView = findViewById(R.id.comments_list);
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");
         if (productID == null || productID.equals("")) return;

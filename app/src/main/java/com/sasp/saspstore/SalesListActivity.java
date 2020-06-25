@@ -31,7 +31,7 @@ public class SalesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_list);
 
-        listView = (ListView) findViewById(R.id.allCouponsList);
+        listView = findViewById(R.id.allSalesList);
         ArrayAdapter<Sale> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, DataManager.shared().getAllSales());
         listView.setAdapter(adapter);
         Account account = DataManager.shared().getLoggedInAccount();
