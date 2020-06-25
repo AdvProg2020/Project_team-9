@@ -15,15 +15,13 @@
         android:id="@+id/editDiscountPercent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:autofillHints="درصد تخفیف" />
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/editMaximumDiscount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:autofillHints="حداکثر تخفیف ممکن" />
+        android:inputType="number" />
 
     <TextView
         android:id="@+id/couponAlertProductsTextView"

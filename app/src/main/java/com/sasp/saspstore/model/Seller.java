@@ -46,7 +46,7 @@ public class Seller extends Account {
 
     @Override
     public String toString() {
-        return super.toString() + '\n' +
+        return super.toString() + "\n\n" +
                 "Company Details: " + companyDetails;
     }
 }

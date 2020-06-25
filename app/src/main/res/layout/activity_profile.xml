@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.sasp.saspstore.ProfileActivity"
     android:orientation="vertical">
 
@@ -105,6 +107,16 @@
         android:onClick="seeAllUsersTapped"/>
 
     <Button
+        android:id="@+id/seeAllRequestsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="مشاهده لیست درخواست‌ها"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="seeAllRequestsTapped"/>
+
+    <Button
         android:id="@+id/seeAllCategoriesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -123,4 +135,4 @@
         android:theme="@style/buttonTexts"
         android:onClick="logoutTapped"/>
 
-</LinearLayout>
+</LinearLayout></ScrollView>

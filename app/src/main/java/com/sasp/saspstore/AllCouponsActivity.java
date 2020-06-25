@@ -48,8 +48,8 @@ public class AllCouponsActivity extends AppCompatActivity {
 
             StringBuilder first = new StringBuilder( "کد: " + coupon.getId());
             first.append("\n");
-            first.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.BASIC_ISO_DATE));
-            first.append("زمان پایان: ").append(coupon.getStartTime().format(DateTimeFormatter.BASIC_ISO_DATE));
+            first.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            first.append("زمان پایان: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
             // TODO: List mahsulat and usages count???
             firstTextView.setText(first);
             secondTextView.setText("");

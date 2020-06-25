@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.sasp.saspstore.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="خانه"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.sasp.saspstore.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="دسته‌بندی‌ها"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.sasp.saspstore.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:label="ناحیه کاربری"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

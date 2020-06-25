@@ -22,15 +22,21 @@ public class NotificationsFragment extends Fragment {
 
     private NotificationsViewModel notificationsViewModel;
 
+    TextView textView;
+    Button loginButton;
+    Button registerButton;
+    Button profileButton;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 //        notificationsViewModel =
 //                new ViewModelProvider(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        final Button loginButton = root.findViewById(R.id.mainprofilepage_loginButton);
-        final Button registerButton = root.findViewById(R.id.mainprofilepage_registerButton);
-        final Button profileButton = root.findViewById(R.id.mainprofilepage_profileButton);
+
+        textView = root.findViewById(R.id.text_notifications);
+        loginButton = root.findViewById(R.id.mainprofilepage_loginButton);
+        registerButton = root.findViewById(R.id.mainprofilepage_registerButton);
+        profileButton = root.findViewById(R.id.mainprofilepage_profileButton);
 //        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
 //            public void onChanged(@Nullable String s) {
@@ -38,19 +44,13 @@ public class NotificationsFragment extends Fragment {
 //            }
 //        });
 //        return root;
-        Account account = DataManager.shared().getLoggedInAccount();
-        if (account == null) {
-            textView.setText("برای ورود به ناحیه کاربری، باید ابتدا در سامانه ثبت‌نام نمایید");
-            loginButton.setVisibility(View.VISIBLE);
-            registerButton.setVisibility(View.VISIBLE);
-            profileButton.setVisibility(View.GONE);
-        } else {
-            textView.setText(account.getFirstName() + " " + account.getLastName() + " گرامی، به سامانه فروش خوش آمدید");
-            loginButton.setVisibility(View.GONE);
-            registerButton.setVisibility(View.GONE);
-            profileButton.setVisibility(View.VISIBLE);
-        }
+        populateData();
 
+        setOnClickListeners();
+        return root;
+    }
+
+    private void setOnClickListeners() {
         registerButton.setOnClickListener(view -> {
             Intent intent = new Intent(DataManager.context, RegisterActivity.class);
             startActivity(intent);
@@ -64,6 +64,27 @@ public class NotificationsFragment extends Fragment {
             Intent intent = new Intent(DataManager.context, ProfileActivity.class);
             startActivity(intent);
         });
-        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        populateData();
+    }
+
+    private void populateData() {
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (account == null) {
+            textView.setText("برای ورود به ناحیه کاربری، باید ابتدا در سامانه ثبت‌نام نمایید");
+            loginButton.setVisibility(View.VISIBLE);
+            registerButton.setVisibility(View.VISIBLE);
+            profileButton.setVisibility(View.GONE);
+        } else {
+            textView.setText(account.getFirstName() + " " + account.getLastName() + " گرامی، به سامانه فروش خوش آمدید");
+            loginButton.setVisibility(View.GONE);
+            registerButton.setVisibility(View.GONE);
+            profileButton.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -36,7 +36,7 @@ public class LogActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Log log = (Log) listView.getItemAtPosition(position);
-            StringBuilder message = new StringBuilder("تاریخ: " + log.getDate().format(DateTimeFormatter.BASIC_ISO_DATE) +
+            StringBuilder message = new StringBuilder("تاریخ: " + log.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) +
                     "\n" +
                     "مبلغ: " + log.getPrice() +
                     "\n" +

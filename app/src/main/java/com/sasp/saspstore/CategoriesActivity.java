@@ -44,11 +44,11 @@ public class CategoriesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
-        listView = (ListView) findViewById(R.id.allCouponsList);
+        listView = findViewById(R.id.allCategoriesList);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, allCategories);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            String previousParentCategoryID = parentCategory.getId();
+            String previousParentCategoryID = (parentCategory == null) ? "" : parentCategory.getId();
             parentCategory = (Category) listView.getItemAtPosition(position);
             repopulateAllCategories();
             if (allCategories.isEmpty()) {
@@ -61,7 +61,9 @@ public class CategoriesActivity extends AppCompatActivity {
                         productIDs.append(product.getProductId());
                     if (i != allProductsSize - 1) productIDs.append(";;;;");
                 }
+                intent.putExtra("openOrSelect", "open");
                 intent.putExtra("productIDs", productIDs.toString());
+                intent.putExtra("categoryID", parentCategory.getId());
                 parentCategory = DataManager.shared().getCategoryWithId(previousParentCategoryID);
                 repopulateAllCategories();
                 startActivity(intent);
@@ -121,7 +123,7 @@ public class CategoriesActivity extends AppCompatActivity {
                 String name = firstEditText.getText().toString();
                 String description = secondEditText.getText().toString();
                 // TODO: we are providing empty array for unique features... this is important...!
-                Category category = new Category(DataManager.getNewId(), name, description, parentCategory.getId(),
+                Category category = new Category(DataManager.getNewId(), name, description, (parentCategory == null) ? "" : parentCategory.getId(),
                         new ArrayList<>());
                 DataManager.shared().addCategory(category);
                 adapter.notifyDataSetChanged();
@@ -150,7 +152,7 @@ public class CategoriesActivity extends AppCompatActivity {
         else {
             allCategories = new ArrayList<>();
             for (Category category : DataManager.shared().getAllCategories())
-                if (category.getParentCategory().getId().equals(parentCategory.getId()))
+                if (category.getParentCategory() != null && category.getParentCategory().getId().equals(parentCategory.getId()))
                     allCategories.add(category);
         }
     }

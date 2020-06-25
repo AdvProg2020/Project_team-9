@@ -16,13 +16,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Category;
 import com.sasp.saspstore.model.Comment;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
+import com.sasp.saspstore.model.Seller;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +44,8 @@ public class EachProductActivity extends AppCompatActivity {
     TextView eachProductScore;
 
     Product currentProduct;
+
+    // TODO: Add to cart??
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +67,10 @@ public class EachProductActivity extends AppCompatActivity {
         currentProduct = DataManager.shared().getProductWithId(productID);
 
         // TODO: ImageView file source??
-        File imgFile = new File(productID + ".png");
-        if (imgFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            eachProductImageView.setImageBitmap(myBitmap);
-        }
+        Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
+        eachProductImageView.setImageBitmap(bitmap);
         eachProductTitle.setText(currentProduct.getName());
-        eachProductBrand.setText(currentProduct.getName());
+        eachProductBrand.setText("برند: " + currentProduct.getName());
         if (currentProduct.getDiscountPercent() != 0) {
             eachProductPriceAndDiscountPercent.setText("مبلغ اصلی: " + currentProduct.getPrice() + " تومان، با " +
                     currentProduct.getDiscountPercent() + " درصد تخفیف، " +
@@ -75,10 +78,9 @@ public class EachProductActivity extends AppCompatActivity {
         } else {
             eachProductPriceAndDiscountPercent.setText("مبلغ اصلی: " + currentProduct.getPrice() + " تومان");
         }
-        eachProductPriceAndDiscountPercent.setText("");
-        eachProductNumberAvailable.setText(currentProduct.getNumberAvailable());
+        eachProductNumberAvailable.setText(Integer.toString(currentProduct.getNumberAvailable()) + " عدد موجود است");
         eachProductDescription.setText(currentProduct.getDescription());
-        eachProductDateCreated.setText(currentProduct.getDateCreated().format(DateTimeFormatter.BASIC_ISO_DATE));
+        eachProductDateCreated.setText("اضافه شده در " + currentProduct.getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         switch ((int) currentProduct.getAverageScore()) {
             case 1:
                 eachProductScore.setText("★☆☆☆☆");
@@ -99,7 +101,6 @@ public class EachProductActivity extends AppCompatActivity {
                 eachProductScore.setText("☆☆☆☆☆");
                 break;
         }
-        eachProductScore.setText("" + currentProduct.getAverageScore());
     }
 
     public void showCommentsTapped(View view) {
@@ -181,5 +182,39 @@ public class EachProductActivity extends AppCompatActivity {
                     .setNeutralButton("بازگشت", null)
                     .show();
         }
+    }
+
+    public void addToCartTapped(View view) {
+        if (currentProduct.getSellers().size() < 2) {
+            addToCart();
+            return;
+        }
+        final EditText editText = new EditText(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("انتخاب فروشنده");
+        StringBuilder stringBuilder = new StringBuilder("از میان فروشنده‌های زیر، فروشنده مطلوب را انتخاب کنید: (در صورت اشتباه بودن نام فروشنده، به تصادف انتخاب می‌شود) ");
+        for (Seller seller : currentProduct.getSellers()) {
+            stringBuilder.append("\n").append(seller.getUsername());
+        }
+        alertDialogBuilder.setMessage(stringBuilder.toString());
+        alertDialogBuilder.setView(editText);
+        alertDialogBuilder.setPositiveButton("افزودن به سبد خرید", (dialogInterface, i) -> {
+            Account account = DataManager.shared().getAccountWithGivenUsername(editText.getText().toString());
+            if (account instanceof Seller) currentProduct.setCurrentSeller((Seller) account);
+            addToCart();
+        });
+        alertDialogBuilder.setNeutralButton("بازگشت", null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void addToCart() {
+        Account account = DataManager.shared().getLoggedInAccount();
+        Cart cart;
+        if (account instanceof Customer) cart = ((Customer) account).getCart();
+        else cart = DataManager.shared().getTemporaryCart();
+        cart.addProduct(currentProduct);
+        DataManager.saveData();
+        Toast.makeText(this, "کالا با موفقیت به سبد خرید افزوده شد", Toast.LENGTH_LONG).show();
     }
 }
