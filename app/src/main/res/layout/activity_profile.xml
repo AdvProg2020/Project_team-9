@@ -75,157 +75,52 @@
         android:visibility="gone"
         tools:ignore="RtlHardcoded" />
 
-    <LinearLayout
-        android:id="@+id/profile_log_root"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:onClick="logTapped">
+        android:layout_margin="20dp"
+        android:text="تاریخچه تراکنش‌ها"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="logTapped"/>
 
-        <TextView
-            android:id="@+id/fragment_profile_log_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:padding="5dp"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="5dp"
-
-            android:text="تاریخچه تراکنش‌ها" />
-
-        <ImageView
-            android:id="@+id/fragment_profile_log_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/profile_coupons_root"
+    <Button
+        android:id="@+id/seeAllCouponsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:onClick="seeAllCouponsTapped"
-        android:visibility="gone">
+        android:layout_margin="20dp"
+        android:text="مشاهده کدهای تخفیف"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="seeAllCouponsTapped"/>
 
-        <TextView
-            android:id="@+id/fragment_profile_coupons_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:padding="5dp"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="5dp"
-
-            android:text="مشاهده کدهای تخفیف" />
-
-        <ImageView
-            android:id="@+id/fragment_profile_coupon_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/profile_allusers_root"
+    <Button
+        android:id="@+id/seeAllUsersButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:onClick="seeAllUsersTapped"
-        android:visibility="gone">
+        android:layout_margin="20dp"
+        android:text="مشاهده لیست کاربران"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="seeAllUsersTapped"/>
 
-        <TextView
-            android:id="@+id/fragment_profile_allusers_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:padding="5dp"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="5dp"
-
-            android:text="مشاهده لیست کاربران" />
-
-        <ImageView
-            android:id="@+id/fragment_profile_allusers_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/profile_allcategories_root"
+    <Button
+        android:id="@+id/seeAllCategoriesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:onClick="seeAllCategoriesTapped"
-        android:visibility="gone">
+        android:layout_margin="20dp"
+        android:text="مشاهده لیست دسته‌بندی‌ها"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="seeAllCategoriesTapped"/>
 
-        <TextView
-            android:id="@+id/fragment_profile_allcategories_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:padding="5dp"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="5dp"
-
-            android:text="مشاهده لیست دسته‌بندی‌ها" />
-
-        <ImageView
-            android:id="@+id/fragment_profile_allcategories_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/profile_logout_root"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:onClick="logoutTapped">
-
-        <TextView
-            android:id="@+id/fragment_profile_logout_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:padding="5dp"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="5dp"
-
-            android:text="خروج از حساب" />
-
-        <ImageView
-            android:id="@+id/fragment_profile_logout_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+        android:layout_margin="20dp"
+        android:text="خروج از حساب"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="logoutTapped"/>
 
 </LinearLayout>

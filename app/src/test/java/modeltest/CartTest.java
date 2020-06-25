@@ -1,16 +1,20 @@
 package modeltest;
 
-import static org.mockito.Mockito.*;
+import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.Cart;
+import com.sasp.saspstore.model.Product;
 
-import controller.DataManager;
-import model.Cart;
-import model.Product;
-import static org.junit.Assert.*;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class CartTest {
 
