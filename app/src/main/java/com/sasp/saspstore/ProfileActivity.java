@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.home.EditProfileActivity;
@@ -32,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeAllCategoriesButton;
     Button seeAllRequestsButton;
     Button seeCartButton;
+    Button addCreditButton;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
 
@@ -52,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
         seeCartButton = findViewById(R.id.seeCartButton);
         seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
+        addCreditButton = findViewById(R.id.addCreditButton);
 
         populateData();
     }
@@ -63,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        addCreditButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
@@ -137,5 +142,14 @@ public class ProfileActivity extends AppCompatActivity {
     public void seeCartTapped(View view) {
         Intent intent = new Intent(this, CartActivity.class);
         startActivity(intent);
+    }
+
+    public void addCreditTapped(View view) {
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (account instanceof Customer) {
+            account.increaseCredit(5);
+            Toast.makeText(this, "اعتبار حساب شما ۵ تومان افزایش یافت", Toast.LENGTH_SHORT).show();
+            txtCredit.setText("اعتبار: " + account.getCredit());
+        }
     }
 }
