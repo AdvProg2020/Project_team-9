@@ -3,6 +3,7 @@ package com.sasp.saspstore;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +28,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText txtCompanyDetails;
     RadioGroup radioGroup;
 
+    String addAdmin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,14 @@ public class RegisterActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.register_email);
         txtCompanyDetails = findViewById(R.id.register_companyDetails);
         radioGroup = findViewById(R.id.radioGroup);
+
+        Intent intent = getIntent();
+
+        addAdmin = intent.getStringExtra("addAdmin");
+        if (addAdmin != null && addAdmin.equals("true")) {
+            txtCompanyDetails.setVisibility(View.GONE);
+            radioGroup.setVisibility(View.GONE);
+        }
     }
 
     public void registerTapped(View view) {
@@ -51,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         String email = txtEmail.getText().toString();
         String phone = txtPhoneNumber.getText().toString();
         String companyDetails = txtCompanyDetails.getText().toString();
+        if (addAdmin == null || !addAdmin.equals("true") || checkForAdmin(type)) return;
         if (hasAnyValidationFailed(type, username, password, email, phone, companyDetails)) return;
         if (registerIfSeller(type, username, password, name, lastName, email, phone, companyDetails))
             return;
@@ -90,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean hasAnyValidationFailed(String type, String username, String password, String email, String phone, String companyDetails) {
-        return checkForAdmin(type) || checkEmptyUsernameOrPassword(username, password) ||
+        return checkEmptyUsernameOrPassword(username, password) ||
                 checkForRepeatedUsername(username) || checkEmail(email) || checkPhoneNumber(phone) ||
                 checkSellerCompanyDetails(type, companyDetails);
     }
@@ -168,6 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private String getAccountType() {
+        if (addAdmin != null && addAdmin.equals("true")) return "administrator";
         String type = "";
         int selectedId = radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
