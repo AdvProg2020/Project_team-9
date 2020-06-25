@@ -31,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeAllUsersButton;
     Button seeAllCategoriesButton;
     Button seeAllRequestsButton;
+    Button seeCartButton;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
 
@@ -49,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCouponsButton =  findViewById(R.id.seeAllCouponsButton);
         seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
         seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
+        seeCartButton = findViewById(R.id.seeCartButton);
         seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
 
         populateData();
@@ -60,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllUsersButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
@@ -128,6 +131,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void seeAllRequestsTapped(View view) {
         Intent intent = new Intent(this, AdministratorRequestsActivity.class);
+        startActivity(intent);
+    }
+
+    public void seeCartTapped(View view) {
+        Intent intent = new Intent(this, CartActivity.class);
         startActivity(intent);
     }
 }
