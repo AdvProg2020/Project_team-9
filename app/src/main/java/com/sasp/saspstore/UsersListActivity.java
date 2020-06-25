@@ -1,19 +1,16 @@
 package com.sasp.saspstore;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
-import com.sasp.saspstore.model.Coupon;
 
 public class UsersListActivity extends AppCompatActivity {
 
@@ -26,7 +23,7 @@ public class UsersListActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         // TODO: Error if no sender...?
         String sender = receivedIntent.getStringExtra("sender");
-        listView = (ListView) findViewById(R.id.allCouponsList);
+        listView = findViewById(R.id.allCouponsList);
         // TODO: Should sometimes show only customers... and not sellers and...!!!
         ArrayAdapter<Account> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1,
                 DataManager.shared().getAllAccounts());
@@ -46,8 +43,8 @@ public class UsersListActivity extends AppCompatActivity {
                             break;
                     }
                 };
-                builder.setMessage("Are you sure you want to remove \"" + account.getUsername() + "\"?")
-                        .setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+                builder.setMessage("آیا مطمینید که می‌خواهید \"" + account.getUsername() + "\" را حذف کنید؟")
+                        .setPositiveButton("بله", dialogClickListener).setNegativeButton("خیر", dialogClickListener).show();
             });
         } else {
             listView.setOnItemClickListener((parent, view, position, id) -> {

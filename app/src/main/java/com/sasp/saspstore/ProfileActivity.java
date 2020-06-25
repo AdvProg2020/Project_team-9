@@ -1,16 +1,16 @@
 package com.sasp.saspstore;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
@@ -27,9 +27,9 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtPhoneNumber;
     TextView txtCredit;
     TextView txtCompanyDetails;
-    ViewGroup vgSeeAllCoupons;
-    ViewGroup vgSeeAllUsers;
-    ViewGroup vgSeeAllCategories;
+    Button seeAllCouponsButton;
+    Button seeAllUsersButton;
+    Button seeAllCategoriesButton;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
 
@@ -45,14 +45,18 @@ public class ProfileActivity extends AppCompatActivity {
         txtPhoneNumber = (TextView) findViewById(R.id.fragment_profile_phoneNumber);
         txtCredit = (TextView) findViewById(R.id.fragment_profile_credit);
         txtCompanyDetails = (TextView) findViewById(R.id.fragment_profile_companyDetails);
-        vgSeeAllCoupons = (ViewGroup) findViewById(R.id.profile_coupons_root);
-        vgSeeAllUsers = (ViewGroup) findViewById(R.id.profile_allusers_root);
-        vgSeeAllCategories = (ViewGroup) findViewById(R.id.profile_allcategories_root);
+        seeAllCouponsButton =  findViewById(R.id.seeAllCouponsButton);
+        seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
+        seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
 
+        populateData();
+    }
+
+    private void populateData() {
         Account account = DataManager.shared().getLoggedInAccount();
-        vgSeeAllCoupons.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
-        vgSeeAllUsers.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
-        vgSeeAllCategories.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeAllCouponsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeAllUsersButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
@@ -72,6 +76,12 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             // TODO: Show login activity!
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateData();
     }
 
     @Override

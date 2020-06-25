@@ -1,14 +1,41 @@
 package com.sasp.saspstore.controller;
 
-import com.google.gson.*;
-import com.sasp.saspstore.model.*;
+import android.content.Context;
 
-import java.io.FileOutputStream;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.AddProductBySellerRequest;
+import com.sasp.saspstore.model.AddSaleBySellerRequest;
+import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Cart;
+import com.sasp.saspstore.model.Category;
+import com.sasp.saspstore.model.Coupon;
+import com.sasp.saspstore.model.Customer;
+import com.sasp.saspstore.model.EditProductBySellerRequest;
+import com.sasp.saspstore.model.EditSaleBySellerRequest;
+import com.sasp.saspstore.model.Log;
+import com.sasp.saspstore.model.Product;
+import com.sasp.saspstore.model.PurchaseLog;
+import com.sasp.saspstore.model.Request;
+import com.sasp.saspstore.model.Sale;
+import com.sasp.saspstore.model.SellLog;
+import com.sasp.saspstore.model.Seller;
+import com.sasp.saspstore.model.SellerRegistrationRequest;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +46,8 @@ import java.util.UUID;
 
 public class DataManager {
     private static DataManager sharedInstance;
+
+    public static Context context;
 
     private Account loggedInAccount;
     private ArrayList<Customer> allCustomers = new ArrayList<>();
@@ -94,7 +123,7 @@ public class DataManager {
         return allCategories;
     }
 
-   // TODO: Up to here checked saveData()s...
+    // TODO: Up to here checked saveData()s...
 
     public ArrayList<Request> getAllRequests() {
         ArrayList<Request> result = new ArrayList<>();
@@ -247,30 +276,54 @@ public class DataManager {
         Gson gson = gsonBuilder.setPrettyPrinting().create();
 
         String json = gson.toJson(sharedInstance);
-        try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
-            out.print(json);
-        } catch (IOException e) {
-            System.out.println("Unexpected exception happened in saving data: " + e.getLocalizedMessage());
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("data.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(json);
+            outputStreamWriter.close();
         }
+        catch (IOException e) {
+            // TODO: Here
+        }
+//        try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
+//            out.print(json);
+//        } catch (IOException e) {
+//            System.out.println("Unexpected exception happened in saving data: " + e.getLocalizedMessage());
+//        }
     }
 
     public static void loadData() {
+        String json = "";
+
         try {
-            String json = new String(Files.readAllBytes(Paths.get("data.txt")));
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+            InputStream inputStream = context.openFileInput("data.txt");
 
-            gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString;
+                StringBuilder stringBuilder = new StringBuilder();
 
-            gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
 
-            gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-
-            Gson gson = gsonBuilder.setPrettyPrinting().create();
-            sharedInstance = gson.fromJson(json, DataManager.class);
+                inputStream.close();
+                json = stringBuilder.toString();
+            }
         } catch (IOException e) {
-            System.out.println("Unexpected exception happened in loading data: " + e.getLocalizedMessage());
+            e.printStackTrace();
         }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+
+        Gson gson = gsonBuilder.setPrettyPrinting().create();
+        sharedInstance = gson.fromJson(json, DataManager.class);
     }
 
     public void addLog(Log log) {
