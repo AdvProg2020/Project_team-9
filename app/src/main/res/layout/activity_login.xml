@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/login_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="نام کاربری"
+        android:inputType="text"
+        android:gravity="center"
+        android:fontFamily="@font/yekan"
+        android:layout_margin="20dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="رمز عبور"
+        android:inputType="textPassword"
+        android:gravity="center"
+        android:fontFamily="@font/yekan"
+        android:layout_margin="20dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp" />
+
+    <TextView
+        android:id="@+id/login_register_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/usualTexts"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:onClick="registerTapped"
+        android:text="اکانت ندارید؟ ثبت نام کنید!" />
+
+    <Button
+        android:id="@+id/login_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="ورود"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="loginTapped"/>
+</LinearLayout>
