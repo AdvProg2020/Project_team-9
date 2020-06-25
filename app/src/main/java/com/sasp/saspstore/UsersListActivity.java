@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -57,5 +58,11 @@ public class UsersListActivity extends AppCompatActivity {
                 finish();
             });
         }
+    }
+
+    public void addAdminTapped(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("addAdmin", "true");
+        startActivity(intent);
     }
 }
