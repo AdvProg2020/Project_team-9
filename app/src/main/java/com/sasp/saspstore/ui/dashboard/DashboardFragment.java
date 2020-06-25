@@ -6,16 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.sasp.saspstore.CategoriesActivity;
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.SalesListActivity;
 import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.UserRole;
+import com.sasp.saspstore.ui.login.LoginActivity;
 
 public class DashboardFragment extends Fragment {
 
@@ -53,9 +55,9 @@ public class DashboardFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.customer_radio)
                     selectedRole[0] = UserRole.CUSTOMER;
-                if (checkedId == R.id.customer_radio)
+                if (checkedId == R.id.seller_radio)
                     selectedRole[0] = UserRole.SELLER;
-                if (checkedId == R.id.customer_radio)
+                if (checkedId == R.id.admin_radio)
                     selectedRole[0] = UserRole.ADMIN;
             }
         });

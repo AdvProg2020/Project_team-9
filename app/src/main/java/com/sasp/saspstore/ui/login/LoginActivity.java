@@ -20,7 +20,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.sasp.saspstore.R;
-import com.sasp.saspstore.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -111,15 +110,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        });
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.register(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         });

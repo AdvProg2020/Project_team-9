@@ -24,4 +24,10 @@
     <string name="customer">مشتری</string>
     <string name="seller">فروشنده</string>
     <string name="admin">مدیر</string>
+    <string name="username">نام کاربری</string>
+    <string name="phone_number">شماره تلفن</string>
+    <string name="first_name">نام</string>
+    <string name="last_name">نام خانوادگی</string>
+    <string name="company_details">اطلاعات شرکت</string>
+    <string name="profile_picture">عکس پروفایل</string>
 </resources>
