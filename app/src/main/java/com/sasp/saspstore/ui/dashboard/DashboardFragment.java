@@ -9,26 +9,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sasp.saspstore.CategoriesActivity;
-import com.sasp.saspstore.LoginActivity;
-import com.sasp.saspstore.ProfileActivity;
 import com.sasp.saspstore.R;
-import com.sasp.saspstore.RegisterActivity;
 import com.sasp.saspstore.SalesListActivity;
 import com.sasp.saspstore.controller.DataManager;
 
 public class DashboardFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
-
     TextView textView;
     Button seeAllCategoriesButton;
     Button seeAllSalesButton;
+    private DashboardViewModel dashboardViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,16 +32,33 @@ public class DashboardFragment extends Fragment {
         textView = root.findViewById(R.id.text_dashboard);
         seeAllCategoriesButton = root.findViewById(R.id.seeAllCategoriesButton_dashboard);
         seeAllSalesButton = root.findViewById(R.id.seeAllSalesButton_dashboard);
-//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         populateData();
 
         setOnClickListeners();
+        final UserRole[] selectedRole = {UserRole.CUSTOMER};
+        final Button openLoginButton = root.findViewById(R.id.openLogin);
+        final RadioGroup roleSelectionGroup = root.findViewById(R.id.login_role);
+        openLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        roleSelectionGroup.clearCheck();
+        roleSelectionGroup.check(R.id.customer_radio);
+        roleSelectionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.customer_radio)
+                    selectedRole[0] = UserRole.CUSTOMER;
+                if (checkedId == R.id.customer_radio)
+                    selectedRole[0] = UserRole.SELLER;
+                if (checkedId == R.id.customer_radio)
+                    selectedRole[0] = UserRole.ADMIN;
+            }
+        });
         return root;
     }
 

@@ -20,6 +20,9 @@
         <activity android:name=".AddProductActivity" />
         <activity android:name=".AdministratorRequestsActivity" />
         <activity android:name=".CategoriesActivity" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
         <activity android:name=".UsersListActivity" />
         <activity android:name=".ProductListActivity" />
         <activity android:name=".AddCouponActivity" />

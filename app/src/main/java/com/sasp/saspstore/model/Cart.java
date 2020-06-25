@@ -17,7 +17,8 @@ public class Cart {
         HashMap<Product, Integer> result = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : products.entrySet()) {
             Map.Entry pair = stringIntegerEntry;
-            result.put(DataManager.shared().getProductWithId((String) pair.getKey()), (int) pair.getValue());
+            result.put(DataManager.shared().getProductWithId((String) pair.getKey()),
+                    (int) pair.getValue());
         }
         return result;
     }
@@ -25,12 +26,15 @@ public class Cart {
     // TODO: Does this func work right??
     public void setProducts(HashMap<Product, Integer> products) {
         this.products = new HashMap<>();
-        products.entrySet().forEach(productIntegerEntry -> this.products.put(((Product) (((Map.Entry) productIntegerEntry).getKey())).getProductId(), (int) ((Map.Entry) productIntegerEntry).getValue()));
+        products.entrySet().forEach(productIntegerEntry -> this.products.put(
+                ((Product) (((Map.Entry) productIntegerEntry).getKey())).getProductId(),
+                (int) ((Map.Entry) productIntegerEntry).getValue()));
         DataManager.saveData();
     }
 
     public void addProduct(Product product, int quantity) {
-        products.put(product.getProductId(), products.getOrDefault(product.getProductId(), 0) + quantity);
+        products.put(product.getProductId(),
+                products.getOrDefault(product.getProductId(), 0) + quantity);
         DataManager.saveData();
     }
 

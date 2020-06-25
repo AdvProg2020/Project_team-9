@@ -5,7 +5,7 @@
     <color name="activeTabColor">#212121</color>
     <color name="inactiveTabColor">#CCCCCC</color>
 
-    <color name="background">#ffffff</color>
+    <color name="background">#fff9f9</color>
     <color name="regularPriceColor">#d42626</color>
     <color name="salePriceColor">#161816</color>
 

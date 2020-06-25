@@ -1,17 +1,27 @@
 <resources>
     <string name="app_name">SASP Store</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">خانه</string>
+    <string name="title_dashboard">ناحیه کاربری</string>
+    <string name="title_notifications">حراج‌ها</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_login">ناحیه‌ی کاربری</string>
+    <string name="prompt_email">ایمیل</string>
+    <string name="prompt_password">کلمه‌ی عبور</string>
+    <string name="action_sign_in">ورود</string>
+    <string name="action_register">ثبت نام</string>
+    <string name="action_sign_in_short">ورود</string>
+    <string name="welcome"> عزیز، خوش آمدید</string>
+    <string name="invalid_username">نام کاربری معتبر نیست</string>
+    <string name="invalid_password">کلمه‌ی عبور باید بیش از ۵ کاراکتر داشته باشد</string>
+    <string name="login_failed">ورود با خطا مواجه شد</string>
+    <string name="sign_in">ورود</string>
+    <string name="register">ثبت نام</string>
+    <string name="user_exists">کاربر با این نام وجود دارد</string>
+    <string name="sign_out">خروج از حساب</string>
+    <string name="transaction_log">تاریخچه تراکنش‌ها</string>
+    <string name="credit">اعتبار:</string>
+    <string name="customer">مشتری</string>
+    <string name="seller">فروشنده</string>
+    <string name="admin">مدیر</string>
 </resources>
