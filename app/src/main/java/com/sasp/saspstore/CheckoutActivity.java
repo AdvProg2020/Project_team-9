@@ -76,12 +76,12 @@ public class CheckoutActivity extends AppCompatActivity {
         }
         if (totalPrice > 1000) {
             priceAfterDiscount -= 100;
-            txtTotalPriceText.append("چون بیش از ۱۰۰۰ دلار خرج کرده اید، یک تخفیف ۱۰۰ دلاری برای شما در نظر گرفته شده است!!").append("\n");
+            txtTotalPriceText.append("چون بیش از ۱۰۰۰ تومان خرج کرده اید، یک تخفیف ۱۰۰ تومانی برای شما در نظر گرفته شده است!!").append("\n");
         }
         txtTotalPriceText.append("میزان تخفیف: ").append(totalPrice - priceAfterDiscount).append("\n");
         txtTotalPriceText.append("مبلغ قابل پرداخت: ").append(priceAfterDiscount);
         if (customer.getCredit() < priceAfterDiscount) {
-            txtTotalPriceText.append("شما ").append(customer.getCredit()).append(" دلار در حساب خود دارید و متاسفانه نمی‌توانید هزینه این کالاها را پرداخت کنید.");
+            txtTotalPriceText.append("\n").append("شما ").append(customer.getCredit()).append(" تومان در حساب خود دارید و متاسفانه نمی‌توانید هزینه این کالاها را پرداخت کنید.");
             finishButton.setVisibility(View.GONE);
         } else {
             finishButton.setVisibility(View.VISIBLE);
@@ -203,7 +203,7 @@ public class CheckoutActivity extends AppCompatActivity {
         alertDialog.setTitle("پرداخت با موفقیت انجام شد");
         StringBuilder message = new StringBuilder("با تشکر از خرید شما");
         message.append("\n").append("اطلاعات خرید:").append("\n").append("تاریخ و زمان خرید: ")
-                .append(LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE))
+                .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .append("\n").append("تعداد گزارشات فروش ثبت شده: ").append(countOfSellLogsAdded)
                 .append("\n").append("قیمت: ").append((int) (totalPrice - priceAfterDiscount));
         alertDialog.setMessage(message);

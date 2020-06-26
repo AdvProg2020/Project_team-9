@@ -23,7 +23,7 @@ public class AdministratorRequestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrator_requests);
 
-        listView = (ListView) findViewById(R.id.allCategoriesList);
+        listView = findViewById(R.id.allRequestsList);
         ArrayAdapter<Request> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1,
                 DataManager.shared().getAllRequests());
         listView.setAdapter(adapter);

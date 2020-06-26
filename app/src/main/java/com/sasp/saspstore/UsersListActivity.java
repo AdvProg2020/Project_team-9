@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,7 +24,7 @@ public class UsersListActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         // TODO: Error if no sender...?
         String sender = receivedIntent.getStringExtra("sender");
-        listView = findViewById(R.id.allCouponsList);
+        listView = findViewById(R.id.allUsersList);
         // TODO: Should sometimes show only customers... and not sellers and...!!!
         ArrayAdapter<Account> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1,
                 DataManager.shared().getAllAccounts());
@@ -33,7 +34,7 @@ public class UsersListActivity extends AppCompatActivity {
                 Account account = (Account) listView.getItemAtPosition(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-                    switch (which){
+                    switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
                             DataManager.shared().removeAccount(account);
                             adapter.notifyDataSetChanged();
@@ -44,7 +45,9 @@ public class UsersListActivity extends AppCompatActivity {
                     }
                 };
                 builder.setMessage("آیا مطمینید که می‌خواهید \"" + account.getUsername() + "\" را حذف کنید؟")
-                        .setPositiveButton("بله", dialogClickListener).setNegativeButton("خیر", dialogClickListener).show();
+                        .setPositiveButton("بله", dialogClickListener).setNegativeButton("خیر", dialogClickListener);
+                if (!account.getUsername().equals(DataManager.shared().getLoggedInAccount().getUsername()))
+                    builder.show();
             });
         } else {
             listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -55,5 +58,11 @@ public class UsersListActivity extends AppCompatActivity {
                 finish();
             });
         }
+    }
+
+    public void addAdminTapped(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("addAdmin", "true");
+        startActivity(intent);
     }
 }

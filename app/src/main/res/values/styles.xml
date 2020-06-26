@@ -5,32 +5,29 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:fontFamily">@font/yekan</item>
     </style>
 
     <style name="usualTexts" >
-        <item name="android:fontFamily">@font/yekan</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">@dimen/textSize</item>
         <item name="android:gravity">right</item>
     </style>
 
     <style name="titleTexts" >
-        <item name="android:fontFamily">@font/yekan</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">@dimen/titleText</item>
         <item name="android:gravity">right</item>
     </style>
 
     <style name="buttonTexts" >
-        <item name="android:fontFamily">@font/yekan</item>
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">@dimen/textSize</item>
         <item name="android:gravity">right</item>
     </style>
 
     <style name="secondary_buttonTexts" >
-        <item name="android:fontFamily">@font/yekan</item>
-
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">@dimen/textSize</item>
         <item name="android:gravity">right</item>
