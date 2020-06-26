@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Ad;
-import com.sasp.saspstore.model.AdRequest;
+import com.sasp.saspstore.model.AddAdBySellerRequest;
 import com.sasp.saspstore.model.AddProductBySellerRequest;
 import com.sasp.saspstore.model.AddSaleBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
@@ -61,7 +61,7 @@ public class DataManager {
     private ArrayList<EditSaleBySellerRequest> editSaleBySellerRequests = new ArrayList<>();
     private ArrayList<SellerRegistrationRequest> sellerRegistrationRequests = new ArrayList<>();
     private ArrayList<Ad> allAds = new ArrayList<>();
-    private ArrayList<AdRequest> adRequests = new ArrayList<>();
+    private ArrayList<AddAdBySellerRequest> adRequests = new ArrayList<>();
 
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
@@ -170,7 +170,8 @@ public class DataManager {
     }
 
     public void addAd(Ad ad) {
-
+        allAds.add(ad);
+        saveData();
     }
 
     public PurchaseLog purchaseLogForCustomerById(Customer customer, String id) {
@@ -214,6 +215,7 @@ public class DataManager {
         result.addAll(editProductBySellerRequests);
         result.addAll(editSaleBySellerRequests);
         result.addAll(sellerRegistrationRequests);
+        result.addAll(adRequests);
         return result;
     }
 
@@ -228,6 +230,8 @@ public class DataManager {
             editSaleBySellerRequests.add((EditSaleBySellerRequest) request);
         } else if (request instanceof SellerRegistrationRequest) {
             sellerRegistrationRequests.add((SellerRegistrationRequest) request);
+        } else if (request instanceof AddAdBySellerRequest) {
+            adRequests.add((AddAdBySellerRequest) request);
         }
         saveData();
     }
@@ -371,6 +375,7 @@ public class DataManager {
         editProductBySellerRequests.remove(request);
         editSaleBySellerRequests.remove(request);
         sellerRegistrationRequests.remove(request);
+        adRequests.remove(request);
         saveData();
     }
 
@@ -405,6 +410,10 @@ public class DataManager {
 
     public Product getProductWithId(String id) {
         return allProducts.stream().filter(product -> product.getProductId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Ad getAdWithId(String id) {
+        return allAds.stream().filter(ad -> ad.getId().equals(id)).findFirst().orElse(null);
     }
 
     public Product getProductWithName(String name) {

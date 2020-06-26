@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Ad;
+import com.sasp.saspstore.model.AddAdBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    EditText adTxt;
+    Button adBtn;
     TextView txtName;
     TextView txtUsernameAndRole;
     TextView txtEmail;
@@ -47,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        adTxt = findViewById(R.id.profile_adTxt);
+        adBtn = findViewById(R.id.profile_adBtn);
         txtName = (TextView) findViewById(R.id.fragment_profile_name);
         txtUsernameAndRole = (TextView) findViewById(R.id.fragment_profile_usernameAndRole);
         txtEmail = (TextView) findViewById(R.id.fragment_profile_email);
@@ -66,6 +73,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void populateData() {
         Account account = DataManager.shared().getLoggedInAccount();
+        adBtn.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
+        adTxt.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         seeAllCouponsButton.setVisibility(account instanceof Seller ? View.GONE : View.VISIBLE);
         seeAllUsersButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
@@ -202,5 +211,22 @@ public class ProfileActivity extends AppCompatActivity {
             if (i != productIDsSize - 1) productIDsStringBuilder.append(";;;;");
         }
         return productIDsStringBuilder;
+    }
+
+    public void addAdTapped(View view) {
+        String ad = adTxt.getText().toString();
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (!ad.equals("") && account instanceof Seller) {
+            if (account.getCredit() < 5) {
+                Toast.makeText(this, "اعتبار حساب شما ناکافی است", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            account.decreaseCredit(5);
+            Ad adObject = new Ad(DataManager.getNewId(), ad);
+            AddAdBySellerRequest request = new AddAdBySellerRequest(DataManager.getNewId(), (Seller) account, adObject);
+            DataManager.shared().addRequest(request);
+            Toast.makeText(this, "درخواست افزودن تبلیغ برای مدیر ارسال شد", Toast.LENGTH_SHORT).show();
+            populateData();
+        }
     }
 }

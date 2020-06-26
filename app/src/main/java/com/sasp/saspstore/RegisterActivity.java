@@ -112,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = getContentResolver()
                         .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        filePathColumn, null, null, null);
+                                filePathColumn, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 profilePicturePath = cursor.getString(columnIndex);
@@ -146,12 +146,14 @@ public class RegisterActivity extends AppCompatActivity {
         String email = txtEmail.getText().toString();
         String phone = txtPhoneNumber.getText().toString();
         String companyDetails = txtCompanyDetails.getText().toString();
-        if (addAdmin == null || !addAdmin.equals("true") || checkForAdmin(type)) return;
-        if (hasAnyValidationFailed(type, username, password, email, phone, companyDetails)) return;
-        if (registerIfSeller(type, username, password, name,
-                lastName, email, phone, companyDetails))
+        if (addAdmin != null && addAdmin.equals("true")) {
+            registerCustomerOrAdmin(type, username, password, name, lastName, email, phone);
             return;
-        registerCustomerOrAdmin(type, username, password, name, lastName, email, phone);
+        }
+        if (checkForAdmin(type)) return;
+        if (hasAnyValidationFailed(type, username, password, email, phone, companyDetails)) return;
+        registerIfSeller(type, username, password, name,
+                lastName, email, phone, companyDetails);
     }
 
     private void registerCustomerOrAdmin(UserRole type, String username, String password,

@@ -35,6 +35,11 @@ public class Request {
             SellerRegistrationRequest request = (SellerRegistrationRequest) this;
             return "فروشنده " + request.getSeller().getFirstName() + " " + request.getSeller().getLastName() + " از شرکت "
                     + request.getSeller().getCompanyDetails() +  " تمایل به ثبت نام دارد" + "\n" + "وضعیت درخواست: در انتظار تایید توسط مدیر";
+        } else if (this instanceof AddAdBySellerRequest) {
+            AddAdBySellerRequest request = (AddAdBySellerRequest) this;
+            return "فروشنده " + request.getSeller().getFirstName() + " " + request.getSeller().getLastName() + " از شرکت "
+                    + request.getSeller().getCompanyDetails() +  " قصد افزودن تبلیغ"   + " را دارد\n" + "وضعیت درخواست: در انتظار تایید توسط مدیر";
+
         } else return "ID #" + id;
     }
 }

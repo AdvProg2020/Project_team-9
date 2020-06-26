@@ -80,7 +80,7 @@ public class EachProductActivity extends AppCompatActivity {
                 Util.showLargePhoto(getApplicationContext(), bitmap);
             }
         });
-        eachProductTitle.setText(currentProduct.getName());
+        eachProductTitle.setText(currentProduct.getName() + (currentProduct.getNumberAvailable() <= 0 ? " (تمام شده)" : ""));
         eachProductBrand.setText("برند: " + currentProduct.getName());
         if (currentProduct.getDiscountPercent() != 0) {
             eachProductPriceAndDiscountPercent.setText("مبلغ اصلی: " + currentProduct.getPrice() + " تومان، با " +
@@ -290,4 +290,82 @@ public class EachProductActivity extends AppCompatActivity {
                         + "\n\n" + category.getUniqueFeatures().get(1) + ":\n" + currentProduct.getFeatures().get(category.getUniqueFeatures().get(1)))
                 .setNeutralButton("بازگشت", null).show();
     }
+
+    public void seeSimilarsTapped(View view) {
+        Intent intent = new Intent(this, ProductListActivity.class);
+        StringBuilder productIDs = new StringBuilder();
+        ArrayList<Product> allProducts = DataManager.shared().getAllProducts();
+        for (int i = 0, allProductsSize = allProducts.size(); i < allProductsSize; i++) {
+            Product product = allProducts.get(i);
+            if (getLevenshteinDistance(product.getName(), currentProduct.getName()) < 5 ||
+                    getLevenshteinDistance(product.getBrand(), currentProduct.getBrand()) < 5) {
+                productIDs.append(product.getProductId());
+                if (i != allProductsSize - 1) productIDs.append(";;;;");
+            }
+        }
+        intent.putExtra("openOrSelect", "open");
+        intent.putExtra("productIDs", productIDs.toString());
+        intent.putExtra("categoryID", currentProduct.getCategory().getId());
+        startActivity(intent);
+    }
+
+    // Code snippet from the Internet
+    public static int getLevenshteinDistance(String s, String t) {
+        if (s == null || t == null) {
+            throw new IllegalArgumentException("Strings must not be null");
+        }
+        int n = s.length();
+        int m = t.length();
+
+        if (n == 0) {
+            return m;
+        } else if (m == 0) {
+            return n;
+        }
+
+        if (n > m) {
+            String tmp = s;
+            s = t;
+            t = tmp;
+            n = m;
+            m = t.length();
+        }
+
+        int[] p = new int[n+1]; //'previous' cost array, horizontally
+        int[] d = new int[n+1]; // cost array, horizontally
+        int[] _d; //placeholder to assist in swapping p and d
+
+        // indexes into strings s and t
+        int i; // iterates through s
+        int j; // iterates through t
+
+        char t_j; // jth character of t
+
+        int cost; // cost
+
+        for (i = 0; i<=n; i++) {
+            p[i] = i;
+        }
+
+        for (j = 1; j<=m; j++) {
+            t_j = t.charAt(j-1);
+            d[0] = j;
+
+            for (i=1; i<=n; i++) {
+                cost = s.charAt(i-1)==t_j ? 0 : 1;
+                // minimum of cell to the left+1, to the top+1, diagonally left and up +cost
+                d[i] = Math.min(Math.min(d[i-1]+1, p[i]+1),  p[i-1]+cost);
+            }
+
+            // copy current distance counts to 'previous row' distance counts
+            _d = p;
+            p = d;
+            d = _d;
+        }
+
+        // our last action in the above loop was to switch d and p, so p now
+        // actually has the most recent cost counts
+        return p[n];
+    }
+
 }
