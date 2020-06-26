@@ -1,6 +1,7 @@
 package com.sasp.saspstore.ui.home;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     CarouselView carouselView;
+    MediaPlayer player;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +69,20 @@ public class HomeFragment extends Fragment {
         }
         adsListView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.ad_list_item, allAds));
 
+        player = Util.getMediaPlayer(getContext(), R.raw.swanlake);
+
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        player.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        player.start();
     }
 }

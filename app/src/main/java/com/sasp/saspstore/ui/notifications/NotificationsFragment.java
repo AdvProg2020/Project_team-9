@@ -1,6 +1,7 @@
 package com.sasp.saspstore.ui.notifications;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +16,18 @@ import com.sasp.saspstore.LoginActivity;
 import com.sasp.saspstore.ProfileActivity;
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.RegisterActivity;
+import com.sasp.saspstore.Util;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
 
 public class NotificationsFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
-
     TextView textView;
     Button loginButton;
     Button registerButton;
     Button profileButton;
+    private NotificationsViewModel notificationsViewModel;
+    private MediaPlayer player;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class NotificationsFragment extends Fragment {
         populateData();
 
         setOnClickListeners();
+        player = Util.getMediaPlayer(getContext(), R.raw.spring);
+
         return root;
     }
 
@@ -67,10 +71,17 @@ public class NotificationsFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        player.pause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
         populateData();
+        player.start();
     }
 
     private void populateData() {

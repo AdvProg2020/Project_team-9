@@ -1,6 +1,7 @@
 package com.sasp.saspstore;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,11 +32,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        startMusic();
-    }
-
-    private void startMusic() {
-        Intent intent = new Intent(this, BackgroundSoundService.class);
-        startService(intent);
     }
 }
