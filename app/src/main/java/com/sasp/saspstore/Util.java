@@ -37,6 +37,7 @@ public class Util {
         Intent intent = new Intent(context, LargeImageViewActivity.class);
         intent.putExtra("bitmap", bitmap);
         intent.putExtra("mode", "bitmap");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
