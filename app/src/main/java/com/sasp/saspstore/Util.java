@@ -52,7 +52,7 @@ public class Util {
             }
         }.start();
         try {
-            Thread.sleep(100);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
