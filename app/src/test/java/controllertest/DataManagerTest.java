@@ -1,14 +1,28 @@
 package controllertest;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import com.sasp.saspstore.controller.DataManager;
-import com.sasp.saspstore.model.*;
+import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Cart;
+import com.sasp.saspstore.model.Customer;
+import com.sasp.saspstore.model.Seller;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class DataManagerTest {
     @Test
@@ -447,5 +461,34 @@ public class DataManagerTest {
         doReturn(accounts).when(spy).getAllAccounts();
 
         assertFalse(spy.doesUserWithGivenUsernameExist("hello"));
+    }
+    @Test
+    public void givenUserNameHAsGivenPassword(){
+        Administrator admin = mock(Administrator.class);
+        when(admin.getUsername()).thenReturn("Admin");
+        when(admin.getPassword()).thenReturn("AdminAdmin");
+
+        Customer customer = mock(Customer.class);
+        when(customer.getUsername()).thenReturn("customer");
+        when(customer.getPassword()).thenReturn("customercustomer");
+
+        Seller seller = mock(Seller.class);
+        when(seller.getUsername()).thenReturn("seller");
+        when(seller.getPassword()).thenReturn("sellerseller");
+
+        Seller seller2 = mock(Seller.class);
+        when(seller2.getUsername()).thenReturn("seller");
+        when(seller2.getPassword()).thenReturn("sellerrrr");
+
+        ArrayList<Account> accounts = new ArrayList<>();
+        accounts.add(admin);
+        accounts.add(seller);
+        accounts.add(seller2)
+        accounts.add(customer);
+
+        DataManager spy = spy(DataManager.shared());
+        doReturn(accounts).when(spy).getAllAccounts();
+
+        assertTrue(spy.givenUsernameHasGivenPassword("seller","sellerrrr"));
     }
 }
