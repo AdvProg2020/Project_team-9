@@ -1,6 +1,7 @@
 package com.sasp.saspstore.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.sasp.saspstore.ImageSaver;
 import com.sasp.saspstore.R;
+import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Product;
 
 import java.util.ArrayList;
@@ -40,7 +43,9 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         RatingBar ratingBar = rowView.findViewById(R.id.product_list_item_score);
 
         Product product = products.get(position);
-        Glide.with(context).load(product.getImageURL()).into(imageView);
+//        Glide.with(context).load(product.getImageURL()).into(imageView);
+        Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
+        imageView.setImageBitmap(bitmap);
         txtTitle.setText(product.getName());
         txtPrice.setText(Integer.toString(product.getPrice()));
         ratingBar.setRating((float) product.getAverageScore());
