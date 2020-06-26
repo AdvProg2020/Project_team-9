@@ -14,14 +14,12 @@
     <EditText
         android:id="@+id/editDiscountPercent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/editMaximumDiscount"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/couponAlertProductsTextView"

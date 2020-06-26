@@ -100,6 +100,15 @@
         android:theme="@style/buttonTexts"
         android:onClick="submitScoreTapped"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="مشاهده ویژگی‌های دسته‌بندی"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="seeFeaturesTapped"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

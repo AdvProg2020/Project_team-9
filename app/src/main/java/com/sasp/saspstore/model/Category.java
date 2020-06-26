@@ -56,6 +56,10 @@ public class Category {
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder stringBuilder = new StringBuilder(name + "\n" + "ویژگی‌ها: ");
+        for (String uniqueFeature : getUniqueFeatures()) {
+            stringBuilder.append("\n").append(uniqueFeature);
+        }
+        return stringBuilder.toString();
     }
 }

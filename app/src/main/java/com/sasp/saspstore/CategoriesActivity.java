@@ -55,9 +55,10 @@ public class CategoriesActivity extends AppCompatActivity {
                 ArrayList<Product> allProducts = DataManager.shared().getAllProducts();
                 for (int i = 0, allProductsSize = allProducts.size(); i < allProductsSize; i++) {
                     Product product = allProducts.get(i);
-                    if (product.getCategory().getId().equals(parentCategory.getId()))
+                    if (product.getCategory().getId().equals(parentCategory.getId())) {
                         productIDs.append(product.getProductId());
-                    if (i != allProductsSize - 1) productIDs.append(";;;;");
+                        if (i != allProductsSize - 1) productIDs.append(";;;;");
+                    }
                 }
                 intent.putExtra("openOrSelect", "open");
                 intent.putExtra("productIDs", productIDs.toString());
