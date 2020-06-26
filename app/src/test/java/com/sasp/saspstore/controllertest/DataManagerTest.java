@@ -1,4 +1,4 @@
-package controllertest;
+package com.sasp.saspstore.controllertest;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
@@ -483,7 +483,7 @@ public class DataManagerTest {
         ArrayList<Account> accounts = new ArrayList<>();
         accounts.add(admin);
         accounts.add(seller);
-        accounts.add(seller2)
+        accounts.add(seller2);
         accounts.add(customer);
 
         DataManager spy = spy(DataManager.shared());
