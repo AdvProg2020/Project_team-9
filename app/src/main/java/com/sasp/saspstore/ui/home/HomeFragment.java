@@ -1,11 +1,14 @@
 package com.sasp.saspstore.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,8 +19,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.sasp.saspstore.R;
+import com.sasp.saspstore.Util;
+import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.Ad;
+import com.sasp.saspstore.ui.LargeImageViewActivity;
 import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
@@ -39,9 +49,23 @@ public class HomeFragment extends Fragment {
                 imageView.setImageResource(slides[position]);
             }
         });
+        carouselView.setImageClickListener(new ImageClickListener() {
+            @Override
+            public void onClick(int position) {
+                Util.showLargePhoto(getContext(), slides[position]);
+            }
+        });
 
         ImageView gifView = root.findViewById(R.id.gif_view);
         Glide.with(this).load(R.drawable.welcome_gif).into(gifView);
+
+        ListView adsListView = root.findViewById(R.id.list_ads);
+        ArrayList<Ad> allAds = DataManager.shared().getAllAds();
+        if (allAds.size() == 0) {
+            allAds = new ArrayList<>();
+            allAds.add(new Ad("موردی برای نمایش وجود ندارد"));
+        }
+        adsListView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.ad_list_item, allAds));
 
         return root;
     }

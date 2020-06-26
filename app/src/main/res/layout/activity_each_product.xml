@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/eachProductImageView"
         android:layout_width="match_parent"
-        android:layout_height="200sp"
+        android:layout_height="200dp"
         android:contentDescription="Product Image"
         android:scaleType="centerCrop" />
 

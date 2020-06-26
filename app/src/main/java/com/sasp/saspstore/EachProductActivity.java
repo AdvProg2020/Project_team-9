@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
@@ -69,6 +71,14 @@ public class EachProductActivity extends AppCompatActivity {
         // TODO: ImageView file source??
         Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
         eachProductImageView.setImageBitmap(bitmap);
+        //TODO: color overlay. Is this working?
+        eachProductImageView.getBackground().setColorFilter(getResources().getColor(R.color.grey_overlay), PorterDuff.Mode.OVERLAY);
+        eachProductImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.showLargePhoto(getApplicationContext(), bitmap);
+            }
+        });
         eachProductTitle.setText(currentProduct.getName());
         eachProductBrand.setText("برند: " + currentProduct.getName());
         if (currentProduct.getDiscountPercent() != 0) {

@@ -1,5 +1,6 @@
 package com.sasp.saspstore.model;
 
+import com.sasp.saspstore.R;
 import com.sasp.saspstore.controller.DataManager;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class Product {
     private String category;
     private String description;
     private String imageURL;
+    private int[] slides;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
     private LocalDateTime dateCreated;
@@ -67,6 +69,7 @@ public class Product {
         this.scores = new ArrayList<>();
         this.dateCreated = dateCreated;
         this.features = features;
+        this.slides = new int[]{R.drawable.image_asset1, R.raw.ligntness};
     }
 
     public Seller getCurrentSeller() {

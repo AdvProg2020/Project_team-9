@@ -12,6 +12,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Ad;
+import com.sasp.saspstore.model.AdRequest;
 import com.sasp.saspstore.model.AddProductBySellerRequest;
 import com.sasp.saspstore.model.AddSaleBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
@@ -45,10 +47,8 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class DataManager {
-    private static DataManager sharedInstance;
-
     public static Context context;
-
+    private static DataManager sharedInstance;
     private Account loggedInAccount;
     private ArrayList<Customer> allCustomers = new ArrayList<>();
     private ArrayList<Seller> allSellers = new ArrayList<>();
@@ -60,6 +60,8 @@ public class DataManager {
     private ArrayList<EditProductBySellerRequest> editProductBySellerRequests = new ArrayList<>();
     private ArrayList<EditSaleBySellerRequest> editSaleBySellerRequests = new ArrayList<>();
     private ArrayList<SellerRegistrationRequest> sellerRegistrationRequests = new ArrayList<>();
+    private ArrayList<Ad> allAds = new ArrayList<>();
+    private ArrayList<AdRequest> adRequests = new ArrayList<>();
 
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
@@ -67,12 +69,92 @@ public class DataManager {
     private ArrayList<SellLog> sellLogs = new ArrayList<>();
     private Cart temporaryCart = new Cart();
 
+    private DataManager() {
+    }
+
     public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    public static String getNewId() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    public static DataManager shared() {
+        if (sharedInstance == null) {
+            sharedInstance = new DataManager();
+        }
+        return sharedInstance;
+    }
+
+    public static void saveData() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+
+        Gson gson = gsonBuilder.setPrettyPrinting().create();
+
+        String json = gson.toJson(sharedInstance);
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("data.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(json);
+            outputStreamWriter.close();
+        } catch (IOException e) {
+            // TODO: Here
+        }
+//        try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
+//            out.print(json);
+//        } catch (IOException e) {
+//            System.out.println("Unexpected exception happened in saving data: " + e.getLocalizedMessage());
+//        }
+    }
+
+    public static void loadData() {
+        String json = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("data.txt");
+
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString;
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((receiveString = bufferedReader.readLine()) != null) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                json = stringBuilder.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+
+        Gson gson = gsonBuilder.setPrettyPrinting().create();
+        sharedInstance = gson.fromJson(json, DataManager.class);
+    }
+
+    public ArrayList<Ad> getAllAds() {
+        return allAds;
     }
 
     public ArrayList<Log> getAllLogs() {
@@ -83,8 +165,12 @@ public class DataManager {
     }
 
     public void logout() {
-        loggedInAccount= null;
+        loggedInAccount = null;
         DataManager.saveData();
+    }
+
+    public void addAd(Ad ad) {
+
     }
 
     public PurchaseLog purchaseLogForCustomerById(Customer customer, String id) {
@@ -98,13 +184,11 @@ public class DataManager {
         return temporaryCart;
     }
 
+    // TODO: Up to here checked saveData()s...
+
     public void setTemporaryCart(Cart temporaryCart) {
         this.temporaryCart = temporaryCart;
         saveData();
-    }
-
-    public static String getNewId() {
-        return UUID.randomUUID().toString().replace("-", "");
     }
 
     public ArrayList<Sale> getAllSales() {
@@ -122,8 +206,6 @@ public class DataManager {
     public ArrayList<Category> getAllCategories() {
         return allCategories;
     }
-
-    // TODO: Up to here checked saveData()s...
 
     public ArrayList<Request> getAllRequests() {
         ArrayList<Request> result = new ArrayList<>();
@@ -174,20 +256,6 @@ public class DataManager {
 
     public ArrayList<Product> getAllProducts() {
         return allProducts;
-    }
-
-    public enum AccountType {
-        CUSTOMER, ADMINISTRATOR, SELLER, NONE
-    }
-
-    private DataManager() {
-    }
-
-    public static DataManager shared() {
-        if (sharedInstance == null) {
-            sharedInstance = new DataManager();
-        }
-        return sharedInstance;
     }
 
     public void removeProduct(String productID) {
@@ -261,69 +329,6 @@ public class DataManager {
             }
         }
         return false;
-    }
-
-    public static void saveData() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-
-        Gson gson = gsonBuilder.setPrettyPrinting().create();
-
-        String json = gson.toJson(sharedInstance);
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("data.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(json);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            // TODO: Here
-        }
-//        try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
-//            out.print(json);
-//        } catch (IOException e) {
-//            System.out.println("Unexpected exception happened in saving data: " + e.getLocalizedMessage());
-//        }
-    }
-
-    public static void loadData() {
-        String json = "";
-
-        try {
-            InputStream inputStream = context.openFileInput("data.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString;
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append("\n").append(receiveString);
-                }
-
-                inputStream.close();
-                json = stringBuilder.toString();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-
-        Gson gson = gsonBuilder.setPrettyPrinting().create();
-        sharedInstance = gson.fromJson(json, DataManager.class);
     }
 
     public void addLog(Log log) {
@@ -410,9 +415,13 @@ public class DataManager {
         return allSales.stream().filter(sale -> sale.getOffId().equals(id)).findFirst().orElse(null);
     }
 
+    public enum AccountType {
+        CUSTOMER, ADMINISTRATOR, SELLER, NONE
+    }
+
 }
 
-class LocalDateTimeSerializer implements JsonSerializer < LocalDateTime > {
+class LocalDateTimeSerializer implements JsonSerializer<LocalDateTime> {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss");
 
     @Override
@@ -421,7 +430,7 @@ class LocalDateTimeSerializer implements JsonSerializer < LocalDateTime > {
     }
 }
 
-class LocalDateTimeDeserializer implements JsonDeserializer < LocalDateTime > {
+class LocalDateTimeDeserializer implements JsonDeserializer<LocalDateTime> {
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
@@ -430,7 +439,7 @@ class LocalDateTimeDeserializer implements JsonDeserializer < LocalDateTime > {
     }
 }
 
-class LocalDateDeserializer implements JsonDeserializer < LocalDate > {
+class LocalDateDeserializer implements JsonDeserializer<LocalDate> {
     @Override
     public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
@@ -439,7 +448,7 @@ class LocalDateDeserializer implements JsonDeserializer < LocalDate > {
     }
 }
 
-class LocalDateSerializer implements JsonSerializer < LocalDate > {
+class LocalDateSerializer implements JsonSerializer<LocalDate> {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-yyyy");
 
     @Override
