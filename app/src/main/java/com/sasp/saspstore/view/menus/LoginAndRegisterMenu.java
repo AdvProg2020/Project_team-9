@@ -177,17 +177,17 @@ public class LoginAndRegisterMenu extends Menu {
         if (type.equalsIgnoreCase("seller")) {
             System.out.print("Company name: ");
             String companyDetails = scanner.nextLine();
-            Seller seller = new Seller(username, password, email, phone, firstName, lastName, companyDetails);
+            Seller seller = new Seller(username, password, email, phone, firstName, lastName, companyDetails, "");
             DataManager.shared().registerAccount(seller);
             SellerRegistrationRequest request = new SellerRegistrationRequest(DataManager.getNewId(), seller);
             DataManager.shared().addRequest(request);
             System.out.println("Account created");
         } else if (type.equalsIgnoreCase("customer")) {
-            Customer customer = new Customer(username, password, email, phone, firstName, lastName);
+            Customer customer = new Customer(username, password, email, phone, firstName, lastName, "");
             DataManager.shared().registerAccount(customer);
             System.out.println("Account created");
         } else if (type.equalsIgnoreCase("administrator")) {
-            Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName);
+            Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName, "");
             DataManager.shared().registerAccount(administrator);
             System.out.println("Account created");
         } else {

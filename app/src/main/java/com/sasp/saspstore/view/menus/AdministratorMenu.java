@@ -988,7 +988,7 @@ public class AdministratorMenu extends UserMenu {
                 System.out.print("Invalid phone number. Try a new one or enter -1 to quit: ");
             } else break;
         }
-        Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName);
+        Administrator administrator = new Administrator(username, password, email, phone, firstName, lastName, "");
         DataManager.shared().registerAccount(administrator);
         System.out.println("Account created");
         return false;
