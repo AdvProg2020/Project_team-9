@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -43,19 +42,9 @@ public class Util {
 
     public static MediaPlayer getMediaPlayer(Context context, int resId) {
         final MediaPlayer[] player = new MediaPlayer[1];
-        new Thread() {
-            @Override
-            public void run() {
-                player[0] = MediaPlayer.create(context, resId);
-                player[0].setLooping(true);
-                player[0].setVolume(100, 100);
-            }
-        }.start();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        player[0] = MediaPlayer.create(context, resId);
+        player[0].setLooping(true);
+        player[0].setVolume(100, 100);
         return player[0];
     }
 }

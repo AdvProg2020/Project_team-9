@@ -1,4 +1,4 @@
-package modeltest;
+package com.sasp.saspstore.modeltest;
 
 import static org.junit.Assert.*;
 

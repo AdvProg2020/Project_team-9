@@ -1,4 +1,4 @@
-package modeltest;
+package com.sasp.saspstore.modeltest;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Cart;
