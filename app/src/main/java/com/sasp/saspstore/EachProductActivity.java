@@ -72,7 +72,8 @@ public class EachProductActivity extends AppCompatActivity {
         Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
         eachProductImageView.setImageBitmap(bitmap);
         //TODO: color overlay. Is this working?
-        eachProductImageView.getBackground().setColorFilter(getResources().getColor(R.color.grey_overlay), PorterDuff.Mode.OVERLAY);
+        if (currentProduct.getNumberAvailable() == 0)
+            eachProductImageView.getBackground().setColorFilter(getResources().getColor(R.color.grey_overlay), PorterDuff.Mode.OVERLAY);
         eachProductImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
