@@ -54,7 +54,7 @@ public class ProductsAdapter extends BaseAdapter {
         nameTextView.setText(product.getName());
         priceTextView.setText(Integer.toString(product.getPrice()));
         if (product.isSelected()) imageViewSelected.setImageResource(R.drawable.star_enabled);
-        // else imageViewSelected.setImageResource(R.drawable.star_disabled);
+        else imageViewSelected.setImageResource(0);
         return convertView;
     }
 

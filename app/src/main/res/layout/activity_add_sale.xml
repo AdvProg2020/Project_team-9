@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:theme="@style/usualTexts"
-        android:text="افزودن حراج" />
+        android:textSize="30sp"
+        android:fontFamily="@font/yekan"
+        android:text="اطلاعات حراج" />
 
     <TextView
         android:layout_width="match_parent"
@@ -113,4 +114,12 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addSale_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:contentDescription="Submit"
+        android:layout_margin="16dp"/>
 </LinearLayout>

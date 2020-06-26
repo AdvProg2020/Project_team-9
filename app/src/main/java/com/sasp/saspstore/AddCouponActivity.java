@@ -8,6 +8,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -18,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Product;
@@ -38,32 +43,28 @@ public class AddCouponActivity extends AppCompatActivity {
     EditText txtDiscountPercent;
     EditText txtMaximumDiscount;
     TextView txtChooseProducts;
+    TextView txtSelectUserCount;
     ArrayList<Product> selectedProducts = new ArrayList<>();
     HashMap<String, Integer> remainingUsagesCount = new HashMap<>();
     // TODO: Error if default...?
     // TODO: Error if start time after end time...?
     LocalDateTime startDate = LocalDateTime.now();
     LocalDateTime endDate = LocalDateTime.now();
+    int numberOfUsersSet = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_coupon);
 
-        txtDiscountPercent = (EditText) findViewById(R.id.addCoupon_discountPercent);
-        txtMaximumDiscount = (EditText) findViewById(R.id.addCoupon_maximumDiscount);
-        txtChooseProducts = (TextView) findViewById(R.id.addCoupon_txtChooseProducts);
-    }
+        txtDiscountPercent = findViewById(R.id.addCoupon_discountPercent);
+        txtMaximumDiscount = findViewById(R.id.addCoupon_maximumDiscount);
+        txtChooseProducts = findViewById(R.id.addCoupon_txtChooseProducts);
+        txtSelectUserCount = findViewById(R.id.addCoupon_txtSelectUserCount);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.addcoupon_memu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.profilemenu_btnEdit) {
+        FloatingActionButton fab = findViewById(R.id.addCoupon_fab);
+        fab.setImageBitmap(textAsBitmap("✓", 40, Color.WHITE));
+        fab.setOnClickListener(view -> {
             try {
                 // TODO: Check to be valid and in range...
                 int discountPercent = Integer.parseInt(txtDiscountPercent.getText().toString());
@@ -74,8 +75,45 @@ public class AddCouponActivity extends AppCompatActivity {
             } catch (Exception ignored) {
                 // TODO: Here
             }
-            return true;
-        }
+        });
+    }
+
+    private Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.0f); // round
+        int height = (int) (baseline + paint.descent() + 0.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.addcoupon_memu, menu);
+//        return true;
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.profilemenu_btnEdit) {
+//            try {
+//                // TODO: Check to be valid and in range...
+//                int discountPercent = Integer.parseInt(txtDiscountPercent.getText().toString());
+//                int maximumDiscount = Integer.parseInt(txtMaximumDiscount.getText().toString());
+//                Coupon coupon = new Coupon(DataManager.getNewId(), selectedProducts, Status.CONFIRMED, discountPercent, maximumDiscount, startDate, endDate, remainingUsagesCount);
+//                DataManager.shared().addCoupon(coupon);
+//                finish();
+//            } catch (Exception ignored) {
+//                // TODO: Here
+//            }
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -112,12 +150,14 @@ public class AddCouponActivity extends AppCompatActivity {
                 alert.setPositiveButton("ثبت", (dialog, whichButton) -> {
                     try {
                         remainingUsagesCount.put(selectedUsername, Integer.parseInt(input.getText().toString()));
+                        numberOfUsersSet += 1;
+                        txtSelectUserCount.setText("انتخاب دسترسی کاربران (" + numberOfUsersSet + " کاربر تاکنون تنظیم شده است)");
                     } catch (Exception ignored) {
                         // TODO: here???
                     }
                 });
                 // TODO: Does providing null here and then tapping lead to a NullPointerException??
-                alert.setNegativeButton("بازگشت", null);
+                alert.setNeutralButton("بازگشت", null);
                 alert.show();
             }
         } else {

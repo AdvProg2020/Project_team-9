@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,8 +21,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Administrator;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Log;
@@ -30,6 +36,7 @@ import java.util.ArrayList;
 public class AllCouponsActivity extends AppCompatActivity {
 
     ListView listView;
+    ArrayAdapter<Coupon> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,7 @@ public class AllCouponsActivity extends AppCompatActivity {
         listView = findViewById(R.id.allCouponsList);
         if (checkForCustomerSpecificCoupons()) return;
 
-        ArrayAdapter<Coupon> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 android.R.id.text1, DataManager.shared().getAllCoupons());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -53,9 +60,8 @@ public class AllCouponsActivity extends AppCompatActivity {
             final TextView firstTextView = (TextView) dialogView.findViewById(R.id.couponAlertTextView);
             final TextView secondTextView = (TextView) dialogView.findViewById(R.id.couponAlertProductsTextView);
 
-            StringBuilder first = new StringBuilder( "کد: " + coupon.getId());
-            first.append("\n");
-            first.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            StringBuilder first = new StringBuilder("کد: " + coupon.getId()).append("\n");
+            first.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n");
             first.append("زمان پایان: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
             // TODO: List mahsulat and usages count???
             firstTextView.setText(first);
@@ -63,8 +69,8 @@ public class AllCouponsActivity extends AppCompatActivity {
 
             final EditText editDiscountPercent = (EditText) dialogView.findViewById(R.id.editDiscountPercent);
             final EditText editMaximumDiscount = (EditText) dialogView.findViewById(R.id.editMaximumDiscount);
-            editDiscountPercent.setText(coupon.getDiscountPercent());
-            editMaximumDiscount.setText(coupon.getMaximumDiscount());
+            editDiscountPercent.setText(Integer.toString(coupon.getDiscountPercent()));
+            editMaximumDiscount.setText(Integer.toString(coupon.getMaximumDiscount()));
             dialogBuilder.setTitle("ویرایش کد تخفیف").setMessage("").setPositiveButton("ثبت تغییرات", (dialog, whichButton) -> {
                 try {
                     int discountPercent = Integer.parseInt(editDiscountPercent.getText().toString());
@@ -87,6 +93,38 @@ public class AllCouponsActivity extends AppCompatActivity {
             AlertDialog b = dialogBuilder.create();
             b.show();
         });
+        Account account = DataManager.shared().getLoggedInAccount();
+        FloatingActionButton fab = findViewById(R.id.allCoupons_fab);
+        fab.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        Intent intent = getIntent();
+        String customerUsername = intent.getStringExtra("customerUsername");
+        if (customerUsername != null && !customerUsername.equals("")) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setImageBitmap(textAsBitmap("+", 40, Color.WHITE));
+            if (account instanceof Administrator)
+                fab.setOnClickListener(view -> startActivity(new Intent(AllCouponsActivity.this, AddCouponActivity.class)));
+        }
+    }
+
+    private Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.0f); // round
+        int height = (int) (baseline + paint.descent() + 0.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 
     private boolean checkForCustomerSpecificCoupons() {
@@ -107,8 +145,9 @@ public class AllCouponsActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener((adapterView, view, i, l) -> {
                     Coupon coupon = (Coupon) listView.getItemAtPosition(i);
-                    StringBuilder stringBuilder = new StringBuilder( "کد: " + coupon.getId()).append("\n");
-                    stringBuilder.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    StringBuilder stringBuilder = new StringBuilder("کد: " + coupon.getId()).append("\n");
+                    stringBuilder.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                            .append("\n");
                     stringBuilder.append("زمان پایان: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                     new AlertDialog.Builder(AllCouponsActivity.this).setTitle("اطلاعات کد تخفیف")
                             .setMessage(stringBuilder).setNeutralButton("بازگشت", null).show();
@@ -121,11 +160,12 @@ public class AllCouponsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Intent intent = getIntent();
-        String customerUsername = intent.getStringExtra("customerUsername");
-        if (customerUsername != null && !customerUsername.equals("")) return false;
-        getMenuInflater().inflate(R.menu.allcoupons_menu, menu);
-        return true;
+//        Intent intent = getIntent();
+//        String customerUsername = intent.getStringExtra("customerUsername");
+//        if (customerUsername != null && !customerUsername.equals("")) return false;
+//        getMenuInflater().inflate(R.menu.allcoupons_menu, menu);
+//        return true;
+        return false;
     }
 
     @Override

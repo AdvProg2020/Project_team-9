@@ -6,6 +6,7 @@
     tools:context="com.sasp.saspstore.UsersListActivity"
     android:orientation="vertical">
     <Button
+        android:id="@+id/allUsersList_addAdminButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

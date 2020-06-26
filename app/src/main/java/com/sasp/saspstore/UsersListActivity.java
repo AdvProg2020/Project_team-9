@@ -6,16 +6,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Customer;
+
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class UsersListActivity extends AppCompatActivity {
 
     ListView listView;
+    Button addAdminButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +31,11 @@ public class UsersListActivity extends AppCompatActivity {
         // TODO: Error if no sender...?
         String sender = receivedIntent.getStringExtra("sender");
         listView = findViewById(R.id.allUsersList);
+        addAdminButton = findViewById(R.id.allUsersList_addAdminButton);
         // TODO: Should sometimes show only customers... and not sellers and...!!!
-        ArrayAdapter<Account> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1,
-                DataManager.shared().getAllAccounts());
+        ArrayList<Account> accounts = new ArrayList<>(DataManager.shared().getAllAccounts());
+        ArrayAdapter<Account> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                android.R.id.text1, accounts);
         listView.setAdapter(adapter);
         if (sender != null && sender.equals("administratorProfile")) {
             listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -50,6 +58,9 @@ public class UsersListActivity extends AppCompatActivity {
                     builder.show();
             });
         } else {
+            addAdminButton.setVisibility(View.GONE);
+            accounts.removeIf(account -> !(account instanceof Customer));
+            adapter.notifyDataSetChanged();
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 Account account = (Account) listView.getItemAtPosition(position);
                 Intent intent = new Intent();
