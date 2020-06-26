@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sasp.saspstore.controller.DataManager;
@@ -26,6 +27,7 @@ import com.sasp.saspstore.model.Administrator;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
+import com.sasp.saspstore.ui.ProductArrayAdapter;
 import com.sasp.saspstore.ui.home.EditProfileActivity;
 import com.sasp.saspstore.view.menus.FilterProductsActivity;
 
@@ -35,7 +37,7 @@ import java.util.Collection;
 public class ProductListActivity extends AppCompatActivity {
 
     ArrayList<Product> selectedProducts = new ArrayList<>();
-    ProductsAdapter productsAdapter;
+    ProductArrayAdapter productsAdapter;
 
     boolean shouldOpen = true;
     String categoryID;
@@ -67,10 +69,10 @@ public class ProductListActivity extends AppCompatActivity {
             originalProducts = DataManager.shared().getAllProducts();
         }
 
-        GridView gridView = findViewById(R.id.productsListGridView);
+        ListView gridView = findViewById(R.id.productsListGridView);
         // TODO: Product images here...?
         // TODO: Does the second line work in converting array???
-        productsAdapter = new ProductsAdapter(this, products);
+        productsAdapter = new ProductArrayAdapter(this, products);
         gridView.setAdapter(productsAdapter);
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             Product product = products.get(position);
