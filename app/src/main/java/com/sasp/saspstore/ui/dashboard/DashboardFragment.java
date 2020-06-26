@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
         populateData();
 
         setOnClickListeners();
-        final UserRole[] selectedRole = {UserRole.CUSTOMER};
+        /*final UserRole[] selectedRole = {UserRole.CUSTOMER};
         final Button openLoginButton = root.findViewById(R.id.openLogin);
         final RadioGroup roleSelectionGroup = root.findViewById(R.id.login_role);
         openLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +60,7 @@ public class DashboardFragment extends Fragment {
                 if (checkedId == R.id.admin_radio)
                     selectedRole[0] = UserRole.ADMIN;
             }
-        });
+        });*/
         return root;
     }
 

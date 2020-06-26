@@ -1,14 +1,22 @@
 package com.sasp.saspstore;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.controller.Validator;
@@ -17,8 +25,14 @@ import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.model.SellerRegistrationRequest;
 
+import java.io.File;
+
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final int PICK_IMAGE = 1;
+    ImageButton profilePicture;
     EditText txtName;
     EditText txtLastName;
     EditText txtUsername;
@@ -27,14 +41,15 @@ public class RegisterActivity extends AppCompatActivity {
     EditText txtEmail;
     EditText txtCompanyDetails;
     RadioGroup radioGroup;
-
     String addAdmin;
+    private String profilePicturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        profilePicture = findViewById(R.id.profile_picture_chooser);
         txtName = findViewById(R.id.register_name);
         txtLastName = findViewById(R.id.register_lname);
         txtUsername = findViewById(R.id.register_username);
@@ -50,6 +65,55 @@ public class RegisterActivity extends AppCompatActivity {
         if (addAdmin != null && addAdmin.equals("true")) {
             txtCompanyDetails.setVisibility(View.GONE);
             radioGroup.setVisibility(View.GONE);
+        }
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                startActivityForResult(chooserIntent, PICK_IMAGE);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && null != data) {
+            try {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                profilePicturePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                if (EasyPermissions.hasPermissions(this, galleryPermissions)) {
+                    File imageFile = new File(profilePicturePath);
+                    Bitmap picture = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                    profilePicture.setImageBitmap(picture);
+                } else {
+                    EasyPermissions.requestPermissions(this, "Access for storage",
+                            101, galleryPermissions);
+                }
+
+
+            } catch (Exception e) {
+                Toast.makeText(this,
+                        "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -69,18 +133,21 @@ public class RegisterActivity extends AppCompatActivity {
         registerCustomerOrAdmin(type, username, password, name, lastName, email, phone);
     }
 
-    private void registerCustomerOrAdmin(String type, String username, String password, String name, String lastName, String email, String phone) {
+    private void registerCustomerOrAdmin(String type, String username, String password,
+                                         String name, String lastName, String email, String phone) {
         if (type.equalsIgnoreCase("customer")) {
             Customer customer = new Customer(username, password, email, phone, name, lastName);
             DataManager.shared().registerAccount(customer);
         } else if (type.equalsIgnoreCase("administrator")) {
-            Administrator administrator = new Administrator(username, password, email, phone, name, lastName);
+            Administrator administrator =
+                    new Administrator(username, password, email, phone, name, lastName);
             DataManager.shared().registerAccount(administrator);
         }
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("ثبت نام با موفقیت انجام شد");
         alertDialog.setMessage("می‌توانید به حساب خود از طریق صفحه ورود، وارد شوید.");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> dialog.dismiss());
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت",
+                (dialog, which) -> dialog.dismiss());
         alertDialog.show();
     }
 

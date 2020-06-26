@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
+        <service
+        android:name=".ui.BackgroundSoundService"
+        android:enabled="true" />
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".CheckoutActivity" />
