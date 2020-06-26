@@ -95,4 +95,9 @@ public class Coupon {
     public int remainingUsageCountForAccount(Account account) {
         return remainingUsagesCount.get(account.getUsername());
     }
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }
