@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
             DataManager.saveData();
         }
+        finish();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }

@@ -174,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
         alertDialog.setTitle("ثبت نام با موفقیت انجام شد");
         alertDialog.setMessage("می‌توانید به حساب خود از طریق صفحه ورود، وارد شوید.");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت",
-                (dialog, which) -> dialog.dismiss());
+                (dialog, which) -> {dialog.dismiss();finish();});
         alertDialog.show();
     }
 
@@ -194,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
             alertDialog.setMessage("درخواست افزوده شدن فروشنده به مدیر ارسال شد." +
                     " بعد از تایید، می‌توانید از طریق صفحه ورود، به حساب خود وارد شوید.");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
-                    "بازگشت", (dialog, which) -> dialog.dismiss());
+                    "بازگشت", (dialog, which) -> {dialog.dismiss();finish();});
             alertDialog.show();
             return true;
         }
