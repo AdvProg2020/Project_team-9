@@ -11,17 +11,21 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Coupon;
+import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Log;
 import com.sasp.saspstore.ui.home.EditProfileActivity;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class AllCouponsActivity extends AppCompatActivity {
 
@@ -32,8 +36,11 @@ public class AllCouponsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_coupons);
 
-        listView = (ListView) findViewById(R.id.allCouponsList);
-        ArrayAdapter<Coupon> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, DataManager.shared().getAllCoupons());
+        listView = findViewById(R.id.allCouponsList);
+        if (checkForCustomerSpecificCoupons()) return;
+
+        ArrayAdapter<Coupon> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                android.R.id.text1, DataManager.shared().getAllCoupons());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -82,8 +89,41 @@ public class AllCouponsActivity extends AppCompatActivity {
         });
     }
 
+    private boolean checkForCustomerSpecificCoupons() {
+        Intent intent = getIntent();
+        String customerUsername = intent.getStringExtra("customerUsername");
+        if (customerUsername != null && !customerUsername.equals("")) {
+            Account account = DataManager.shared().getAccountWithGivenUsername(customerUsername);
+            if (account instanceof Customer) {
+                ArrayList<Coupon> coupons = new ArrayList<>();
+                for (Coupon coupon : DataManager.shared().getAllCoupons()) {
+                    Integer usagesCount = coupon.getRemainingUsagesCount().get(customerUsername);
+                    if (usagesCount != null && usagesCount > 0) {
+                        coupons.add(coupon);
+                    }
+                }
+                ArrayAdapter<Coupon> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                        android.R.id.text1, coupons);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                    Coupon coupon = (Coupon) listView.getItemAtPosition(i);
+                    StringBuilder stringBuilder = new StringBuilder( "کد: " + coupon.getId()).append("\n");
+                    stringBuilder.append("زمان شروع: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    stringBuilder.append("زمان پایان: ").append(coupon.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                    new AlertDialog.Builder(AllCouponsActivity.this).setTitle("اطلاعات کد تخفیف")
+                            .setMessage(stringBuilder).setNeutralButton("بازگشت", null).show();
+                });
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Intent intent = getIntent();
+        String customerUsername = intent.getStringExtra("customerUsername");
+        if (customerUsername != null && !customerUsername.equals("")) return false;
         getMenuInflater().inflate(R.menu.allcoupons_menu, menu);
         return true;
     }
