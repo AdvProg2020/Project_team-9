@@ -152,8 +152,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
         if (checkForAdmin(type)) return;
         if (hasAnyValidationFailed(type, username, password, email, phone, companyDetails)) return;
-        registerIfSeller(type, username, password, name,
-                lastName, email, phone, companyDetails);
+        if (registerIfSeller(type, username, password, name,
+                lastName, email, phone, companyDetails)) return;
+        registerCustomerOrAdmin(type, username, password, name, lastName, email, phone);
     }
 
     private void registerCustomerOrAdmin(UserRole type, String username, String password,
