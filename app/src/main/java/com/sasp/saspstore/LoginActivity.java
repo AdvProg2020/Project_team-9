@@ -68,14 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
             DataManager.saveData();
         }
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("ورود با موفقیت انجام شد");
-        alertDialog.setMessage("");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "ورود به صفحه پروفایل", (dialog, which) -> {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-            dialog.dismiss();
-        });
-        alertDialog.show();
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 }

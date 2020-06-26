@@ -7,6 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -18,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.AddSaleBySellerRequest;
 import com.sasp.saspstore.model.Coupon;
@@ -58,23 +63,64 @@ public class AddSaleActivity extends AppCompatActivity {
         txtDiscountAmount = (EditText) findViewById(R.id.addSale_discountAmount);
         txtChooseProducts = (TextView) findViewById(R.id.addSale_txtChooseProducts);
 
+        FloatingActionButton fab = findViewById(R.id.addSale_fab);
+        fab.setImageBitmap(textAsBitmap("✓", 40, Color.WHITE));
+        fab.setOnClickListener(view -> {
+            try {
+                // TODO: Check to be valid and in range...
+                int discountAmount = Integer.parseInt(txtDiscountAmount.getText().toString());
+                if (saleID.equals("")) {
+                    Sale sale = new Sale(DataManager.getNewId(), selectedProducts, SaleStatus.CONFIRMED, discountAmount, startDate, endDate, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
+                    AddSaleBySellerRequest request = new AddSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale);
+                    DataManager.shared().addRequest(request);
+                    Toast.makeText(this, "درخواست افزودن حراج با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
+                } else {
+                    Sale oldSale = DataManager.shared().getSaleWithId(saleID);
+                    Sale newSale = new Sale(oldSale.getOffId(), selectedProducts, oldSale.getSaleStatus(), discountAmount,
+                            startDate, endDate, oldSale.getSeller(), DeliveryStatus.ORDERED);
+                    EditSaleBySellerRequest request = new EditSaleBySellerRequest(DataManager.getNewId(),
+                            (Seller) DataManager.shared().getLoggedInAccount(), oldSale, newSale);
+                    DataManager.shared().addRequest(request);
+                    Toast.makeText(this, "درخواست ویرایش حراج با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
+                }
+                finish();
+            } catch (Exception ignored) {
+                // TODO: Here
+            }
+        });
+
         Intent intent = getIntent();
         saleID = intent.getStringExtra("saleID");
         if (saleID == null) {
             saleID = "";
         } else {
             Sale sale = DataManager.shared().getSaleWithId(saleID);
-            txtDiscountAmount.setText(sale.getDiscountAmount());
+            txtDiscountAmount.setText(Integer.toString(sale.getDiscountAmount()));
             startDate = sale.getStartTime();
             endDate = sale.getEndTime();
             selectedProducts = sale.getProducts();
+            txtChooseProducts.setText("انتخاب محصولات (" + selectedProducts.size() + " عدد انتخاب شده‌اند)");
         }
+    }
+
+    private Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.0f); // round
+        int height = (int) (baseline + paint.descent() + 0.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.addcoupon_memu, menu);
-        return true;
+//        getMenuInflater().inflate(R.menu.addcoupon_memu, menu);
+        return false;
     }
 
     @Override

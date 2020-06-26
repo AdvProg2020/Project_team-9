@@ -73,7 +73,7 @@ public class ProductListActivity extends AppCompatActivity {
         productsAdapter = new ProductsAdapter(this, products);
         gridView.setAdapter(productsAdapter);
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-            Product product = (Product) gridView.getItemAtPosition(position);
+            Product product = products.get(position);
             if (shouldOpen) {
                 Intent productDetails = new Intent(ProductListActivity.this, EachProductActivity.class);
                 productDetails.putExtra("productID", product.getProductId());

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Customer;
@@ -123,6 +124,14 @@ public class CheckoutActivity extends AppCompatActivity {
     private void affectCoupon() {
         txtCoupon.setVisibility(View.GONE);
         checkCouponButton.setVisibility(View.GONE);
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (coupon != null && account instanceof Customer && coupon.getRemainingUsagesCount() != null) {
+            int number = 0;
+            if (coupon.getRemainingUsagesCount().containsKey(customer.getUsername()))
+                number = coupon.getRemainingUsagesCount().get(customer.getUsername()) - 1;
+            coupon.getRemainingUsagesCount().put(customer.getUsername(), Math.max(number, 0));
+            DataManager.saveData();
+        }
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("ثبت کد تخفیف");
         alertDialog.setMessage("کد تخفیف شما با موفقیت اعمال شد");
@@ -204,11 +213,12 @@ public class CheckoutActivity extends AppCompatActivity {
         StringBuilder message = new StringBuilder("با تشکر از خرید شما");
         message.append("\n").append("اطلاعات خرید:").append("\n").append("تاریخ و زمان خرید: ")
                 .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                .append("\n").append("تعداد گزارشات فروش ثبت شده: ").append(countOfSellLogsAdded)
-                .append("\n").append("قیمت: ").append((int) (totalPrice - priceAfterDiscount));
+                .append("\n").append("تعداد گزارشات فروش ثبت شده: ").append(countOfSellLogsAdded).append("\n");
         alertDialog.setMessage(message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> dialog.dismiss());
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> {
+            dialog.dismiss();
+            finish();
+        });
         alertDialog.show();
-        // TODO: Return to main menu...?
     }
 }

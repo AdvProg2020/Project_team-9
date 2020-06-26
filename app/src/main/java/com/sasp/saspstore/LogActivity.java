@@ -46,7 +46,7 @@ public class LogActivity extends AppCompatActivity {
                     "\n");
             for (Product product : log.getProducts().keySet())
                 message.append(product.getName()).append("\n");
-            new AlertDialog.Builder(getApplicationContext())
+            new AlertDialog.Builder(LogActivity.this)
                     .setTitle("اطلاعات تراکنش")
                     .setMessage(message)
                     .setPositiveButton("بازگشت", null)

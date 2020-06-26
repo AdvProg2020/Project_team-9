@@ -66,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void populateData() {
         Account account = DataManager.shared().getLoggedInAccount();
-        seeAllCouponsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeAllCouponsButton.setVisibility(account instanceof Seller ? View.GONE : View.VISIBLE);
         seeAllUsersButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
@@ -125,7 +125,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void seeAllCouponsTapped(View view) {
-        startActivity(new Intent(this, AllCouponsActivity.class));
+        Account account = DataManager.shared().getLoggedInAccount();
+        Intent intent = new Intent(this, AllCouponsActivity.class);
+        if (account instanceof Customer) intent.putExtra("customerUsername", account.getUsername());
+        startActivity(intent);
     }
 
     public void seeAllUsersTapped(View view) {
