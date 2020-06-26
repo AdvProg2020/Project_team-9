@@ -12,12 +12,17 @@ public class Account {
     private String phoneNumber;
     private String firstName;
     private String lastName;
+    private String profilePicPath;
     private ArrayList<String> coupons;
     private ArrayList<String> logs;
     private int credit;
 
+    public String getProfilePicPath() {
+        return profilePicPath;
+    }
+
     public Account(String username, String password, String email,
-                   String phoneNumber, String firstName, String lastName) {
+                   String phoneNumber, String firstName, String lastName, String profilePicPath) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -27,6 +32,7 @@ public class Account {
         this.coupons = new ArrayList<>();
         this.logs = new ArrayList<>();
         this.credit = 0;
+        this.profilePicPath = profilePicPath;
     }
 
     // TODO: DataManager.saveData() should be also added to all places calling new()...

@@ -9,17 +9,21 @@ public class Customer extends Account {
     private Cart cart;
     private String address = "";
 
-    public Customer(String username, String password, String email, String phone, String firstName, String lastName) {
-        this(username, password, email, phone, firstName, lastName, new Cart());
+    public Customer(String username, String password, String email, String phone,
+                    String firstName, String lastName, String profilePicPath) {
+        this(username, password, email, phone, firstName, lastName, new Cart(), profilePicPath);
     }
 
-    public Customer(String username, String password, String email, String phoneNumber, String firstName, String lastName, Cart cart) {
-        super(username, password, email, phoneNumber, firstName, lastName);
+    public Customer(String username, String password, String email, String phoneNumber,
+                    String firstName, String lastName, Cart cart, String profilePicPath) {
+        super(username, password, email, phoneNumber, firstName, lastName, profilePicPath);
         this.cart = cart;
     }
 
     public Customer(Account account) {
-        this(account.getUsername(), account.getPassword(), account.getEmail(), account.getPhoneNumber(), account.getFirstName(), account.getLastName());
+        this(account.getUsername(), account.getPassword(), account.getEmail(),
+                account.getPhoneNumber(), account.getFirstName(), account.getLastName(),
+                account.getProfilePicPath());
     }
 
     public String getAddress() {
