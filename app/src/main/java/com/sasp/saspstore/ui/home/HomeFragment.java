@@ -1,5 +1,6 @@
 package com.sasp.saspstore.ui.home;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.sasp.saspstore.R;
 import com.sasp.saspstore.Util;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Ad;
+import com.sasp.saspstore.ui.LargeImageViewActivity;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
@@ -50,7 +52,9 @@ public class HomeFragment extends Fragment {
         carouselView.setImageClickListener(new ImageClickListener() {
             @Override
             public void onClick(int position) {
-                Util.showLargePhoto(getContext(), slides[position]);
+                Intent intent = new Intent(getContext(), LargeImageViewActivity.class);
+                intent.putExtra("resId", slides[position]);
+                getContext().startActivity(intent);
             }
         });
 

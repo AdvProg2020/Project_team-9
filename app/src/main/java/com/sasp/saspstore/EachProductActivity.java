@@ -29,6 +29,7 @@ import com.sasp.saspstore.model.Comment;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
+import com.sasp.saspstore.ui.LargeImageViewActivity;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
@@ -77,7 +78,10 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Util.showLargePhoto(getApplicationContext(), bitmap);
+                Intent intent = new Intent(getApplicationContext(), LargeImageViewActivity.class);
+                intent.putExtra("bitmap", bitmap);
+                intent.putExtra("mode", "bitmap");
+                getApplicationContext().startActivity(intent);
             }
         });
         eachProductTitle.setText(currentProduct.getName() + (currentProduct.getNumberAvailable() <= 0 ? " (تمام شده)" : ""));
