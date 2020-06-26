@@ -42,7 +42,7 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         Product product = products.get(position);
         Glide.with(context).load(product.getImageURL()).into(imageView);
         txtTitle.setText(product.getName());
-        txtPrice.setText(product.getPrice());
+        txtPrice.setText(Integer.toString(product.getPrice()));
         ratingBar.setRating((float) product.getAverageScore());
         return rowView;
     }
