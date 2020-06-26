@@ -15,4 +15,5 @@
 
     <color name="grayTextColor">#564f4f</color>
     <color name="grey_overlay">#aa333333</color>
+    <color name="red_overlay">#55ff0000</color>
 </resources>

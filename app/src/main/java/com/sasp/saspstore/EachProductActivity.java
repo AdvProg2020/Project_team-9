@@ -75,6 +75,8 @@ public class EachProductActivity extends AppCompatActivity {
         //TODO: color overlay. Is this working?
         if (currentProduct.getNumberAvailable() == 0)
             findViewById(R.id.eachProductImageViewOverlay).setBackground(getDrawable(R.color.grey_overlay));
+        else if (currentProduct.getDiscountPercent() != 0)
+            findViewById(R.id.eachProductImageViewOverlay).setBackground(getDrawable(R.color.red_overlay));
         else
             findViewById(R.id.eachProductImageViewOverlay).setBackground(null);
         eachProductImageView.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +101,10 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductDescription.setText(currentProduct.getDescription());
         eachProductDateCreated.setText("اضافه شده در " + currentProduct.getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         starRating((int) currentProduct.getAverageScore());
+    }
+
+    public void showVideo() {
+        
     }
 
     private void starRating(int score) {
