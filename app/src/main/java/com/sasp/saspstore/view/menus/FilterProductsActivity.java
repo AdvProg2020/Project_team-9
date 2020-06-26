@@ -15,7 +15,7 @@ import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Category;
 
 public class FilterProductsActivity extends AppCompatActivity {
-    
+
     EditText txtProductName;
     EditText txtProductDescription;
     EditText txtBrand;
@@ -79,7 +79,8 @@ public class FilterProductsActivity extends AppCompatActivity {
         String secondFeature = intent.getStringExtra("secondFeature");
         if (secondFeature != null) txtSecondFeature.setText(secondFeature);
         String onlyAvailableProducts = intent.getStringExtra("onlyAvailableProducts");
-        if (onlyAvailableProducts != null && onlyAvailableProducts.equals("true")) switchOnlyAvailableProducts.setChecked(true);
+        if (onlyAvailableProducts != null && onlyAvailableProducts.equals("true"))
+            switchOnlyAvailableProducts.setChecked(true);
         else switchOnlyAvailableProducts.setChecked(false);
     }
 
