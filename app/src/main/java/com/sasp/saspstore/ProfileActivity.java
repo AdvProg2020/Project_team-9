@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +17,11 @@ import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Administrator;
 import com.sasp.saspstore.model.Customer;
+import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.home.EditProfileActivity;
+
+import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -30,6 +34,10 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeAllCouponsButton;
     Button seeAllUsersButton;
     Button seeAllCategoriesButton;
+    Button seeAllRequestsButton;
+    Button seeCartButton;
+    Button addCreditButton;
+    Button inSellProductListButton;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
 
@@ -48,6 +56,10 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCouponsButton =  findViewById(R.id.seeAllCouponsButton);
         seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
         seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
+        seeCartButton = findViewById(R.id.seeCartButton);
+        seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
+        addCreditButton = findViewById(R.id.addCreditButton);
+        inSellProductListButton = findViewById(R.id.inSellProductListButton);
 
         populateData();
     }
@@ -57,8 +69,12 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCouponsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllUsersButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        addCreditButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
+        inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
             txtName.setText(account.getFirstName() + " " + account.getLastName());
             String role = "";
@@ -101,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void logoutTapped(View view) {
         DataManager.shared().logout();
-        // TODO: Here!
+        finish();
     }
 
     public void logTapped(View view) {
@@ -121,5 +137,67 @@ public class ProfileActivity extends AppCompatActivity {
     public void seeAllCategoriesTapped(View view) {
         Intent intent = new Intent(this, CategoriesActivity.class);
         startActivity(intent);
+    }
+
+    public void seeAllRequestsTapped(View view) {
+        Intent intent = new Intent(this, AdministratorRequestsActivity.class);
+        startActivity(intent);
+    }
+
+    public void seeCartTapped(View view) {
+        Intent intent = new Intent(this, CartActivity.class);
+        startActivity(intent);
+    }
+
+    public void addCreditTapped(View view) {
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (account instanceof Customer) {
+            account.increaseCredit(5);
+            Toast.makeText(this, "اعتبار حساب شما ۵ تومان افزایش یافت", Toast.LENGTH_SHORT).show();
+            txtCredit.setText("اعتبار: " + account.getCredit());
+        }
+    }
+
+    public boolean doesProductContainSeller(Product product, Seller seller) {
+        for (Seller productSeller : product.getSellers()) {
+            if (productSeller.getUsername().equals(seller.getUsername())) return true;
+        }
+        return false;
+    }
+
+    public void inSellProductListTapped(View view) {
+        ArrayList<String> productIDs = findAppropriateProductIDs();
+        if (productIDs == null) return;
+        StringBuilder productIDsStringBuilder = getStringBuilderFromProductIDs(productIDs);
+        navigateToProductsListActivityToShowSellerProducts(productIDsStringBuilder);
+    }
+
+    private void navigateToProductsListActivityToShowSellerProducts(StringBuilder productIDsStringBuilder) {
+        Intent intent = new Intent(this, ProductListActivity.class);
+        intent.putExtra("openOrSelect", "open");
+        intent.putExtra("productIDs", productIDsStringBuilder.toString());
+        startActivity(intent);
+    }
+
+    private ArrayList<String> findAppropriateProductIDs() {
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (!(account instanceof Seller)) return null;
+        ArrayList<String> productIDs = new ArrayList<>();
+        for (Product product : DataManager.shared().getAllProducts()) {
+            if (doesProductContainSeller(product, (Seller) account)) {
+                productIDs.add(product.getProductId());
+            }
+        }
+        return productIDs;
+    }
+
+    private StringBuilder getStringBuilderFromProductIDs(ArrayList<String> productIDs) {
+        StringBuilder productIDsStringBuilder = new StringBuilder();
+        for (int i = 0, productIDsSize = productIDs.size(); i < productIDsSize; i++) {
+            String productID = productIDs.get(i);
+            productIDsStringBuilder.append(productID);
+            if (i != productIDsSize - 1) productIDsStringBuilder.append(";;;;");
+        }
+        return productIDsStringBuilder;
     }
 }

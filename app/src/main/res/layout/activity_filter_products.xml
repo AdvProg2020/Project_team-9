@@ -3,8 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"><LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.sasp.saspstore.AddProductActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10sp"
+    android:paddingLeft="10sp"
+    android:paddingRight="10sp"
+    android:paddingTop="10sp"
+    tools:context="com.sasp.saspstore.view.menus.FilterProductsActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="فیلتر محصولات"
+        android:fontFamily="@font/yekan"
+        android:textSize="30sp"
+        android:layout_marginBottom="20sp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,77 +26,13 @@
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
     <EditText
-        android:id="@+id/addProduct_txtProductName"
+        android:id="@+id/filterProduct_txtProductName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:autofillHints="نام محصول"
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="نام برند"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtBrandName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="نام برند"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="قیمت"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="قیمت"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <!-- TODO: Check validity of numbers + multiple sellers for one product??? -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="درصد تخفیف"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtDiscountPercent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="درصد تخفیف"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="تعداد موجود در انبار"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtAvailableCount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="تعداد موجود در انبار"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,64 +41,117 @@
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
     <EditText
-        android:id="@+id/addProduct_txtProductDescription"
+        android:id="@+id/filterProduct_txtProductDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:autofillHints="توضیحات محصول"
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
+
     <TextView
-        android:id="@+id/addProduct_lblFirstFeature"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="ویژگی اول دسته"
+        android:text="نام برند"
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
     <EditText
-        android:id="@+id/addProduct_txtFirstFeature"
+        android:id="@+id/filterProduct_txtBrand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:autofillHints="ویژگی اول دسته"
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
+
     <TextView
-        android:id="@+id/addProduct_lblSecondFeature"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="ویژگی دوم دسته"
+        android:text="قیمت محصول"
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
     <EditText
-        android:id="@+id/addProduct_txtSecondFeature"
+        android:id="@+id/filterProduct_txtPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:autofillHints="ویژگی دوم دسته"
+        android:inputType="number"
         android:fontFamily="@font/yekan"
         android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="نام / شرکت فروشنده"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/filterProduct_txtSellerNameOrCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:inputType="number"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/filterProduct_lblFirstFeature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="ویژگی اول"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/filterProduct_txtFirstFeature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/filterProduct_lblSecondFeature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="ویژگی دوم"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/filterProduct_txtSecondFeature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:inputType="number"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+
+    <Switch
+        android:id="@+id/filterProduct_switchOnlyAvailableProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="تنها کالاهای موجود نمایش داده شود"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="انتخاب عکس"
+        android:text="حذف فیلترها"
         android:background="@drawable/buttons"
         android:theme="@style/buttonTexts"
-        android:onClick="selectPictureTapped"/>
-    <ImageView
-        android:id="@+id/selectedImageView"
+        android:onClick="removeFiltersTapped"/>
+
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="30sp"
-        android:layout_gravity="center" />
-    <!-- TODO: Features + video -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/submitAddProduct_fab"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:contentDescription="Submit"
-        android:layout_margin="16dp" />
+        android:layout_margin="20dp"
+        android:text="اعمال فیلترها"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="submitTapped"/>
+
 </LinearLayout></ScrollView>

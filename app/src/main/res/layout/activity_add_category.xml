@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"><LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.sasp.saspstore.AddCategoryActivity"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="نام دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/addCategory_txtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:autofillHints="نام دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="توضیحات دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/addCategory_txtDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:autofillHints="توضیحات دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="ویژگی نخست دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/addCategory_txtFeatureOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:autofillHints="ویژگی نخست دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="ویژگی دوم دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/addCategory_txtFeatureTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:autofillHints="ویژگی دوم دسته‌بندی"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="نام دسته‌بندی پدر"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+    <EditText
+        android:id="@+id/addCategory_txtParentCategoryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:autofillHints="نام دسته‌بندی پدر"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="افزودن دسته‌بندی"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="addCategoryTapped"/>
+</LinearLayout></ScrollView>

@@ -394,8 +394,16 @@ public class DataManager {
         return allCategories.stream().filter(category -> category.getId().equals(id)).findFirst().orElse(null);
     }
 
+    public Category getCategoryWithName(String name) {
+        return allCategories.stream().filter(category -> category.getName().equals(name)).findFirst().orElse(null);
+    }
+
     public Product getProductWithId(String id) {
         return allProducts.stream().filter(product -> product.getProductId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Product getProductWithName(String name) {
+        return allProducts.stream().filter(product -> product.getName().equals(name)).findFirst().orElse(null);
     }
 
     public Sale getSaleWithId(String id) {

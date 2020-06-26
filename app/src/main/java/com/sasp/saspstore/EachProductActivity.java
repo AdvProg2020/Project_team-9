@@ -16,13 +16,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Category;
 import com.sasp.saspstore.model.Comment;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
+import com.sasp.saspstore.model.Seller;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +42,7 @@ public class EachProductActivity extends AppCompatActivity {
     TextView eachProductDescription;
     TextView eachProductDateCreated;
     TextView eachProductScore;
+    EditText eachProductCompareProductID;
 
     Product currentProduct;
 
@@ -47,13 +52,14 @@ public class EachProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_each_product);
 
         eachProductImageView = findViewById(R.id.eachProductImageView);
-        eachProductTitle = (TextView) findViewById(R.id.eachProductTitle);
+        eachProductTitle = findViewById(R.id.eachProductTitle);
         eachProductBrand = (TextView) findViewById(R.id.eachProductBrand);
         eachProductPriceAndDiscountPercent = (TextView) findViewById(R.id.eachProductPriceAndDiscountPercent);
         eachProductNumberAvailable = (TextView) findViewById(R.id.eachProductNumberAvailable);
         eachProductDescription = (TextView) findViewById(R.id.eachProductDescription);
         eachProductDateCreated = (TextView) findViewById(R.id.eachProductDateCreated);
         eachProductScore = (TextView) findViewById(R.id.eachProductScore);
+        eachProductCompareProductID = findViewById(R.id.eachProductCompareProductID);
 
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");
@@ -61,13 +67,10 @@ public class EachProductActivity extends AppCompatActivity {
         currentProduct = DataManager.shared().getProductWithId(productID);
 
         // TODO: ImageView file source??
-        File imgFile = new File(productID + ".png");
-        if (imgFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            eachProductImageView.setImageBitmap(myBitmap);
-        }
+        Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
+        eachProductImageView.setImageBitmap(bitmap);
         eachProductTitle.setText(currentProduct.getName());
-        eachProductBrand.setText(currentProduct.getName());
+        eachProductBrand.setText("برند: " + currentProduct.getName());
         if (currentProduct.getDiscountPercent() != 0) {
             eachProductPriceAndDiscountPercent.setText("مبلغ اصلی: " + currentProduct.getPrice() + " تومان، با " +
                     currentProduct.getDiscountPercent() + " درصد تخفیف، " +
@@ -75,10 +78,9 @@ public class EachProductActivity extends AppCompatActivity {
         } else {
             eachProductPriceAndDiscountPercent.setText("مبلغ اصلی: " + currentProduct.getPrice() + " تومان");
         }
-        eachProductPriceAndDiscountPercent.setText("");
-        eachProductNumberAvailable.setText(currentProduct.getNumberAvailable());
+        eachProductNumberAvailable.setText(Integer.toString(currentProduct.getNumberAvailable()) + " عدد موجود است");
         eachProductDescription.setText(currentProduct.getDescription());
-        eachProductDateCreated.setText(currentProduct.getDateCreated().format(DateTimeFormatter.BASIC_ISO_DATE));
+        eachProductDateCreated.setText("اضافه شده در " + currentProduct.getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         switch ((int) currentProduct.getAverageScore()) {
             case 1:
                 eachProductScore.setText("★☆☆☆☆");
@@ -99,7 +101,6 @@ public class EachProductActivity extends AppCompatActivity {
                 eachProductScore.setText("☆☆☆☆☆");
                 break;
         }
-        eachProductScore.setText("" + currentProduct.getAverageScore());
     }
 
     public void showCommentsTapped(View view) {
@@ -181,5 +182,85 @@ public class EachProductActivity extends AppCompatActivity {
                     .setNeutralButton("بازگشت", null)
                     .show();
         }
+    }
+
+    public void addToCartTapped(View view) {
+        if (currentProduct.getSellers().size() < 2) {
+            addToCart();
+            return;
+        }
+        final EditText editText = new EditText(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("انتخاب فروشنده");
+        StringBuilder stringBuilder = new StringBuilder("از میان فروشنده‌های زیر، فروشنده مطلوب را انتخاب کنید: (در صورت اشتباه بودن نام فروشنده، به تصادف انتخاب می‌شود) ");
+        for (Seller seller : currentProduct.getSellers()) {
+            stringBuilder.append("\n").append(seller.getUsername());
+        }
+        alertDialogBuilder.setMessage(stringBuilder.toString());
+        alertDialogBuilder.setView(editText);
+        alertDialogBuilder.setPositiveButton("افزودن به سبد خرید", (dialogInterface, i) -> {
+            Account account = DataManager.shared().getAccountWithGivenUsername(editText.getText().toString());
+            if (account instanceof Seller) currentProduct.setCurrentSeller((Seller) account);
+            addToCart();
+        });
+        alertDialogBuilder.setNeutralButton("بازگشت", null);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void addToCart() {
+        Account account = DataManager.shared().getLoggedInAccount();
+        Cart cart;
+        if (account instanceof Customer) cart = ((Customer) account).getCart();
+        else cart = DataManager.shared().getTemporaryCart();
+        cart.addProduct(currentProduct);
+        DataManager.saveData();
+        Toast.makeText(this, "کالا با موفقیت به سبد خرید افزوده شد", Toast.LENGTH_LONG).show();
+    }
+
+
+    public void compareTapped(View view) {
+        if (eachProductCompareProductID.getText().toString().equals("")) return;
+        Product product = DataManager.shared().getProductWithName(eachProductCompareProductID.getText().toString());
+        if (product == null) return;
+        Category category = product.getCategory();
+        if (!category.getId().equals(currentProduct.getCategory().getId())) {
+            new AlertDialog.Builder(EachProductActivity.this).setTitle("خطا")
+                    .setMessage("تنها دو محصول از یک گروه با یک‌دیگر قابل مقایسه‌اند")
+                    .setNeutralButton("بازگشت", null).show();
+            return;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("نام: ").append("\n");
+        stringBuilder.append(currentProduct.getName()).append("\n");
+        stringBuilder.append(product.getName()).append("\n");
+        stringBuilder.append("\n");
+        stringBuilder.append("برند: ").append("\n");
+        stringBuilder.append(currentProduct.getBrand()).append("\n");
+        stringBuilder.append(product.getBrand()).append("\n");
+        stringBuilder.append("\n");
+        stringBuilder.append("قیمت: ").append("\n");
+        stringBuilder.append(currentProduct.getPrice()).append("\n");
+        stringBuilder.append(product.getPrice()).append("\n");
+        stringBuilder.append("\n");
+        stringBuilder.append("درصد تخفیف").append("\n");
+        stringBuilder.append(currentProduct.getDiscountPercent()).append("\n");
+        stringBuilder.append(product.getDiscountPercent()).append("\n");
+        stringBuilder.append("\n");
+        stringBuilder.append("تعداد موجود: ").append("\n");
+        stringBuilder.append(currentProduct.getNumberAvailable()).append("\n");
+        stringBuilder.append(product.getNumberAvailable()).append("\n");
+        stringBuilder.append("\n");
+        for (String feature : category.getUniqueFeatures()) {
+            stringBuilder.append(feature).append(": ").append("\n");
+            stringBuilder.append(currentProduct.getFeatures().get(feature)).append("\n");
+            stringBuilder.append(product.getFeatures().get(feature)).append("\n").append("\n");
+        }
+        stringBuilder.append("توضیحات: ").append("\n");
+        stringBuilder.append(currentProduct.getDescription()).append("\n");
+        stringBuilder.append(product.getDescription());
+        new AlertDialog.Builder(EachProductActivity.this).setTitle("مقایسه محصول")
+                .setMessage(stringBuilder.toString())
+                .setNeutralButton("بازگشت", null).show();
     }
 }

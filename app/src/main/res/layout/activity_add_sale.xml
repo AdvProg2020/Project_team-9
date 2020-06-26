@@ -9,18 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:theme="@style/usualTexts"
         android:text="افزودن حراج" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:theme="@style/usualTexts"
         android:text=" " />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:theme="@style/usualTexts"
         android:text="میزان تخفیف" />
 
     <EditText
@@ -29,6 +32,7 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:inputType="number"
+        android:theme="@style/usualTexts"
         android:autofillHints="میزان تخفیف" />
 
     <LinearLayout
@@ -39,7 +43,6 @@
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:onClick="setStartTimeTapped">
 
         <TextView
@@ -66,7 +69,6 @@
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:onClick="setEndTimeTapped">
 
         <TextView
@@ -93,7 +95,6 @@
         android:layout_marginBottom="15dp"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:onClick="selectProductsTapped">
 
         <TextView

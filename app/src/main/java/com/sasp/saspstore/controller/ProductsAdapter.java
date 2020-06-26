@@ -11,19 +11,21 @@ import android.widget.TextView;
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.model.Product;
 
+import java.util.ArrayList;
+
 public class ProductsAdapter extends BaseAdapter {
 
     private final Context mContext;
-    private final Product[] products;
+    private final ArrayList<Product> products;
 
-    public ProductsAdapter(Context context, Product[] products) {
+    public ProductsAdapter(Context context, ArrayList<Product> products) {
         this.mContext = context;
         this.products = products;
     }
 
     @Override
     public int getCount() {
-        return products.length;
+        return products.size();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class ProductsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Product product = products[position];
+        final Product product = products.get(position);
         if (convertView == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(R.layout.linearlayout_product, null);
@@ -50,9 +52,9 @@ public class ProductsAdapter extends BaseAdapter {
         // TODO: The next line...!
         // imageView.setImageResource(product.getImageURL());
         nameTextView.setText(product.getName());
-        priceTextView.setText(product.getPrice());
+        priceTextView.setText(Integer.toString(product.getPrice()));
         if (product.isSelected()) imageViewSelected.setImageResource(R.drawable.star_enabled);
-        else imageViewSelected.setImageResource(R.drawable.star_disabled);
+        // else imageViewSelected.setImageResource(R.drawable.star_disabled);
         return convertView;
     }
 

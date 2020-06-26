@@ -4,6 +4,7 @@ import com.sasp.saspstore.controller.DataManager;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -73,8 +74,11 @@ public class Sale {
             result.append(DataManager.shared().getProductWithId(product).getName()).append("\n");
         }
         result.append("میزان تخفیف: ").append(discountAmount).append("\n");
-        result.append("زمان شروع حراج: ").append(startTime.format(DateTimeFormatter.BASIC_ISO_DATE)).append("\n");
-        result.append("زمان پایان حراج: ").append(endTime.format(DateTimeFormatter.BASIC_ISO_DATE)).append("\n");
+        result.append("زمان شروع حراج: ").append(startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n");
+        result.append("زمان پایان حراج: ").append(endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n");
+        long minutes = ChronoUnit.MINUTES.between(startTime, endTime);
+        long hours = ChronoUnit.HOURS.between(startTime, endTime);
+        result.append("زمان باقی‌مانده: ").append(hours).append(" ساعت و ").append(minutes).append(" دقیقه").append("\n");
         result.append("فروشنده: ").append(DataManager.shared().getAccountWithGivenUsername(seller).getFirstName()).append(" ")
                 .append(DataManager.shared().getAccountWithGivenUsername(seller).getLastName()).append("\n");
         return result.toString();

@@ -15,16 +15,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.AddProductBySellerRequest;
+import com.sasp.saspstore.model.Category;
 import com.sasp.saspstore.model.EditProductBySellerRequest;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.model.Status;
+
+import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,6 +46,10 @@ public class AddProductActivity extends AppCompatActivity {
     EditText txtDiscountPercent;
     EditText txtAvailableCount;
     EditText txtProductDescription;
+    EditText txtFirstFeature;
+    EditText txtSecondFeature;
+    TextView lblFirstFeature;
+    TextView lblSecondFeature;
     ImageView selectedImageView;
     String productID = "";
     String categoryID = "";
@@ -56,20 +64,27 @@ public class AddProductActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         productID = receivedIntent.getStringExtra("productID");
         categoryID = receivedIntent.getStringExtra("categoryID");
+        Category category = DataManager.shared().getCategoryWithId(categoryID);
         if (productID != null) {
             Product product = DataManager.shared().getProductWithId(productID);
             if (product != null) {
                 txtProductName.setText(product.getName());
                 txtBrandName.setText(product.getBrand());
-                txtPrice.setText(product.getPrice());
-                txtDiscountPercent.setText(product.getDiscountPercent());
-                txtAvailableCount.setText(product.getNumberAvailable());
+                txtPrice.setText(Integer.toString(product.getPrice()));
+                txtDiscountPercent.setText(Integer.toString(product.getDiscountPercent()));
+                txtAvailableCount.setText(Integer.toString(product.getNumberAvailable()));
                 txtProductDescription.setText(product.getDescription());
+                if (category == null) category = product.getCategory();
+                if (category != null && category.getUniqueFeatures().size() == 2) {
+                    lblFirstFeature.setText(category.getUniqueFeatures().get(0));
+                    lblSecondFeature.setText(category.getUniqueFeatures().get(1));
+                }
             } else productID = "";
         } else productID = "";
 
         FloatingActionButton fab = findViewById(R.id.submitAddProduct_fab);
         fab.setImageBitmap(textAsBitmap("✓", 40, Color.WHITE));
+        Category finalCategory = category;
         fab.setOnClickListener(view -> {
             int price = Integer.parseInt(txtPrice.getText().toString());
             int discountPercent = Integer.parseInt(txtDiscountPercent.getText().toString());
@@ -77,12 +92,11 @@ public class AddProductActivity extends AppCompatActivity {
             String newProductID = DataManager.getNewId();
             Drawable drawable = Drawable.createFromStream(imageInputStream, newProductID);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            try {
-                // TODO: File extension in the name in the next line??
-                FileOutputStream out = openFileOutput(newProductID + ".png", Context.MODE_PRIVATE);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            new ImageSaver(this).setFileName(newProductID + ".png").setDirectoryName("images").save(bitmap);
+            HashMap<String, String> hashMap = new HashMap<>();
+            if (finalCategory != null) {
+                hashMap.put(finalCategory.getUniqueFeatures().get(0), txtFirstFeature.getText().toString());
+                hashMap.put(finalCategory.getUniqueFeatures().get(1), txtSecondFeature.getText().toString());
             }
             if (productID.equals("")) {
                 // TODO: Integer validation...!
@@ -93,7 +107,7 @@ public class AddProductActivity extends AppCompatActivity {
                 Product product = new Product(newProductID, Status.CONFIRMED, txtProductName.getText().toString(),
                         txtBrandName.getText().toString(), price, discountPercent, sellers, numberAvailable,
                         DataManager.shared().getCategoryWithId(categoryID), txtProductDescription.getText().toString(),
-                        LocalDateTime.now(), new HashMap<>());
+                        LocalDateTime.now(), hashMap);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
                 DataManager.shared().addRequest(request);
                 Toast.makeText(this, "درخواست افزودن کالا با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
@@ -103,7 +117,7 @@ public class AddProductActivity extends AppCompatActivity {
                 Product newProduct = new Product(oldProduct.getProductId(), oldProduct.getStatus(), txtProductName.getText().toString(),
                         txtBrandName.getText().toString(), price, discountPercent, oldProduct.getSellers(),
                         numberAvailable, oldProduct.getCategory(),
-                        txtProductDescription.getText().toString(), oldProduct.getDateCreated(), oldProduct.getFeatures());
+                        txtProductDescription.getText().toString(), oldProduct.getDateCreated(), hashMap);
                 EditProductBySellerRequest request = new EditProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), oldProduct, newProduct);
                 DataManager.shared().addRequest(request);
                 Toast.makeText(this, "درخواست ویرایش کالا با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
@@ -133,9 +147,14 @@ public class AddProductActivity extends AppCompatActivity {
         txtDiscountPercent = findViewById(R.id.addProduct_txtDiscountPercent);
         txtAvailableCount = findViewById(R.id.addProduct_txtAvailableCount);
         txtProductDescription = findViewById(R.id.addProduct_txtProductDescription);
+        txtFirstFeature = findViewById(R.id.addProduct_txtFirstFeature);
+        txtSecondFeature = findViewById(R.id.addProduct_txtSecondFeature);
+        lblFirstFeature = findViewById(R.id.addProduct_lblFirstFeature);
+        lblSecondFeature = findViewById(R.id.addProduct_lblSecondFeature);
     }
 
     public static final int PICK_IMAGE = 10;
+
     public void selectPictureTapped(View view) {
         Intent intent = new Intent();
         intent.setType("image/*");

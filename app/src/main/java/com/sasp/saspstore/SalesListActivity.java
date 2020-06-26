@@ -1,7 +1,5 @@
 package com.sasp.saspstore;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,15 +10,17 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
-import com.sasp.saspstore.model.Administrator;
-import com.sasp.saspstore.model.Coupon;
+import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Sale;
 import com.sasp.saspstore.model.Seller;
 
-import java.util.logging.SocketHandler;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class SalesListActivity extends AppCompatActivity {
 
@@ -31,27 +31,64 @@ public class SalesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_list);
 
-        listView = (ListView) findViewById(R.id.allCouponsList);
-        ArrayAdapter<Sale> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, DataManager.shared().getAllSales());
+        listView = findViewById(R.id.allSalesList);
+        ArrayList<Sale> sales = new ArrayList<>();
+        for (Sale sale : DataManager.shared().getAllSales()) {
+            LocalDateTime now = LocalDateTime.now();
+            if (!sale.getEndTime().isBefore(now))  sales.add(sale);
+        }
+        ArrayAdapter<Sale> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, sales);
         listView.setAdapter(adapter);
         Account account = DataManager.shared().getLoggedInAccount();
         if ((account instanceof Seller)) {
             // TODO: Why the var in the next line isn't used??
             Seller seller = (Seller) account;
-            listView.setOnItemClickListener((parent, view, position, id) -> {
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
                 Sale sale = (Sale) listView.getItemAtPosition(position);
                 Intent intent = new Intent(this, AddSaleActivity.class);
                 intent.putExtra("saleID", sale.getOffId());
                 startActivity(intent);
+                return true;
             });
         }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Sale sale = (Sale) listView.getItemAtPosition(position);
+            ArrayList<String> productIDs = findAppropriateProductIDs(sale);
+            StringBuilder productIDsStringBuilder = getStringBuilderFromProductIDs(productIDs);
+            navigateToProductsListActivityToShowSaleProducts(productIDsStringBuilder);
+        });
         FloatingActionButton fab = findViewById(R.id.categories_fab);
-        fab.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        fab.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         fab.setImageBitmap(textAsBitmap("+", 40, Color.WHITE));
         if (account instanceof Seller) fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddSaleActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void navigateToProductsListActivityToShowSaleProducts(StringBuilder productIDsStringBuilder) {
+        Intent intent = new Intent(this, ProductListActivity.class);
+        intent.putExtra("openOrSelect", "open");
+        intent.putExtra("productIDs", productIDsStringBuilder.toString());
+        startActivity(intent);
+    }
+
+    private StringBuilder getStringBuilderFromProductIDs(ArrayList<String> productIDs) {
+        StringBuilder productIDsStringBuilder = new StringBuilder();
+        for (int i = 0, productIDsSize = productIDs.size(); i < productIDsSize; i++) {
+            String productID = productIDs.get(i);
+            productIDsStringBuilder.append(productID);
+            if (i != productIDsSize - 1) productIDsStringBuilder.append(";;;;");
+        }
+        return productIDsStringBuilder;
+    }
+
+    private ArrayList<String> findAppropriateProductIDs(Sale sale) {
+        ArrayList<String> productIDs = new ArrayList<>();
+        for (Product product : sale.getProducts()) {
+            productIDs.add(product.getProductId());
+        }
+        return productIDs;
     }
 
     private Bitmap textAsBitmap(String text, float textSize, int textColor) {

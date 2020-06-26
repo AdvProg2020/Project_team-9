@@ -8,6 +8,7 @@ public class Comment {
     private String product;
     private String title;
     private String text;
+    private String response = "";
     // TODO: Does enum make problem for Gson??
     private CommentStatus commentStatus;
     //private boolean hasUserPurchasedProduct;
@@ -19,6 +20,14 @@ public class Comment {
         this.title = title;
         this.text = text;
         this.commentStatus = CommentStatus.WAITING_FOR_REVIEW;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public String getResponse() {
+        return response;
     }
 
     public void setCommentStatus(CommentStatus commentStatus) {
@@ -56,6 +65,6 @@ public class Comment {
     @Override
     public String toString() {
         return "کاربر " + getCustomer().getFirstName() + " " + getCustomer().getLastName() + " نوشته است: "
-                + "\n" + getTitle() + "\n\n" + getText();
+                + "\n" + getTitle() + "\n\n" + getText() + (response.equals("") ? "" : "\n\tپاسخ: " + getResponse());
     }
 }
