@@ -43,6 +43,8 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         RatingBar ratingBar = rowView.findViewById(R.id.product_list_item_score);
 
         Product product = products.get(position);
+        if (product == null)
+            return rowView;
 //        Glide.with(context).load(product.getImageURL()).into(imageView);
         Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
         imageView.setImageBitmap(bitmap);

@@ -81,13 +81,13 @@
         android:onClick="addToCartTapped"/>
 
     <Button
+        android:id="@+id/show_video_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="مشاهده‌ی فیلم"
         android:background="@drawable/buttons"
-        android:theme="@style/buttonTexts"
-        android:onClick="showVideo"/>
+        android:theme="@style/buttonTexts"/>
 
     <Button
         android:layout_width="match_parent"

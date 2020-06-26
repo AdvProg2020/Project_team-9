@@ -23,6 +23,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.appcompat:appcompat:1.1.0'
+        }
+    }
     buildToolsVersion '29.0.2'
 }
 
@@ -44,6 +49,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'com.github.HamidrezaAmz:MagicalExoPlayer:1.0.15'
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.mockito:mockito-core:3.3.3'

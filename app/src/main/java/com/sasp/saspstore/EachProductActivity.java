@@ -30,6 +30,7 @@ import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.LargeImageViewActivity;
+import com.sasp.saspstore.ui.VideoActivity;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
@@ -101,10 +102,14 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductDescription.setText(currentProduct.getDescription());
         eachProductDateCreated.setText("اضافه شده در " + currentProduct.getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         starRating((int) currentProduct.getAverageScore());
-    }
 
-    public void showVideo() {
-        
+        findViewById(R.id.show_video_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), VideoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void starRating(int score) {
