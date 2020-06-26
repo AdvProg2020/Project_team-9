@@ -74,14 +74,16 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductImageView.setImageBitmap(bitmap);
         //TODO: color overlay. Is this working?
         if (currentProduct.getNumberAvailable() == 0)
-            eachProductImageView.getBackground().setColorFilter(getResources().getColor(R.color.grey_overlay), PorterDuff.Mode.OVERLAY);
+            findViewById(R.id.eachProductImageViewOverlay).setBackground(getDrawable(R.color.grey_overlay));
+        else
+            findViewById(R.id.eachProductImageViewOverlay).setBackground(null);
         eachProductImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LargeImageViewActivity.class);
-                intent.putExtra("bitmap", bitmap);
+                intent.putExtra("bitmap", productID + ".png");
                 intent.putExtra("mode", "bitmap");
-                getApplicationContext().startActivity(intent);
+                startActivity(intent);
             }
         });
         eachProductTitle.setText(currentProduct.getName() + (currentProduct.getNumberAvailable() <= 0 ? " (تمام شده)" : ""));

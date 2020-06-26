@@ -60,6 +60,7 @@ public class CartActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CheckoutActivity.class);
             startActivity(intent);
             dialog.dismiss();
+            finish();
         });
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "خیر", (dialog, which) -> dialog.dismiss());
         alertDialog.show();

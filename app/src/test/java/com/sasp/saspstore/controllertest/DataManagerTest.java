@@ -1,5 +1,7 @@
 package com.sasp.saspstore.controllertest;
 
+import android.content.Context;
+
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Administrator;
@@ -7,6 +9,7 @@ import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Seller;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 public class DataManagerTest {
+
     @Test
     public void testGetSharedExpectNotNull() {
         assertNotNull(DataManager.shared());

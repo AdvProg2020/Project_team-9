@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.sasp.saspstore.ImageSaver;
 import com.sasp.saspstore.R;
+import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.CartItem;
 
 import java.io.File;
@@ -65,8 +67,8 @@ public class CartRowAdapter extends BaseAdapter implements ListAdapter {
 
         File imgFile = new File(cartItem.getProductId() + ".png");
         if (imgFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            imgProduct.setImageBitmap(myBitmap);
+            Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(cartItem.getProductId() + ".png").setDirectoryName("images").load();
+            imgProduct.setImageBitmap(bitmap);
         }
         txtProductName.setText(cartItem.getName());
         txtPrice.setText("قیمت هر قلم: " + cartItem.getPrice() + " - قیمت کل: " + cartItem.getPrice() * cartItem.getCount());
