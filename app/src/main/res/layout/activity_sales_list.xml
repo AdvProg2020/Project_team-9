@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     tools:context="com.sasp.saspstore.SalesListActivity"
     android:orientation="vertical">
+    <EditText
+        android:id="@+id/salesListSearchField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/yekan"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:gravity="center" />
     <ListView
         android:id="@+id/allSalesList"
         android:layout_height="wrap_content"

@@ -51,10 +51,12 @@ public class ProductsAdapter extends BaseAdapter {
         final ImageView imageViewSelected = (ImageView)convertView.findViewById(R.id.imageview_selected);
         // TODO: The next line...!
         // imageView.setImageResource(product.getImageURL());
-        nameTextView.setText(product.getName());
-        priceTextView.setText(Integer.toString(product.getPrice()));
-        if (product.isSelected()) imageViewSelected.setImageResource(R.drawable.star_enabled);
-        else imageViewSelected.setImageResource(0);
+//        if (product != null) {
+            nameTextView.setText(product.getName());
+            priceTextView.setText(Integer.toString(product.getPrice()));
+            if (product.isSelected()) imageViewSelected.setImageResource(R.drawable.star_enabled);
+            else imageViewSelected.setImageResource(0);
+//        }
         return convertView;
     }
 

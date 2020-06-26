@@ -65,6 +65,6 @@ public class Comment {
     @Override
     public String toString() {
         return "کاربر " + getCustomer().getFirstName() + " " + getCustomer().getLastName() + " نوشته است: "
-                + "\n" + getTitle() + "\n\n" + getText() + (response.equals("") ? "" : "\n\tپاسخ: " + getResponse());
+                + "\n" + getTitle() + "\n\n" + getText() + (response.equals("") ? "" : "\n\t\t\t\t\tپاسخ: " + getResponse());
     }
 }

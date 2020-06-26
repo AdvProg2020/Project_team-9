@@ -24,6 +24,7 @@ import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.controller.ProductsAdapter;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Category;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
@@ -33,6 +34,7 @@ import com.sasp.saspstore.view.menus.FilterProductsActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class ProductListActivity extends AppCompatActivity {
 
@@ -147,6 +149,7 @@ public class ProductListActivity extends AppCompatActivity {
                 });
             } else addFab.setVisibility(View.GONE);
         }
+        if (!(DataManager.shared().getLoggedInAccount() instanceof Seller)) addFab.setVisibility(View.GONE);
     }
 
     @Override
@@ -163,6 +166,9 @@ public class ProductListActivity extends AppCompatActivity {
         productDescriptionFilter = intent.getStringExtra("productDescription");
         brandFilter = intent.getStringExtra("brand");
         priceFilter = intent.getStringExtra("price");
+        sellerNameOrCompanyFilter = intent.getStringExtra("sellerNameOrCompany");
+        firstFeatureFilter = intent.getStringExtra("firstFeature");
+        secondFeatureFilter = intent.getStringExtra("secondFeature");
         sellerNameOrCompanyFilter = intent.getStringExtra("sellerNameOrCompany");
         onlyAvailableProductsFilter = intent.getStringExtra("onlyAvailableProducts");
 
@@ -188,6 +194,24 @@ public class ProductListActivity extends AppCompatActivity {
                 }
                 if (price != -1 && (originalProduct.getPrice() != price)) shouldBeAdded = false;
             }
+
+            if (categoryID != null) {
+                Category category = DataManager.shared().getCategoryWithId(categoryID);
+                if (category != null && category.getUniqueFeatures().size() == 2) {
+                    if (firstFeatureFilter != null && !firstFeatureFilter.equals("")
+                            && originalProduct.getFeatures().containsKey(category.getUniqueFeatures().get(0))
+                            && !Objects.requireNonNull(originalProduct.getFeatures().get(category.getUniqueFeatures().get(0)))
+                            .equals(firstFeatureFilter)) {
+                        shouldBeAdded = false;
+                    } else if (secondFeatureFilter != null && !secondFeatureFilter.equals("")
+                            && originalProduct.getFeatures().containsKey(category.getUniqueFeatures().get(1))
+                            && !Objects.requireNonNull(originalProduct.getFeatures().get(category.getUniqueFeatures().get(1)))
+                            .equals(secondFeatureFilter)) {
+                        shouldBeAdded = false;
+                    }
+                }
+            }
+
             if (sellerNameOrCompanyFilter != null && !sellerNameOrCompanyFilter.equals("")) {
                 boolean hasFoundAnySellerWithTheFilter = false;
                 for (Seller seller : originalProduct.getSellers()) {
@@ -261,6 +285,8 @@ public class ProductListActivity extends AppCompatActivity {
     String brandFilter = "";
     String priceFilter = ""; // empty is no filter
     String sellerNameOrCompanyFilter = "";
+    String firstFeatureFilter = "";
+    String secondFeatureFilter = "";
     String onlyAvailableProductsFilter = "false"; // empty == false here
 
     public void filterTapped(View view) {
@@ -269,6 +295,8 @@ public class ProductListActivity extends AppCompatActivity {
         intent.putExtra("productName", productNameFilter);
         intent.putExtra("productDescription", productDescriptionFilter);
         intent.putExtra("brand", brandFilter);
+        intent.putExtra("firstFeature", firstFeatureFilter);
+        intent.putExtra("firstFeature", secondFeatureFilter);
         intent.putExtra("price", priceFilter);
         intent.putExtra("sellerNameOrCompany", sellerNameOrCompanyFilter);
         intent.putExtra("onlyAvailableProducts", onlyAvailableProductsFilter);

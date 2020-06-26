@@ -6,8 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 public class SalesListActivity extends AppCompatActivity {
 
     ListView listView;
+    EditText searchField;
+    ArrayList<Sale> sales, originalSales;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +37,13 @@ public class SalesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sales_list);
 
         listView = findViewById(R.id.allSalesList);
-        ArrayList<Sale> sales = new ArrayList<>();
+        searchField = findViewById(R.id.salesListSearchField);
+        sales = new ArrayList<>();
         for (Sale sale : DataManager.shared().getAllSales()) {
             LocalDateTime now = LocalDateTime.now();
-            if (!sale.getEndTime().isBefore(now))  sales.add(sale);
+            if (!sale.getEndTime().isBefore(now)) sales.add(sale);
         }
+        originalSales = new ArrayList<>(sales);
         ArrayAdapter<Sale> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, sales);
         listView.setAdapter(adapter);
         Account account = DataManager.shared().getLoggedInAccount();
@@ -63,6 +70,27 @@ public class SalesListActivity extends AppCompatActivity {
         if (account instanceof Seller) fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddSaleActivity.class);
             startActivity(intent);
+        });
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                sales.clear();
+                for (Sale sale : originalSales) {
+                    if (charSequence == null || charSequence.equals("") || sale.toString().contains(charSequence))
+                        sales.add(sale);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
         });
     }
 

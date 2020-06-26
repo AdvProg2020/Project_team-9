@@ -92,7 +92,11 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductNumberAvailable.setText(Integer.toString(currentProduct.getNumberAvailable()) + " عدد موجود است");
         eachProductDescription.setText(currentProduct.getDescription());
         eachProductDateCreated.setText("اضافه شده در " + currentProduct.getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        switch ((int) currentProduct.getAverageScore()) {
+        starRating((int) currentProduct.getAverageScore());
+    }
+
+    private void starRating(int score) {
+        switch (score) {
             case 1:
                 eachProductScore.setText("★☆☆☆☆");
                 break;
@@ -135,7 +139,7 @@ public class EachProductActivity extends AppCompatActivity {
                 alert.setPositiveButton("ثبت", (dialog, whichButton) -> {
                     currentProduct.addScore(Integer.parseInt(input.getText().toString()), customer);
                     DataManager.saveData();
-                    eachProductScore.setText("" + currentProduct.getAverageScore());
+                    starRating((int) currentProduct.getAverageScore());
                 });
                 alert.setNegativeButton("بازگشت", null);
                 alert.show();
@@ -272,6 +276,18 @@ public class EachProductActivity extends AppCompatActivity {
         stringBuilder.append(product.getDescription());
         new AlertDialog.Builder(EachProductActivity.this).setTitle("مقایسه محصول")
                 .setMessage(stringBuilder.toString())
+                .setNeutralButton("بازگشت", null).show();
+    }
+
+    public void seeFeaturesTapped(View view) {
+        Category category = currentProduct.getCategory();
+        if (category.getUniqueFeatures().size() != 2 || currentProduct.getFeatures().keySet().size() != 2) {
+            Toast.makeText(this, "ویژگی‌های دسته‌بندی موجود نیست", Toast.LENGTH_LONG).show();
+            return;
+        }
+        new AlertDialog.Builder(EachProductActivity.this).setTitle("ویژگی‌های دسته‌بندی")
+                .setMessage(category.getUniqueFeatures().get(0) + ":\n" + currentProduct.getFeatures().get(category.getUniqueFeatures().get(0))
+                        + "\n\n" + category.getUniqueFeatures().get(1) + ":\n" + currentProduct.getFeatures().get(category.getUniqueFeatures().get(1)))
                 .setNeutralButton("بازگشت", null).show();
     }
 }
