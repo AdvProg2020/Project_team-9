@@ -2,12 +2,14 @@ package com.sasp.saspstore;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.home.EditProfileActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -43,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeCartButton;
     Button addCreditButton;
     Button inSellProductListButton;
+    ImageView proPic;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
 
@@ -60,13 +64,14 @@ public class ProfileActivity extends AppCompatActivity {
         txtPhoneNumber = (TextView) findViewById(R.id.fragment_profile_phoneNumber);
         txtCredit = (TextView) findViewById(R.id.fragment_profile_credit);
         txtCompanyDetails = (TextView) findViewById(R.id.fragment_profile_companyDetails);
-        seeAllCouponsButton =  findViewById(R.id.seeAllCouponsButton);
+        seeAllCouponsButton = findViewById(R.id.seeAllCouponsButton);
         seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
         seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
         seeCartButton = findViewById(R.id.seeCartButton);
         seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
         addCreditButton = findViewById(R.id.addCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
+//        proPic = findViewById(R.id.profile_pic);
 
         populateData();
     }
@@ -86,6 +91,12 @@ public class ProfileActivity extends AppCompatActivity {
         inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         if (account != null) {
             txtName.setText(account.getFirstName() + " " + account.getLastName());
+            try {
+                File imageFile = new File(account.getProfilePicPath());
+                proPic.setImageBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()));
+            } catch (Exception e) {
+
+            }
             String role = "";
             if (account instanceof Customer) {
                 role = "customer";
@@ -94,6 +105,8 @@ public class ProfileActivity extends AppCompatActivity {
             } else if (account instanceof Administrator) {
                 role = "administrator";
             }
+            if (account instanceof Seller)
+                txtCompanyDetails.setText(((Seller) account).getCompanyDetails());
             txtUsernameAndRole.setText(account.getUsername() + " - " + role);
             txtEmail.setText(account.getEmail());
             txtPhoneNumber.setText(account.getPhoneNumber());

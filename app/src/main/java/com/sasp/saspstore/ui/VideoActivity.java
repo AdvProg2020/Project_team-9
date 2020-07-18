@@ -15,6 +15,6 @@ public class VideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video);
 
         AndExoPlayerView playerView = findViewById(R.id.andExoPlayerView);
-        playerView.setSource("https://www.youtube.com/watch?v=G7iI7YmIr30");
+        playerView.setSource("https://as9.cdn.asset.aparat.com/aparat-video/647f9dc076f821bcc6bc893ac5bd12ef16866763-144p.mp4");
     }
 }

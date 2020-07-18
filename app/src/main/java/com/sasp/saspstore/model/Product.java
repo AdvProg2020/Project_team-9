@@ -69,7 +69,7 @@ public class Product {
         this.scores = new ArrayList<>();
         this.dateCreated = dateCreated;
         this.features = features;
-        this.slides = new int[]{R.drawable.image_asset1, R.raw.ligntness};
+        this.slides = new int[]{R.drawable.image_asset1, R.raw.lightness};
     }
 
     public Seller getCurrentSeller() {

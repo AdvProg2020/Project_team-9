@@ -2,6 +2,7 @@ package com.sasp.saspstore.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,11 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
         imageView.setImageBitmap(bitmap);
         txtTitle.setText(product.getName());
+        if (product.getNumberAvailable() == 0) {
+            txtTitle.setTextColor(Color.parseColor("lightgray"));
+        } else if(product.getDiscountPercent() > 0) {
+            txtTitle.setTextColor(Color.parseColor("red"));
+        }
         txtPrice.setText(Integer.toString(product.getPrice()));
         ratingBar.setRating((float) product.getAverageScore());
         return rowView;
