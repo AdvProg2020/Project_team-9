@@ -47,9 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
     Button removeCreditButton;
     Button inSellProductListButton;
 
-    // TODO: Add another administrator is not implemented yet... waiting for login page
-
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

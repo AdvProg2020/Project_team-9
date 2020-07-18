@@ -145,7 +145,8 @@ public class Account {
 
     @Override
     public String toString() {
-        return username + "\n\nName: " + firstName + " " + lastName + "\n\nEmail: " + email + "\n\nPhone: " + phoneNumber;
+        return username + "\n\nName: " + firstName + " " + lastName + "\n\nEmail: " + email + "\n\nPhone: " + phoneNumber +
+                "\n\nOnline Status: " + (DataManager.shared().getOnlineUsernames().contains(getUsername()) ? "Online" : "Offline");
     }
 
     @Override

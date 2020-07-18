@@ -76,9 +76,18 @@ public class DataManager {
 
     private String token = "";
     private String adminBankAccountNumber = "";
+    private ArrayList<String> onlineUsernames;
 
     public boolean isMadeAdminBankAccount() {
         return !adminBankAccountNumber.equals("");
+    }
+
+    public ArrayList<String> getOnlineUsernames() {
+        return onlineUsernames;
+    }
+
+    public void setOnlineUsernames(ArrayList<String> onlineUsernames) {
+        this.onlineUsernames = onlineUsernames;
     }
 
     public String getAdminBankAccountNumber() {
@@ -198,7 +207,15 @@ public class DataManager {
         Gonnect.getData("http://10.0.2.2:8111/req?action=getAdminBankAccountNumber", (b, s) -> {
             DataManager.shared().setAdminBankAccountNumber(s);
         });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getOnlineUsernames", (b, s) -> {
+            ArrayList<String> usernames = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<String>>() {
+                    }.getType());
+            DataManager.shared().setOnlineUsernames(usernames);
+        });
     }
+
+    // TODO: Online users not tested...
 
     public void populateAllAccountsData() {
         Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCustomers", (b, s) -> {
