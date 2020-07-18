@@ -102,6 +102,19 @@
 <!--            android:theme="@style/buttonTexts"-->
 <!--            android:onClick="addCreditTapped"/>-->
 
+        <EditText android:id="@+id/profile_creditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:theme="@style/usualTexts"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="20dp"
+            android:text=""
+            android:hint="مبلغ"
+            android:visibility="gone"/>
+
         <Button
             android:id="@+id/addCreditButton"
             android:layout_width="match_parent"

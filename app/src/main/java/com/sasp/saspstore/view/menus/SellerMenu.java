@@ -532,7 +532,7 @@ public class SellerMenu extends UserMenu {
         System.out.print("Enter end time in format of yyyy-MM-dd HH:mm: ");
         String endInput = scanner.nextLine();
         LocalDateTime endTime = LocalDateTime.parse(endInput, dateFormatter);
-        Sale newSale = new Sale(sale.getOffId(), products, SaleStatus.CONFIRMED, discountAmount, startTime, endTime, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
+        Sale newSale = new Sale(sale.getOffId(), products, SaleStatus.CONFIRMED, discountAmount, startTime, endTime, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.WAITING);
         EditSaleBySellerRequest request = new EditSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale, newSale);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");
@@ -569,7 +569,7 @@ public class SellerMenu extends UserMenu {
         System.out.print("Enter end time in format of yyyy-MM-dd HH:mm: ");
         String endInput = scanner.nextLine();
         LocalDateTime endTime = LocalDateTime.parse(endInput, dateFormatter);
-        Sale sale = new Sale(DataManager.getNewId(), products, SaleStatus.CONFIRMED, discountAmount, startTime, endTime, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
+        Sale sale = new Sale(DataManager.getNewId(), products, SaleStatus.CONFIRMED, discountAmount, startTime, endTime, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.WAITING);
         AddSaleBySellerRequest request = new AddSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale);
         DataManager.shared().addRequest(request);
         System.out.println("Request sent to admin");

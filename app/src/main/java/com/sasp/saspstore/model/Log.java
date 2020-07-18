@@ -45,6 +45,10 @@ public class Log {
         return deliveryStatus;
     }
 
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
     public Log(String id, LocalDateTime date, long price, int discountAmount, HashMap<Product, Integer> products, DeliveryStatus deliveryStatus) {
         this.id = id;
         this.date = DataManager.stringFromDate(date);

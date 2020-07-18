@@ -74,7 +74,7 @@ public class CheckOutMenu extends Menu {
             if (response.equalsIgnoreCase("yes")) {
                 customer.decreaseCredit((int) priceAfterDiscount);
                 coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
-                PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int) totalPrice, (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
+                PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int) totalPrice, (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.WAITING, customer);
                 DataManager.shared().addLog(purchaseLog);
                 Iterator it2 = products.entrySet().iterator();
                 while (it2.hasNext()) {
@@ -84,7 +84,7 @@ public class CheckOutMenu extends Menu {
                         HashMap<Product, Integer> productsHashMap = new HashMap<>();
                         productsHashMap.put((Product) pair.getKey(), 1);
                         for (int i = 0; i < (int) pair.getValue(); i++) {
-                            SellLog sellLog = new SellLog(LocalDateTime.now(), productsHashMap, DataManager.getNewId(), ((Product) pair.getKey()).getPrice(), ((Product) pair.getKey()).getCurrentSeller(), (int) ((totalPrice - priceAfterDiscount) / (double) products.size()), DeliveryStatus.ORDERED);
+                            SellLog sellLog = new SellLog(LocalDateTime.now(), productsHashMap, DataManager.getNewId(), ((Product) pair.getKey()).getPrice(), ((Product) pair.getKey()).getCurrentSeller(), (int) ((totalPrice - priceAfterDiscount) / (double) products.size()), DeliveryStatus.WAITING);
                             DataManager.shared().addLog(sellLog);
                         }
                         ((Product) pair.getKey()).getCurrentSeller().increaseCredit((int) priceAfterDiscount);

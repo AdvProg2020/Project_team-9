@@ -193,9 +193,10 @@ public class CheckoutActivity extends AppCompatActivity {
     // TODO: Select seller when adding to the cart in each product page...?
 
     public void finishEverything() {
+        customer.setAddress(txtAddress.getText().toString());
         coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
         PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int) totalPrice,
-                (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
+                (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.WAITING, customer);
         DataManager.shared().addLog(purchaseLog);
         int countOfSellLogsAdded = 0;
         for (Map.Entry<Product, Integer> pair : products.entrySet()) {
@@ -206,7 +207,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 for (int i = 0; i < pair.getValue(); i++) {
                     SellLog sellLog = new SellLog(LocalDateTime.now(), productsHashMap, DataManager.getNewId(),
                             pair.getKey().getPrice(), pair.getKey().getCurrentSeller(),
-                            (int) ((totalPrice - priceAfterDiscount) / (double) products.size()), DeliveryStatus.ORDERED);
+                            (int) ((totalPrice - priceAfterDiscount) / (double) products.size()), DeliveryStatus.WAITING);
                     countOfSellLogsAdded += 1;
                     DataManager.shared().addLog(sellLog);
                 }
