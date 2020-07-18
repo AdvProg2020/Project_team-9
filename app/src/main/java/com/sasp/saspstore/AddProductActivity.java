@@ -56,6 +56,11 @@ public class AddProductActivity extends AppCompatActivity {
 
     // TODO: Assumed ONLY SELLERS can enter this activity. Else, crash :)
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

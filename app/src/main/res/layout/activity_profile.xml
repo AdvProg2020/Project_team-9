@@ -87,15 +87,35 @@
             android:theme="@style/buttonTexts"
             android:onClick="seeCartTapped"/>
 
+<!--        <Button-->
+<!--            android:id="@+id/addCreditButton"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:text="افزایش ۵ تومانی اعتبار حساب"-->
+<!--            android:background="@drawable/buttons"-->
+<!--            android:theme="@style/buttonTexts"-->
+<!--            android:onClick="addCreditTapped"/>-->
+
         <Button
             android:id="@+id/addCreditButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="افزایش ۵ تومانی اعتبار حساب"
+            android:text="شارژ کردن کیف پول به میزان تعیین شده در فوق"
             android:background="@drawable/buttons"
             android:theme="@style/buttonTexts"
             android:onClick="addCreditTapped"/>
+
+        <Button
+            android:id="@+id/removeCreditButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="برداشت از کیف پول به میزان تعیین شده در فوق"
+            android:background="@drawable/buttons"
+            android:theme="@style/buttonTexts"
+            android:onClick="removeCreditTapped"/>
 
         <Button
             android:layout_width="match_parent"

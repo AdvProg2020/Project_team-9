@@ -154,5 +154,13 @@
         android:background="@drawable/buttons"
         android:theme="@style/buttonTexts"
         android:onClick="seeSimilarsTapped"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="ورود به پروفایل"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="profileTapped"/>
 
 </LinearLayout></ScrollView>

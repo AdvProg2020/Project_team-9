@@ -29,6 +29,11 @@ public class CartActivity extends AppCompatActivity {
     ArrayList<CartItem> cartItems;
     Button btnPurchase;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

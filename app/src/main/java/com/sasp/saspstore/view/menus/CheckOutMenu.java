@@ -91,7 +91,7 @@ public class CheckOutMenu extends Menu {
                     }
                 }
                 ((Customer) DataManager.shared().getLoggedInAccount()).emptyCart();
-                DataManager.saveData();
+//                DataManager.saveData();
                 System.out.println("Thank you for your purchase!");
             }
         }

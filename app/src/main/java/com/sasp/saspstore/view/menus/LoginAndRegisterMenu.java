@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class LoginAndRegisterMenu extends Menu {
     public LoginAndRegisterMenu(Menu parentMenu) {
         super("Login and registration menu", parentMenu);
-        DataManager.loadData();
+//        DataManager.loadData();
         HashMap<Integer, Menu> subMenus = new HashMap<>();
         subMenus.put(1, new Menu("Create Account", this) {
             @Override
@@ -108,7 +108,7 @@ public class LoginAndRegisterMenu extends Menu {
             prods.putAll(DataManager.shared().getTemporaryCart().getProducts());
             ((Customer) (DataManager.shared().getLoggedInAccount())).getCart().setProducts(prods);
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
-            DataManager.saveData();
+//            DataManager.saveData();
             Menu menu = new CustomerMenu("\nCustomer's main menu", this);
             menu.show();
             menu.execute();

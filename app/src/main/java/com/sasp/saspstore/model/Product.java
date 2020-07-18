@@ -25,7 +25,7 @@ public class Product {
     private int[] slides;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
-    private LocalDateTime dateCreated;
+    private String dateCreated;
     private String currentSeller = "";
     private boolean isSelected = false;
     private HashMap<String, String> features;
@@ -67,7 +67,7 @@ public class Product {
         this.description = description;
         this.comments = new ArrayList<>();
         this.scores = new ArrayList<>();
-        this.dateCreated = dateCreated;
+        this.dateCreated = DataManager.stringFromDate(dateCreated);
         this.features = features;
         this.slides = new int[]{R.drawable.image_asset1, R.raw.ligntness};
     }
@@ -82,8 +82,10 @@ public class Product {
     }
 
     public LocalDateTime getDateCreated() {
-        return dateCreated;
+        return DataManager.dateFromString(dateCreated);
     }
+
+    // TODO: IMPORTANT: Picture is not sent to the server!!
 
     public Status getStatus() {
         return status;
@@ -115,7 +117,7 @@ public class Product {
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
-        DataManager.saveData();
+        DataManager.shared().syncProducts();
     }
 
     public int getVisitCount() {
@@ -128,7 +130,7 @@ public class Product {
 
     public void incrementVisitCount() {
         visitCount += 1;
-        DataManager.saveData();
+        DataManager.shared().syncProducts();
     }
 
     public String getProductId() {
@@ -157,23 +159,23 @@ public class Product {
     }
 
     public void addSeller(Seller seller) {
-
-        DataManager.saveData();
+        sellers.add(seller.getUsername());
+        DataManager.shared().syncProducts();
     }
 
     public void addCustomer(Customer customer) {
-
-        DataManager.saveData();
+        // TODO: Here!!
+        DataManager.shared().syncProducts();
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
-        DataManager.saveData();
+        DataManager.shared().syncProducts();
     }
 
     public void addScore(int rating, Customer customer) {
         scores.add(new Score(DataManager.getNewId(), customer, rating));
-        DataManager.saveData();
+        DataManager.shared().syncProducts();
     }
 
     public void decrementNumberAvailable() {

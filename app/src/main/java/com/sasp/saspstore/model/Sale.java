@@ -13,8 +13,8 @@ public class Sale {
     private ArrayList<String> products;
     private SaleStatus saleStatus;
     private int discountAmount;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String startTime;
+    private String endTime;
     private String seller;
     private DeliveryStatus deliveryStatus;
 
@@ -23,8 +23,8 @@ public class Sale {
         this.products =  products.stream().map(Product::getProductId).collect(Collectors.toCollection(ArrayList::new));
         this.saleStatus = saleStatus;
         this.discountAmount = discountAmount;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = DataManager.stringFromDate(startTime);
+        this.endTime = DataManager.stringFromDate(endTime);
         this.seller = seller.getUsername();
         this.deliveryStatus = deliveryStatus;
     }
@@ -46,11 +46,11 @@ public class Sale {
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return DataManager.dateFromString(startTime);
     }
 
     public LocalDateTime getEndTime() {
-        return endTime;
+        return DataManager.dateFromString(endTime);
     }
 
     public Seller getSeller() {
@@ -63,7 +63,7 @@ public class Sale {
 
     public void addProduct(Product product) {
         products.add(product.getProductId());
-        DataManager.saveData();
+        DataManager.shared().syncSales();
     }
 
     @Override
@@ -74,10 +74,10 @@ public class Sale {
             result.append(DataManager.shared().getProductWithId(product).getName()).append("\n");
         }
         result.append("\n" + "میزان تخفیف: ").append(discountAmount).append("\n\n");
-        result.append("زمان شروع حراج: ").append(startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n\n");
-        result.append("زمان پایان حراج: ").append(endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))).append("\n\n");
-        long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), endTime);
-        long hours = ChronoUnit.HOURS.between(LocalDateTime.now(), endTime);
+        result.append("زمان شروع حراج: ").append(startTime).append("\n\n");
+        result.append("زمان پایان حراج: ").append(endTime).append("\n\n");
+        long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), getEndTime());
+        long hours = ChronoUnit.HOURS.between(LocalDateTime.now(), getStartTime());
         result.append("زمان باقی‌مانده: ").append(hours).append(" ساعت و ").append(minutes).append(" دقیقه").append("\n\n");
         result.append("فروشنده: ").append(DataManager.shared().getAccountWithGivenUsername(seller).getFirstName()).append(" ")
                 .append(DataManager.shared().getAccountWithGivenUsername(seller).getLastName()).append("\n");

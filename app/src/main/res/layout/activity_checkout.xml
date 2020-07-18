@@ -71,9 +71,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="پرداخت"
+        android:text="پرداخت از کیف پول"
         android:background="@drawable/buttons"
         android:theme="@style/buttonTexts"
-        android:onClick="finishTapped"/>
+        android:onClick="payByCreditTapped"/>
+    <Button
+        android:id="@+id/checkout_finishBankButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="پرداخت از حساب بانکی"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="payByBankTapped"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="ورود به پروفایل"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="profileTapped"/>
 
 </LinearLayout>

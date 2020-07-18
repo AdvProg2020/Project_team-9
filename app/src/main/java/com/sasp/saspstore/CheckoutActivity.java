@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
@@ -36,6 +37,7 @@ public class CheckoutActivity extends AppCompatActivity {
     TextView txtTotalPrice;
     EditText txtCoupon;
     Button finishButton;
+    Button finishBankButton;
     Button checkCouponButton;
 
     Coupon coupon;
@@ -44,6 +46,11 @@ public class CheckoutActivity extends AppCompatActivity {
     double priceAfterDiscount;
     double totalPrice;
     HashMap<Product, Integer> products;
+
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,7 @@ public class CheckoutActivity extends AppCompatActivity {
         txtTotalPrice = findViewById(R.id.checkout_totalPrice);
         txtCoupon = findViewById(R.id.checkout_txtCoupon);
         finishButton = findViewById(R.id.checkout_finishButton);
+        finishBankButton = findViewById(R.id.checkout_finishBankButton);
         checkCouponButton = findViewById(R.id.checkout_checkCouponButton);
 
         updateTotalPriceText();
@@ -82,7 +90,7 @@ public class CheckoutActivity extends AppCompatActivity {
         txtTotalPriceText.append("میزان تخفیف: ").append(totalPrice - priceAfterDiscount).append("\n");
         txtTotalPriceText.append("مبلغ قابل پرداخت: ").append(priceAfterDiscount);
         if (customer.getCredit() < priceAfterDiscount) {
-            txtTotalPriceText.append("\n").append("شما ").append(customer.getCredit()).append(" تومان در حساب خود دارید و متاسفانه نمی‌توانید هزینه این کالاها را پرداخت کنید.");
+            txtTotalPriceText.append("\n").append("شما ").append(customer.getCredit()).append(" تومان در حساب خود دارید و متاسفانه نمی‌توانید هزینه این کالاها را از کیف پول خود پرداخت کنید.");
             finishButton.setVisibility(View.GONE);
         } else {
             finishButton.setVisibility(View.VISIBLE);
@@ -130,7 +138,7 @@ public class CheckoutActivity extends AppCompatActivity {
             if (coupon.getRemainingUsagesCount().containsKey(customer.getUsername()))
                 number = coupon.getRemainingUsagesCount().get(customer.getUsername()) - 1;
             coupon.getRemainingUsagesCount().put(customer.getUsername(), Math.max(number, 0));
-            DataManager.saveData();
+            DataManager.shared().syncCoupons();
         }
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("ثبت کد تخفیف");
@@ -169,23 +177,22 @@ public class CheckoutActivity extends AppCompatActivity {
     private void couponByChance() {
         Random random = new Random();
         int r = random.nextInt(10);
-        if (r == 2) {
-            int percent = random.nextInt(90);
-            coupon = new Coupon(DataManager.getNewId(), new ArrayList<>());
-            coupon.setDiscountPercent(percent);
-            coupon.setMaximumDiscount(1000);
-            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle("کد تحفیف");
-            alertDialog.setMessage("تبریک! به شما کد تخفیفی با " + percent + " درصد تخفیف تعلق گرفت!");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> dialog.dismiss());
-            alertDialog.show();
-        }
+//        if (r == 2) {
+        int percent = random.nextInt(90);
+        coupon = new Coupon(DataManager.getNewId(), new ArrayList<>());
+        coupon.setDiscountPercent(percent);
+        coupon.setMaximumDiscount(1000);
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("کد تحفیف");
+        alertDialog.setMessage("تبریک! به شما کد تخفیفی با " + percent + " درصد تخفیف تعلق گرفت!");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> dialog.dismiss());
+        alertDialog.show();
+//        }
     }
 
     // TODO: Select seller when adding to the cart in each product page...?
 
-    public void finishTapped(View view) {
-        customer.decreaseCredit((int) priceAfterDiscount);
+    public void finishEverything() {
         coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
         PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int) totalPrice,
                 (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.ORDERED, customer);
@@ -207,7 +214,9 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         }
         ((Customer) DataManager.shared().getLoggedInAccount()).emptyCart();
-        DataManager.saveData();
+        DataManager.shared().syncLogs();
+        DataManager.shared().syncCartForUser();
+        DataManager.shared().syncCustomers();
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("پرداخت با موفقیت انجام شد");
         StringBuilder message = new StringBuilder("با تشکر از خرید شما");
@@ -220,5 +229,31 @@ public class CheckoutActivity extends AppCompatActivity {
             finish();
         });
         alertDialog.show();
+    }
+
+    public void payByCreditTapped(View view) {
+        customer.decreaseCredit((int) priceAfterDiscount);
+        finishEverything();
+    }
+
+    public void payByBankTapped(View view) {
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (!(account instanceof Customer)) return;
+        Customer customer = (Customer) account;
+        BankAPI.tellBankAndReceiveResponse("get_token " + customer.getUsername() + " " + customer.getPassword(), token ->
+                BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+                        "move" + " " + (int) priceAfterDiscount + " " + customer.getBankAccountNumber() +
+                        " " + DataManager.shared().getAdminBankAccountNumber() + " pBBT", receiptID ->
+                        BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+                                runOnUiThread(() -> {
+                                    switch (response) {
+                                        case "source account does not have enough money":
+                                            Toast.makeText(CheckoutActivity.this, "حساب مبدا به اندازه کافی پول ندارد", Toast.LENGTH_LONG).show();
+                                            break;
+                                        case "done successfully":
+                                            finishEverything();
+                                            break;
+                                    }
+                                }))));
     }
 }

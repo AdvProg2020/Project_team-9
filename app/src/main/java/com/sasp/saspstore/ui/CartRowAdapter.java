@@ -16,6 +16,7 @@ import com.sasp.saspstore.ImageSaver;
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.CartItem;
+import com.sasp.saspstore.model.Product;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,11 +66,14 @@ public class CartRowAdapter extends BaseAdapter implements ListAdapter {
         Button increaseButton = view.findViewById(R.id.cart_increaseButton);
         Button decreaseButton = view.findViewById(R.id.cart_decreaseButton);
 
-        File imgFile = new File(cartItem.getProductId() + ".png");
-        if (imgFile.exists()) {
-            Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(cartItem.getProductId() + ".png").setDirectoryName("images").load();
-            imgProduct.setImageBitmap(bitmap);
-        }
+        Product product = DataManager.shared().getProductWithId(cartItem.getProductId());
+        Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
+        imgProduct.setImageBitmap(bitmap);
+//        File imgFile = new File(cartItem.getProductId() + ".png");
+//        if (imgFile.exists()) {
+//            Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(cartItem.getProductId() + ".png").setDirectoryName("images").load();
+//            imgProduct.setImageBitmap(bitmap);
+//        }
         txtProductName.setText(cartItem.getName());
         txtPrice.setText("قیمت هر قلم: " + cartItem.getPrice() + " - قیمت کل: " + cartItem.getPrice() * cartItem.getCount());
         txtNumber.setText(cartItem.getCount() + " عدد");

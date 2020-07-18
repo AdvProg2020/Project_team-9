@@ -1,8 +1,11 @@
 package com.sasp.saspstore.ui.home;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.telephony.gsm.GsmCellLocation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.Util;
 import com.sasp.saspstore.controller.DataManager;
@@ -25,6 +30,7 @@ import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -49,13 +55,10 @@ public class HomeFragment extends Fragment {
                 imageView.setImageResource(slides[position]);
             }
         });
-        carouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getContext(), LargeImageViewActivity.class);
-                intent.putExtra("resId", slides[position]);
-                getContext().startActivity(intent);
-            }
+        carouselView.setImageClickListener(position -> {
+            Intent intent = new Intent(getContext(), LargeImageViewActivity.class);
+            intent.putExtra("resId", slides[position]);
+            getContext().startActivity(intent);
         });
 
         ImageView gifView = root.findViewById(R.id.gif_view);
@@ -64,16 +67,16 @@ public class HomeFragment extends Fragment {
         ListView adsListView = root.findViewById(R.id.list_ads);
         ArrayList<Ad> allAds = DataManager.shared().getAllAds();
         allAds.removeIf(Objects::isNull);
+        DataManager.shared().setAllAds(allAds);
         if (allAds.size() == 0) {
             allAds = new ArrayList<>();
+            DataManager.shared().setAllAds(allAds);
             allAds.add(new Ad(DataManager.getNewId(), "موردی برای نمایش وجود ندارد"));
         }
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
                 android.R.id.text1, allAds);
         adsListView.setAdapter(adapter);
-
         player = Util.getMediaPlayer(getContext(), R.raw.swanlake);
-
         return root;
     }
 
@@ -86,7 +89,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
-        player.start();
+        if (adapter != null) adapter.notifyDataSetChanged();
+        if (player != null) player.start();
     }
 }

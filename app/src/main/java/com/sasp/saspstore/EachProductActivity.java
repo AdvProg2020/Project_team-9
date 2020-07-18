@@ -3,13 +3,10 @@ package com.sasp.saspstore;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -19,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Cart;
@@ -32,7 +29,7 @@ import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.LargeImageViewActivity;
 import com.sasp.saspstore.ui.VideoActivity;
 
-import java.io.File;
+import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -49,6 +46,11 @@ public class EachProductActivity extends AppCompatActivity {
     EditText eachProductCompareProductID;
 
     Product currentProduct;
+
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +157,7 @@ public class EachProductActivity extends AppCompatActivity {
                 alert.setView(input);
                 alert.setPositiveButton("ثبت", (dialog, whichButton) -> {
                     currentProduct.addScore(Integer.parseInt(input.getText().toString()), customer);
-                    DataManager.saveData();
+                    DataManager.shared().syncProducts();
                     starRating((int) currentProduct.getAverageScore());
                 });
                 alert.setNegativeButton("بازگشت", null);
@@ -196,7 +198,7 @@ public class EachProductActivity extends AppCompatActivity {
                     String text = secondEditText.getText().toString();
                     Comment comment = new Comment(customer, currentProduct, title, text);
                     currentProduct.addComment(comment);
-                    DataManager.saveData();
+                    DataManager.shared().syncProducts();
                 }).setNeutralButton("بازگشت", null);
                 AlertDialog b = dialogBuilder.create();
                 b.show();
@@ -246,7 +248,16 @@ public class EachProductActivity extends AppCompatActivity {
         if (account instanceof Customer) cart = ((Customer) account).getCart();
         else cart = DataManager.shared().getTemporaryCart();
         cart.addProduct(currentProduct);
-        DataManager.saveData();
+        if (!(account instanceof Customer)) {
+            ContentValues cv = new ContentValues();
+            cv.put("action", "setTemporaryCart");
+            cv.put("cart", new Gson().toJson(DataManager.shared().getTemporaryCart()));
+//            Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+//            });
+            Gonnect.getData("http://10.0.2.2:8111/req?action=setTemporaryCart&cart="
+                    + DataManager.encode(new Gson().toJson(DataManager.shared().getTemporaryCart())), (b, s) -> {
+            });
+        }
         Toast.makeText(this, "کالا با موفقیت به سبد خرید افزوده شد", Toast.LENGTH_LONG).show();
     }
 
@@ -348,8 +359,8 @@ public class EachProductActivity extends AppCompatActivity {
             m = t.length();
         }
 
-        int[] p = new int[n+1]; //'previous' cost array, horizontally
-        int[] d = new int[n+1]; // cost array, horizontally
+        int[] p = new int[n + 1]; //'previous' cost array, horizontally
+        int[] d = new int[n + 1]; // cost array, horizontally
         int[] _d; //placeholder to assist in swapping p and d
 
         // indexes into strings s and t
@@ -360,18 +371,18 @@ public class EachProductActivity extends AppCompatActivity {
 
         int cost; // cost
 
-        for (i = 0; i<=n; i++) {
+        for (i = 0; i <= n; i++) {
             p[i] = i;
         }
 
-        for (j = 1; j<=m; j++) {
-            t_j = t.charAt(j-1);
+        for (j = 1; j <= m; j++) {
+            t_j = t.charAt(j - 1);
             d[0] = j;
 
-            for (i=1; i<=n; i++) {
-                cost = s.charAt(i-1)==t_j ? 0 : 1;
+            for (i = 1; i <= n; i++) {
+                cost = s.charAt(i - 1) == t_j ? 0 : 1;
                 // minimum of cell to the left+1, to the top+1, diagonally left and up +cost
-                d[i] = Math.min(Math.min(d[i-1]+1, p[i]+1),  p[i-1]+cost);
+                d[i] = Math.min(Math.min(d[i - 1] + 1, p[i] + 1), p[i - 1] + cost);
             }
 
             // copy current distance counts to 'previous row' distance counts

@@ -490,7 +490,7 @@ public class SellerMenu extends UserMenu {
             return;
         }
         product.addSeller((Seller) DataManager.shared().getLoggedInAccount());
-        DataManager.saveData();
+//        DataManager.saveData();
         System.out.println("Done");
     }
 

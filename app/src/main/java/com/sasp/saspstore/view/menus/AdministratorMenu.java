@@ -891,7 +891,7 @@ public class AdministratorMenu extends UserMenu {
         System.out.println("Are you sure you want to remove this category? Type \"y\" for yes and anything else for no.");
         String confirmation = scanner.nextLine().trim();
         if (confirmation.equals("y") && category != null) {
-            DataManager.shared().removeCategory(category, category.getParentCategory());
+            DataManager.shared().removeCategory(category);
         }
         return false;
     }

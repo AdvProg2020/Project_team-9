@@ -16,6 +16,15 @@ public class Account {
     private ArrayList<String> coupons;
     private ArrayList<String> logs;
     private int credit;
+    private String bankAccountNumber = "";
+
+    public String getBankAccountNumber() {
+        return bankAccountNumber;
+    }
+
+    public void setBankAccountNumber(String bankAccountNumber) {
+        this.bankAccountNumber = bankAccountNumber;
+    }
 
     public String getProfilePicPath() {
         return profilePicPath;
@@ -43,17 +52,17 @@ public class Account {
 
     public void increaseCredit(int amount) {
         credit += amount;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public void decreaseCredit(int amount) {
         credit -= amount;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public void setCredit(int credit) {
         this.credit = credit;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public String getUsername() {
@@ -66,7 +75,7 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public String getEmail() {
@@ -75,7 +84,7 @@ public class Account {
 
     public void setEmail(String newEmail) {
         this.email = newEmail;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public String getPhoneNumber() {
@@ -84,7 +93,7 @@ public class Account {
 
     public void setPhoneNumber(String newPhoneNumber) {
         this.phoneNumber = newPhoneNumber;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public String getFirstName() {
@@ -93,7 +102,7 @@ public class Account {
 
     public void setFirstName(String newFirstName) {
         this.firstName = newFirstName;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public String getLastName() {
@@ -102,7 +111,7 @@ public class Account {
 
     public void setLastName(String newLastName) {
         this.lastName = newLastName;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public ArrayList<Coupon> getCoupons() {
@@ -115,18 +124,18 @@ public class Account {
 
     public void addCoupon(Coupon coupon) {
         coupons.add(coupon.getId());
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public void addLog(Log log) {
         logs.add(log.getId());
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public void changePassword(String oldPassword, String newPassword) {
         if (oldPassword.equals(password)) {
             password = newPassword;
-            DataManager.saveData();
+            DataManager.shared().syncAccounts();
         }
     }
 

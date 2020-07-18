@@ -9,7 +9,7 @@ import java.util.Map;
 public class Log {
     private String id;
     // TODO: Date in Gson??
-    private LocalDateTime date;
+    private String date;
     private long price;
     private int discountAmount;
     private HashMap<String, Integer> products;
@@ -21,7 +21,7 @@ public class Log {
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return DataManager.dateFromString(date);
     }
 
     public long getPrice() {
@@ -47,7 +47,7 @@ public class Log {
 
     public Log(String id, LocalDateTime date, long price, int discountAmount, HashMap<Product, Integer> products, DeliveryStatus deliveryStatus) {
         this.id = id;
-        this.date = date;
+        this.date = DataManager.stringFromDate(date);
         this.price = price;
         this.discountAmount = discountAmount;
         this.products = new HashMap<>();

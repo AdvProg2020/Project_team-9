@@ -42,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeAllRequestsButton;
     Button seeCartButton;
     Button addCreditButton;
+    Button removeCreditButton;
     Button inSellProductListButton;
 
     // TODO: Add another administrator is not implemented yet... waiting for login page
@@ -66,12 +67,14 @@ public class ProfileActivity extends AppCompatActivity {
         seeCartButton = findViewById(R.id.seeCartButton);
         seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
         addCreditButton = findViewById(R.id.addCreditButton);
+        removeCreditButton = findViewById(R.id.removeCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
 
         populateData();
     }
 
     private void populateData() {
+        DataManager.shared().populateData();
         Account account = DataManager.shared().getLoggedInAccount();
         adBtn.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         adTxt.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
@@ -81,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         addCreditButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        removeCreditButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
@@ -161,14 +165,14 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void addCreditTapped(View view) {
-        Account account = DataManager.shared().getLoggedInAccount();
-        if (account instanceof Customer) {
-            account.increaseCredit(5);
-            Toast.makeText(this, "اعتبار حساب شما ۵ تومان افزایش یافت", Toast.LENGTH_SHORT).show();
-            txtCredit.setText("اعتبار: " + account.getCredit());
-        }
-    }
+//    public void addCreditTapped(View view) {
+//        Account account = DataManager.shared().getLoggedInAccount();
+//        if (account instanceof Customer) {
+//            account.increaseCredit(5);
+//            Toast.makeText(this, "اعتبار حساب شما ۵ تومان افزایش یافت", Toast.LENGTH_SHORT).show();
+//            txtCredit.setText("اعتبار: " + account.getCredit());
+//        }
+//    }
 
     public boolean doesProductContainSeller(Product product, Seller seller) {
         for (Seller productSeller : product.getSellers()) {
@@ -228,5 +232,11 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "درخواست افزودن تبلیغ برای مدیر ارسال شد", Toast.LENGTH_SHORT).show();
             populateData();
         }
+    }
+
+    public void addCreditTapped(View view) {
+    }
+
+    public void removeCreditTapped(View view) {
     }
 }
