@@ -75,14 +75,14 @@ public class AddSaleActivity extends AppCompatActivity {
                 // TODO: Check to be valid and in range...
                 int discountAmount = Integer.parseInt(txtDiscountAmount.getText().toString());
                 if (saleID.equals("")) {
-                    Sale sale = new Sale(DataManager.getNewId(), selectedProducts, SaleStatus.CONFIRMED, discountAmount, startDate, endDate, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
+                    Sale sale = new Sale(DataManager.getNewId(), selectedProducts, SaleStatus.CONFIRMED, discountAmount, startDate, endDate, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.WAITING);
                     AddSaleBySellerRequest request = new AddSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale);
                     DataManager.shared().addRequest(request);
                     Toast.makeText(this, "درخواست افزودن حراج با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
                 } else {
                     Sale oldSale = DataManager.shared().getSaleWithId(saleID);
                     Sale newSale = new Sale(oldSale.getOffId(), selectedProducts, oldSale.getSaleStatus(), discountAmount,
-                            startDate, endDate, oldSale.getSeller(), DeliveryStatus.ORDERED);
+                            startDate, endDate, oldSale.getSeller(), DeliveryStatus.WAITING);
                     EditSaleBySellerRequest request = new EditSaleBySellerRequest(DataManager.getNewId(),
                             (Seller) DataManager.shared().getLoggedInAccount(), oldSale, newSale);
                     DataManager.shared().addRequest(request);
@@ -135,14 +135,14 @@ public class AddSaleActivity extends AppCompatActivity {
                 // TODO: Check to be valid and in range...
                 int discountAmount = Integer.parseInt(txtDiscountAmount.getText().toString());
                 if (saleID.equals("")) {
-                    Sale sale = new Sale(DataManager.getNewId(), selectedProducts, SaleStatus.CONFIRMED, discountAmount, startDate, endDate, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.ORDERED);
+                    Sale sale = new Sale(DataManager.getNewId(), selectedProducts, SaleStatus.CONFIRMED, discountAmount, startDate, endDate, (Seller) DataManager.shared().getLoggedInAccount(), DeliveryStatus.WAITING);
                     AddSaleBySellerRequest request = new AddSaleBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), sale);
                     DataManager.shared().addRequest(request);
                     Toast.makeText(this, "درخواست افزودن حراج با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
                 } else {
                     Sale oldSale = DataManager.shared().getSaleWithId(saleID);
                     Sale newSale = new Sale(oldSale.getOffId(), selectedProducts, oldSale.getSaleStatus(), discountAmount,
-                            startDate, endDate, oldSale.getSeller(), DeliveryStatus.ORDERED);
+                            startDate, endDate, oldSale.getSeller(), DeliveryStatus.WAITING);
                     EditSaleBySellerRequest request = new EditSaleBySellerRequest(DataManager.getNewId(),
                             (Seller) DataManager.shared().getLoggedInAccount(), oldSale, newSale);
                     DataManager.shared().addRequest(request);

@@ -21,6 +21,7 @@ import com.sasp.saspstore.model.AddAdBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
+import com.sasp.saspstore.model.SellLog;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.home.EditProfileActivity;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity {
 
     EditText adTxt;
+    EditText creditTxt;
     Button adBtn;
     TextView txtName;
     TextView txtUsernameAndRole;
@@ -60,8 +62,8 @@ public class ProfileActivity extends AppCompatActivity {
         txtEmail = (TextView) findViewById(R.id.fragment_profile_email);
         txtPhoneNumber = (TextView) findViewById(R.id.fragment_profile_phoneNumber);
         txtCredit = (TextView) findViewById(R.id.fragment_profile_credit);
-        txtCompanyDetails = (TextView) findViewById(R.id.fragment_profile_companyDetails);
-        seeAllCouponsButton =  findViewById(R.id.seeAllCouponsButton);
+        txtCompanyDetails = findViewById(R.id.fragment_profile_companyDetails);
+        seeAllCouponsButton = findViewById(R.id.seeAllCouponsButton);
         seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
         seeAllCategoriesButton = findViewById(R.id.seeAllCategoriesButton);
         seeCartButton = findViewById(R.id.seeCartButton);
@@ -69,8 +71,14 @@ public class ProfileActivity extends AppCompatActivity {
         addCreditButton = findViewById(R.id.addCreditButton);
         removeCreditButton = findViewById(R.id.removeCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
+        creditTxt = findViewById(R.id.profile_creditTxt);
 
         populateData();
+    }
+
+    private void updateTxtCreditText() {
+        Account account = DataManager.shared().getLoggedInAccount();
+        txtCredit.setText("اعتبار: " + account.getCredit());
     }
 
     private void populateData() {
@@ -83,8 +91,9 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
-        addCreditButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
-        removeCreditButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        creditTxt.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        addCreditButton.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
+        removeCreditButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
@@ -101,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
             txtUsernameAndRole.setText(account.getUsername() + " - " + role);
             txtEmail.setText(account.getEmail());
             txtPhoneNumber.setText(account.getPhoneNumber());
-            txtCredit.setText("اعتبار: " + account.getCredit());
+            updateTxtCreditText();
         } else {
             // TODO: Show login activity!
         }
@@ -234,9 +243,47 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    // TODO: Add and remove credit not tested... :)
+    // TODO: KarMozd and Hadeaqale mojood dar kife pul
+
     public void addCreditTapped(View view) {
+        Account account = DataManager.shared().getLoggedInAccount();
+        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
+            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+                    "withdraw" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
+                    account.getBankAccountNumber() + " " + "-1" + " withdraw", receiptID ->
+                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+                            runOnUiThread(() -> {
+                                switch (response) {
+                                    case "source account does not have enough money":
+                                        Toast.makeText(ProfileActivity.this, "حساب مبدا به اندازه کافی پول ندارد", Toast.LENGTH_LONG).show();
+                                        break;
+                                    case "done successfully":
+                                        Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
+                                        account.increaseCredit(Integer.parseInt(creditTxt.getText().toString()));
+                                        updateTxtCreditText();
+                                        break;
+                                }
+                            })));
+        });
     }
 
     public void removeCreditTapped(View view) {
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (Integer.parseInt(creditTxt.getText().toString()) > account.getCredit()) {
+            Toast.makeText(this, "اعتبار حساب شما ناکافی است", Toast.LENGTH_LONG).show();
+            return;
+        }
+        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
+            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+                    "deposit" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
+                    "-1" + " " + account.getBankAccountNumber() + " deposit", receiptID ->
+                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+                            runOnUiThread(() -> {
+                                Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
+                                account.decreaseCredit(Integer.parseInt(creditTxt.getText().toString()));
+                                updateTxtCreditText();
+                            })));
+        });
     }
 }
