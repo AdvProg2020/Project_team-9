@@ -38,7 +38,7 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-        DataManager.saveData();
+        DataManager.shared().syncCategories();
     }
 
     public String getDescription() {
@@ -47,7 +47,7 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
-        DataManager.saveData();
+        DataManager.shared().syncCategories();
     }
 
     public Category getParentCategory() {

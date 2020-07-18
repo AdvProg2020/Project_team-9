@@ -22,6 +22,11 @@ public class CommentsListActivity extends AppCompatActivity {
 
     ListView listView;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +56,7 @@ public class CommentsListActivity extends AppCompatActivity {
             dialogBuilder.setTitle("پاسخ به نظر").setMessage("").setPositiveButton("ثبت پاسخ", (dialog, whichButton) -> {
                 String response = firstEditText.getText().toString();
                 comment.setResponse(response);
-                DataManager.saveData();
+                DataManager.shared().syncProducts();
             }).setNeutralButton("بازگشت", null);
             AlertDialog b = dialogBuilder.create();
             b.show();

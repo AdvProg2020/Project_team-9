@@ -29,13 +29,13 @@ public class Cart {
         products.entrySet().forEach(productIntegerEntry -> this.products.put(
                 ((Product) (((Map.Entry) productIntegerEntry).getKey())).getProductId(),
                 (int) ((Map.Entry) productIntegerEntry).getValue()));
-        DataManager.saveData();
+        DataManager.shared().syncCartForUser();
     }
 
     public void addProduct(Product product, int quantity) {
         products.put(product.getProductId(),
                 products.getOrDefault(product.getProductId(), 0) + quantity);
-        DataManager.saveData();
+        DataManager.shared().syncCartForUser();
     }
 
     public void addProduct(Product product) {
@@ -57,7 +57,7 @@ public class Cart {
         } else {
             products.put(product.getProductId(), finalQuantity);
         }
-        DataManager.saveData();
+        DataManager.shared().syncCartForUser();
     }
 
     public void removeProduct(Product product) {

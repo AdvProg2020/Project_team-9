@@ -47,6 +47,11 @@ public class ProductListActivity extends AppCompatActivity {
     ArrayList<Product> originalProducts;
     ArrayList<Product> products;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +138,7 @@ public class ProductListActivity extends AppCompatActivity {
                 for (Product product : selectedProducts) {
                     product.setSelected(false);
                 }
-                DataManager.saveData();
+                DataManager.shared().syncProducts();
                 setResult(RESULT_OK, backIntent);
                 finish();
             });
@@ -263,7 +268,7 @@ public class ProductListActivity extends AppCompatActivity {
             for (Product product : selectedProducts) {
                 product.setSelected(false);
             }
-            DataManager.saveData();
+            DataManager.shared().syncProducts();
             setResult(RESULT_OK, intent);
             finish();
             return true;
@@ -277,7 +282,7 @@ public class ProductListActivity extends AppCompatActivity {
         for (Product product : selectedProducts) {
             product.setSelected(false);
         }
-        DataManager.saveData();
+        DataManager.shared().syncProducts();
     }
 
     String productNameFilter = "";

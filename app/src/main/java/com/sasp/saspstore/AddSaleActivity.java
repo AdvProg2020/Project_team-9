@@ -55,6 +55,11 @@ public class AddSaleActivity extends AppCompatActivity {
 
     // TODO: We assume only seller is able to access this activity
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

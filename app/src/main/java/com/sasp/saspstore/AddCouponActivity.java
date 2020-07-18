@@ -52,6 +52,11 @@ public class AddCouponActivity extends AppCompatActivity {
     LocalDateTime endDate = LocalDateTime.now();
     int numberOfUsersSet = 0;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

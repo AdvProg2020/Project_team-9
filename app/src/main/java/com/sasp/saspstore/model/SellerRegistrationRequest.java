@@ -17,6 +17,6 @@ public class SellerRegistrationRequest extends Request {
     @Override
     public void fulfill() {
         getSeller().setPermittedToSell(true);
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 }

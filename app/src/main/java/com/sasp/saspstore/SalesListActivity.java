@@ -31,6 +31,11 @@ public class SalesListActivity extends AppCompatActivity {
     EditText searchField;
     ArrayList<Sale> sales, originalSales;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

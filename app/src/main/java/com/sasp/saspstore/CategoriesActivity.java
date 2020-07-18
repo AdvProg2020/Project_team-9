@@ -30,6 +30,11 @@ public class CategoriesActivity extends AppCompatActivity {
 
     ListView listView;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
 
     ArrayList<Category> allCategories = DataManager.shared().getAllCategories();
     Category parentCategory = null;
@@ -93,10 +98,10 @@ public class CategoriesActivity extends AppCompatActivity {
                 String description = secondEditText.getText().toString();
                 category.setName(name);
                 category.setDescription(description);
-                DataManager.saveData();
+                DataManager.shared().syncCategories();
                 adapter.notifyDataSetChanged();
             }).setNegativeButton("حذف دسته‌بندی", (dialog, whichButton) -> {
-                DataManager.shared().removeCategory((Category) listView.getItemAtPosition(position), parentCategory);
+                DataManager.shared().removeCategory((Category) listView.getItemAtPosition(position));
                 adapter.notifyDataSetChanged();
             }).setNeutralButton("بازگشت", null);
             AlertDialog b = dialogBuilder.create();

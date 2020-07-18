@@ -1,13 +1,19 @@
 package com.sasp.saspstore;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.Ad;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Log;
 import com.sasp.saspstore.model.Product;
@@ -17,10 +23,16 @@ import com.sasp.saspstore.model.Seller;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class LogActivity extends AppCompatActivity {
 
     ListView listView;
+
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

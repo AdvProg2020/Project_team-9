@@ -16,16 +16,16 @@ public class Coupon {
     private int discountPercent;
     private int maximumDiscount;
     // TODO: LocalDateTime in Gson???
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String startTime;
+    private String endTime;
     private HashMap<String, Integer> remainingUsagesCount;
 
     public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+        this.startTime = DataManager.stringFromDate(startTime);
     }
 
     public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+        this.endTime = DataManager.stringFromDate(endTime);
     }
 
     public HashMap<String, Integer> getRemainingUsagesCount() {
@@ -43,8 +43,8 @@ public class Coupon {
         this.saleStatus = saleStatus;
         this.discountPercent = discountPercent;
         this.maximumDiscount = maximumDiscount;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = DataManager.stringFromDate(startTime);
+        this.endTime = DataManager.stringFromDate(endTime);
         this.remainingUsagesCount = remainingUsagesCount;
     }
 
@@ -58,7 +58,7 @@ public class Coupon {
 
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
-        DataManager.saveData();
+        DataManager.shared().syncCoupons();
     }
 
     public ArrayList<Product> getProducts() {
@@ -75,21 +75,21 @@ public class Coupon {
 
     public void setMaximumDiscount(int maximumDiscount) {
         this.maximumDiscount = maximumDiscount;
-        DataManager.saveData();
+        DataManager.shared().syncCoupons();
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return DataManager.dateFromString(startTime);
     }
 
     public LocalDateTime getEndTime() {
-        return endTime;
+        return DataManager.dateFromString(endTime);
     }
 
     public void decrementRemainingUsagesCountForAccount(Account account) {
         if (remainingUsagesCount == null) return;
         remainingUsagesCount.put(account.getUsername(), Math.max(remainingUsagesCount.get(account.getUsername()) - 1, 0));
-        DataManager.saveData();
+        DataManager.shared().syncCoupons();
     }
 
     public int remainingUsageCountForAccount(Account account) {

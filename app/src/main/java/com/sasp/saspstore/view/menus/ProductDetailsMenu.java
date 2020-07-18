@@ -304,7 +304,7 @@ public class ProductDetailsMenu extends Menu {
     private boolean addToCart() {
         currentProduct.setCurrentSeller(currentSeller);
         getCurrentCart().addProduct(currentProduct);
-        DataManager.saveData();
+//        DataManager.saveData();
         System.out.println("Product added to the cart successfully");
         return false;
     }

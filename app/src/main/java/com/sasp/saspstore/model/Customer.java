@@ -32,7 +32,7 @@ public class Customer extends Account {
 
     public void setAddress(String address) {
         this.address = address;
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public Cart getCart() {
@@ -45,7 +45,7 @@ public class Customer extends Account {
 
     public void addProductToCart(Product product) {
         cart.addProduct(product);
-        DataManager.saveData();
+        DataManager.shared().syncAccounts();
     }
 
     public boolean hasPurchasedProduct(Product product) {

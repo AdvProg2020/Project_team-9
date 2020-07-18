@@ -38,6 +38,11 @@ public class AllCouponsActivity extends AppCompatActivity {
     ListView listView;
     ArrayAdapter<Coupon> adapter;
 
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +83,7 @@ public class AllCouponsActivity extends AppCompatActivity {
                     if (discountPercent >= 0 && discountPercent <= 100) {
                         coupon.setDiscountPercent(discountPercent);
                         coupon.setMaximumDiscount(maximumDiscount);
-                        DataManager.saveData();
+                        DataManager.shared().syncCoupons();
                         adapter.notifyDataSetChanged();
                     } else {
                         // TODO: ??

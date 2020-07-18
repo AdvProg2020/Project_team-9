@@ -14,6 +14,9 @@ import com.sasp.saspstore.model.Product;
 
 import java.util.HashMap;
 
+// b5d985b9114243fd93a73d871816d728
+// a4cb354a9400493b9421d6fce28bcaec
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText txtUsername;
@@ -66,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
             prods.putAll(DataManager.shared().getTemporaryCart().getProducts());
             ((Customer) (DataManager.shared().getLoggedInAccount())).getCart().setProducts(prods);
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
-            DataManager.saveData();
+            DataManager.shared().syncTemporaryCart();
+            DataManager.shared().syncCartForUser();
         }
         finish();
         Intent intent = new Intent(this, ProfileActivity.class);

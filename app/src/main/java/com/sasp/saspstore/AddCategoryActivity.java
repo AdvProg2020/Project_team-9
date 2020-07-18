@@ -53,4 +53,9 @@ public class AddCategoryActivity extends AppCompatActivity {
         DataManager.shared().addCategory(category);
         finish();
     }
+
+    public void profileTapped(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 }

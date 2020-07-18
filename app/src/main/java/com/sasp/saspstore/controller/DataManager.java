@@ -1,9 +1,9 @@
 package com.sasp.saspstore.controller;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -11,6 +11,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
+import com.sasp.saspstore.Gonnect;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Ad;
 import com.sasp.saspstore.model.AddAdBySellerRequest;
@@ -32,12 +34,13 @@ import com.sasp.saspstore.model.SellLog;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.model.SellerRegistrationRequest;
 
-import java.io.BufferedReader;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
+
+// TODO: IMPORTANT: All LocalDateTimes are removed!!
 
 public class DataManager {
     public static Context context;
@@ -69,7 +74,339 @@ public class DataManager {
     private ArrayList<SellLog> sellLogs = new ArrayList<>();
     private Cart temporaryCart = new Cart();
 
+    private String token = "";
+    private String adminBankAccountNumber = "";
+
+    public boolean isMadeAdminBankAccount() {
+        return !adminBankAccountNumber.equals("");
+    }
+
+    public String getAdminBankAccountNumber() {
+        return adminBankAccountNumber;
+    }
+
+    public void setAdminBankAccountNumber(String adminBankAccountNumber) {
+        this.adminBankAccountNumber = adminBankAccountNumber;
+    }
+
     private DataManager() {
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public ArrayList<Ad> getAllAds() {
+        return allAds;
+    }
+
+    public static String encode(String input) {
+        try {
+            return URLEncoder.encode(input, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public void populateDataa() {
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllAds", (b, s) -> {
+            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
+            }.getType());
+            DataManager.shared().setAllAds(allAds);
+        });
+    }
+
+    public void populateData() {
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllAds", (b, s) -> {
+            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
+            }.getType());
+            DataManager.shared().setAllAds(allAds);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/?action=getAllPurchaseLogs", (b, s) -> {
+            ArrayList<PurchaseLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<PurchaseLog>>() {
+            }.getType());
+            DataManager.shared().setPurchaseLogs(allLogs);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/?action=getAllSellLogs", (b, s) -> {
+            ArrayList<SellLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<SellLog>>() {
+            }.getType());
+            DataManager.shared().setSellLogs(allLogs);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getTemporaryCart", (b, s) -> {
+            Cart cart = new Gson().fromJson(s, Cart.class);
+            DataManager.shared().setTemporaryCart(cart);
+        });
+        populateAllAccountsData();
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCategories", (b, s) -> {
+            ArrayList<Category> categories = new Gson().fromJson(s, new TypeToken<ArrayList<Category>>() {
+            }.getType());
+            DataManager.shared().setAllCategories(categories);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAddProductBySellerRequests", (b, s) -> {
+            ArrayList<AddProductBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<AddProductBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setAddProductBySellerRequests(requests);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAddSaleBySellerRequests", (b, s) -> {
+            ArrayList<AddSaleBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<AddSaleBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setAddSaleBySellerRequests(requests);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getEditProductBySellerRequests", (b, s) -> {
+            ArrayList<EditProductBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<EditProductBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setEditProductBySellerRequests(requests);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getEditSaleBySellerRequests", (b, s) -> {
+            ArrayList<EditSaleBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<EditSaleBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setEditSaleBySellerRequests(requests);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getSellerRegistrationRequests", (b, s) -> {
+            ArrayList<SellerRegistrationRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<SellerRegistrationRequest>>() {
+                    }.getType());
+            DataManager.shared().setSellerRegistrationRequests(requests);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAdRequests", (b, s) -> {
+            ArrayList<AddAdBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<AddAdBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setAdRequests(requests);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCoupons", (b, s) -> {
+            ArrayList<Coupon> coupons = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<Coupon>>() {
+                    }.getType());
+            DataManager.shared().setAllCoupons(coupons);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllProducts", (b, s) -> {
+            ArrayList<Product> products = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<Product>>() {
+                    }.getType());
+            DataManager.shared().setAllProducts(products);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAdminBankAccountNumber", (b, s) -> {
+            DataManager.shared().setAdminBankAccountNumber(s);
+        });
+    }
+
+    public void populateAllAccountsData() {
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCustomers", (b, s) -> {
+            ArrayList<Customer> customers = new Gson().fromJson(s, new TypeToken<ArrayList<Customer>>() {
+            }.getType());
+            DataManager.shared().setAllCustomers(customers);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllSellers", (b, s) -> {
+            ArrayList<Seller> sellers = new Gson().fromJson(s, new TypeToken<ArrayList<Seller>>() {
+            }.getType());
+            DataManager.shared().setAllSellers(sellers);
+        });
+        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllAdministrators", (b, s) -> {
+            ArrayList<Administrator> administrators = new Gson().fromJson(s, new TypeToken<ArrayList<Administrator>>() {
+            }.getType());
+            DataManager.shared().setAllAdministrators(administrators);
+        });
+    }
+
+    // populateData
+
+    /* j */
+
+//    public void populateData() {
+//        ContentValues cv0 = new ContentValues();
+//        cv0.put("action", "getAllAds");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv0, (b, s) -> {
+//            android.util.Log.wtf("String from getAllAds: " + s + "b: " + b, "String from getAllAds: " + s);
+//            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
+//            }.getType());
+//            DataManager.shared().setAllAds(allAds);
+//        });
+//
+//        ContentValues cv = new ContentValues();
+//        cv.put("action", "getAllPurchaseLogs");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+//            ArrayList<PurchaseLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<PurchaseLog>>() {
+//            }.getType());
+//            DataManager.shared().setPurchaseLogs(allLogs);
+//        });
+//
+//        ContentValues cv2 = new ContentValues();
+//        cv2.put("action", "getAllSellLogs");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv2, (b, s) -> {
+//            ArrayList<SellLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<SellLog>>() {
+//            }.getType());
+//            DataManager.shared().setSellLogs(allLogs);
+//        });
+//
+//        ContentValues cv3 = new ContentValues();
+//        cv3.put("action", "getTemporaryCart");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/req", cv3, (b, s) -> {
+//            android.util.Log.wtf("S in getTemp: " + s, " S in getTemp: " + s);
+//            Cart cart = new Gson().fromJson(s, Cart.class);
+//            DataManager.shared().setTemporaryCart(cart);
+//        });
+//
+//        ContentValues cv4 = new ContentValues();
+//        cv4.put("action", "getAllCustomers");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv4, (b, s) -> {
+//            ArrayList<Customer> customers = new Gson().fromJson(s, new TypeToken<ArrayList<Customer>>() {
+//            }.getType());
+//            DataManager.shared().setAllCustomers(customers);
+//        });
+//
+//        ContentValues cv5 = new ContentValues();
+//        cv5.put("action", "getAllSellers");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv5, (b, s) -> {
+//            ArrayList<Seller> sellers = new Gson().fromJson(s, new TypeToken<ArrayList<Seller>>() {
+//            }.getType());
+//            DataManager.shared().setAllSellers(sellers);
+//        });
+//
+//        ContentValues cv6 = new ContentValues();
+//        cv6.put("action", "getAllAdministrators");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv6, (b, s) -> {
+//            ArrayList<Administrator> administrators = new Gson().fromJson(s, new TypeToken<ArrayList<Administrator>>() {
+//            }.getType());
+//            DataManager.shared().setAllAdministrators(administrators);
+//        });
+//
+//        ContentValues cv7 = new ContentValues();
+//        cv7.put("action", "getAllCategories");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv7, (b, s) -> {
+//            ArrayList<Category> categories = new Gson().fromJson(s, new TypeToken<ArrayList<Category>>() {
+//            }.getType());
+//            DataManager.shared().setAllCategories(categories);
+//        });
+//
+//        ContentValues cv8 = new ContentValues();
+//        cv8.put("action", "getAddProductBySellerRequests");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv8, (b, s) -> {
+//            ArrayList<AddProductBySellerRequest> requests = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<AddProductBySellerRequest>>() {
+//                    }.getType());
+//            DataManager.shared().setAddProductBySellerRequests(requests);
+//        });
+//
+//        ContentValues cv9 = new ContentValues();
+//        cv9.put("action", "getAddSaleBySellerRequests");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv9, (b, s) -> {
+//            ArrayList<AddSaleBySellerRequest> requests = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<AddSaleBySellerRequest>>() {
+//                    }.getType());
+//            DataManager.shared().setAddSaleBySellerRequests(requests);
+//        });
+//
+//        ContentValues cv10 = new ContentValues();
+//        cv10.put("action", "getEditProductBySellerRequests");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv10, (b, s) -> {
+//            ArrayList<EditProductBySellerRequest> requests = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<EditProductBySellerRequest>>() {
+//                    }.getType());
+//            DataManager.shared().setEditProductBySellerRequests(requests);
+//        });
+//
+//        ContentValues cv11 = new ContentValues();
+//        cv11.put("action", "getEditSaleBySellerRequests");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv11, (b, s) -> {
+//            ArrayList<EditSaleBySellerRequest> requests = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<EditSaleBySellerRequest>>() {
+//                    }.getType());
+//            DataManager.shared().setEditSaleBySellerRequests(requests);
+//        });
+//
+//        ContentValues cv12 = new ContentValues();
+//        cv12.put("action", "getSellerRegistrationRequests");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv12, (b, s) -> {
+//            ArrayList<SellerRegistrationRequest> requests = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<SellerRegistrationRequest>>() {
+//                    }.getType());
+//            DataManager.shared().setSellerRegistrationRequests(requests);
+//        });
+//
+//        ContentValues cv13 = new ContentValues();
+//        cv13.put("action", "getAdRequests");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv13, (b, s) -> {
+//            ArrayList<AddAdBySellerRequest> requests = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<AddAdBySellerRequest>>() {
+//                    }.getType());
+//            DataManager.shared().setAdRequests(requests);
+//        });
+//
+//        ContentValues cv14 = new ContentValues();
+//        cv14.put("action", "getAllCoupons");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv14, (b, s) -> {
+//            ArrayList<Coupon> coupons = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<Coupon>>() {
+//                    }.getType());
+//            DataManager.shared().setAllCoupons(coupons);
+//        });
+//
+//        ContentValues cv15 = new ContentValues();
+//        cv15.put("action", "getAllProducts");
+//        Gonnect.sendRequest("http://10.0.2.2:8111/", cv15, (b, s) -> {
+//            ArrayList<Product> products = new Gson().fromJson(s,
+//                    new TypeToken<ArrayList<Product>>() {
+//                    }.getType());
+//            DataManager.shared().setAllProducts(products);
+//        });
+//    }
+
+    public void setAllProducts(ArrayList<Product> allProducts) {
+        this.allProducts = allProducts;
+    }
+
+    public void setAllCoupons(ArrayList<Coupon> allCoupons) {
+        this.allCoupons = allCoupons;
+    }
+
+    public void setAddProductBySellerRequests(ArrayList<AddProductBySellerRequest> addProductBySellerRequests) {
+        this.addProductBySellerRequests = addProductBySellerRequests;
+    }
+
+    public void setAddSaleBySellerRequests(ArrayList<AddSaleBySellerRequest> addSaleBySellerRequests) {
+        this.addSaleBySellerRequests = addSaleBySellerRequests;
+    }
+
+    public void setEditProductBySellerRequests(ArrayList<EditProductBySellerRequest> editProductBySellerRequests) {
+        this.editProductBySellerRequests = editProductBySellerRequests;
+    }
+
+    public void setEditSaleBySellerRequests(ArrayList<EditSaleBySellerRequest> editSaleBySellerRequests) {
+        this.editSaleBySellerRequests = editSaleBySellerRequests;
+    }
+
+    public void setSellerRegistrationRequests(ArrayList<SellerRegistrationRequest> sellerRegistrationRequests) {
+        this.sellerRegistrationRequests = sellerRegistrationRequests;
+    }
+
+    public void setAdRequests(ArrayList<AddAdBySellerRequest> adRequests) {
+        this.adRequests = adRequests;
+    }
+
+    public void setAllCustomers(ArrayList<Customer> allCustomers) {
+        this.allCustomers = allCustomers;
+    }
+
+    public void setAllSellers(ArrayList<Seller> allSellers) {
+        this.allSellers = allSellers;
+    }
+
+    public void setAllAdministrators(ArrayList<Administrator> allAdministrators) {
+        this.allAdministrators = allAdministrators;
+    }
+
+    public void setAllCategories(ArrayList<Category> allCategories) {
+        this.allCategories = allCategories;
     }
 
     public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
@@ -91,70 +428,70 @@ public class DataManager {
         return sharedInstance;
     }
 
-    public static void saveData() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-
-        Gson gson = gsonBuilder.setPrettyPrinting().create();
-
-        String json = gson.toJson(sharedInstance);
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("data.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(json);
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            // TODO: Here
-        }
-//        try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
-//            out.print(json);
+//    public static void saveData() {
+//        GsonBuilder gsonBuilder = new GsonBuilder();
+//        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+//
+//        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+//
+//        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+//
+//        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+//
+//        Gson gson = gsonBuilder.setPrettyPrinting().create();
+//
+//        String json = gson.toJson(sharedInstance);
+//        try {
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("data.txt", Context.MODE_PRIVATE));
+//            outputStreamWriter.write(json);
+//            outputStreamWriter.close();
 //        } catch (IOException e) {
-//            System.out.println("Unexpected exception happened in saving data: " + e.getLocalizedMessage());
+//            // TODO: Here
 //        }
-    }
+////        try (PrintStream out = new PrintStream(new FileOutputStream("data.txt"))) {
+////            out.print(json);
+////        } catch (IOException e) {
+////            System.out.println("Unexpected exception happened in saving data: " + e.getLocalizedMessage());
+////        }
+//    }
+//
+//    public static void loadData() {
+//        String json = "";
+//
+//        try {
+//            InputStream inputStream = context.openFileInput("data.txt");
+//
+//            if (inputStream != null) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//                String receiveString;
+//                StringBuilder stringBuilder = new StringBuilder();
+//
+//                while ((receiveString = bufferedReader.readLine()) != null) {
+//                    stringBuilder.append("\n").append(receiveString);
+//                }
+//
+//                inputStream.close();
+//                json = stringBuilder.toString();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        GsonBuilder gsonBuilder = new GsonBuilder();
+//        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
+//
+//        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+//
+//        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
+//
+//        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+//
+//        Gson gson = gsonBuilder.setPrettyPrinting().create();
+//        sharedInstance = gson.fromJson(json, DataManager.class);
+//    }
 
-    public static void loadData() {
-        String json = "";
-
-        try {
-            InputStream inputStream = context.openFileInput("data.txt");
-
-            if (inputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString;
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ((receiveString = bufferedReader.readLine()) != null) {
-                    stringBuilder.append("\n").append(receiveString);
-                }
-
-                inputStream.close();
-                json = stringBuilder.toString();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
-
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
-
-        Gson gson = gsonBuilder.setPrettyPrinting().create();
-        sharedInstance = gson.fromJson(json, DataManager.class);
-    }
-
-    public ArrayList<Ad> getAllAds() {
-        return allAds;
+    public void setAllAds(ArrayList<Ad> allAds) {
+        this.allAds = allAds;
     }
 
     public ArrayList<Log> getAllLogs() {
@@ -164,14 +501,37 @@ public class DataManager {
         return result;
     }
 
+    public void setPurchaseLogs(ArrayList<PurchaseLog> purchaseLogs) {
+        this.purchaseLogs = purchaseLogs;
+    }
+
+    public void setSellLogs(ArrayList<SellLog> sellLogs) {
+        this.sellLogs = sellLogs;
+    }
+
     public void logout() {
-        loggedInAccount = null;
-        DataManager.saveData();
+        if (loggedInAccount != null) {
+            loggedInAccount = null;
+            ContentValues cv = new ContentValues();
+            cv.put("action", "logout");
+            cv.put("token", getToken());
+//            Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+//            });
+            Gonnect.getData("http://10.0.2.2:8111/req?action=logout&token="
+                    + DataManager.encode(getToken()), (b, s) -> {
+            });
+        }
     }
 
     public void addAd(Ad ad) {
         allAds.add(ad);
-        saveData();
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addAd");
+        cv.put("id", ad.getId());
+        cv.put("content", ad.getContent());
+        Gonnect.getData("http://10.0.2.2:8111/req?action=addAd&id=" + ad.getId() + "&content="
+                + DataManager.encode(ad.getContent()), (b, s) -> {
+        });
     }
 
     public PurchaseLog purchaseLogForCustomerById(Customer customer, String id) {
@@ -185,11 +545,8 @@ public class DataManager {
         return temporaryCart;
     }
 
-    // TODO: Up to here checked saveData()s...
-
     public void setTemporaryCart(Cart temporaryCart) {
         this.temporaryCart = temporaryCart;
-        saveData();
     }
 
     public ArrayList<Sale> getAllSales() {
@@ -220,20 +577,39 @@ public class DataManager {
     }
 
     public void addRequest(Request request) {
+        String type = "";
+        String requestStr = new Gson().toJson(request);
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addRequest");
         if (request instanceof AddProductBySellerRequest) {
             addProductBySellerRequests.add((AddProductBySellerRequest) request);
+            cv.put("request", new Gson().toJson(request));
+            type = "AddProductBySellerRequest";
         } else if (request instanceof AddSaleBySellerRequest) {
             addSaleBySellerRequests.add((AddSaleBySellerRequest) request);
+            cv.put("request", new Gson().toJson(request));
+            type = "AddSaleBySellerRequest";
         } else if (request instanceof EditProductBySellerRequest) {
             editProductBySellerRequests.add((EditProductBySellerRequest) request);
+            cv.put("request", new Gson().toJson(request));
+            type = "EditProductBySellerRequest";
         } else if (request instanceof EditSaleBySellerRequest) {
             editSaleBySellerRequests.add((EditSaleBySellerRequest) request);
+            cv.put("request", new Gson().toJson(request));
+            type = "EditSaleBySellerRequest";
         } else if (request instanceof SellerRegistrationRequest) {
             sellerRegistrationRequests.add((SellerRegistrationRequest) request);
+            cv.put("request", new Gson().toJson(request));
+            type = "SellerRegistrationRequest";
         } else if (request instanceof AddAdBySellerRequest) {
             adRequests.add((AddAdBySellerRequest) request);
+            cv.put("request", new Gson().toJson((AddAdBySellerRequest) request));
+            type = "AddAdBySellerRequest";
         }
-        saveData();
+        cv.put("requestType", type);
+        Gonnect.getData("http://10.0.2.2:8111/req?action=addRequest&requestType=" + type + "&request="
+                + DataManager.encode(requestStr), (b, s) -> {
+        });
     }
 
     public Request getRequestWithID(String id) {
@@ -265,8 +641,12 @@ public class DataManager {
     public void removeProduct(String productID) {
         for (Product product : allProducts) {
             if (product.getProductId().equals(productID)) {
+                ContentValues cv = new ContentValues();
+                cv.put("action", "removeProduct");
+                cv.put("id", product.getProductId());
+                Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+                });
                 allProducts.remove(product);
-                saveData();
                 return;
             }
         }
@@ -279,11 +659,146 @@ public class DataManager {
         return null;
     }
 
+    public void syncProducts() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncProducts");
+        cv.put("products", new Gson().toJson(getAllProducts()));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncAccounts() {
+        syncCustomers();
+        syncSellers();
+        syncAdministrators();
+    }
+
+    public void syncCustomers() {
+        ArrayList<Customer> customers = new ArrayList<>();
+        for (Account account : getAllAccounts()) {
+            if (account instanceof Customer) customers.add((Customer) account);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncCustomers");
+        cv.put("customers", new Gson().toJson(customers));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncSellers() {
+        ArrayList<Seller> sellers = new ArrayList<>();
+        for (Account account : getAllAccounts()) {
+            if (account instanceof Seller) sellers.add((Seller) account);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncSellers");
+        cv.put("sellers", new Gson().toJson(sellers));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncAdministrators() {
+        ArrayList<Administrator> administrators = new ArrayList<>();
+        for (Account account : getAllAccounts()) {
+            if (account instanceof Administrator) administrators.add((Administrator) account);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncAdministrators");
+        cv.put("administrators", new Gson().toJson(administrators));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncCategories() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncCategories");
+        cv.put("categories", new Gson().toJson(getAllCategories()));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncSales() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncSales");
+        cv.put("sales", new Gson().toJson(getAllSales()));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncCoupons() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncCoupons");
+        cv.put("coupons", new Gson().toJson(getAllCoupons()));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    // TODO: Cart should be get on login
+    public void syncCartForUser() {
+        if (getLoggedInAccount() instanceof Customer) {
+            ContentValues cv = new ContentValues();
+            cv.put("action", "syncCartForUser");
+            cv.put("token", getToken());
+            cv.put("cart", new Gson().toJson(((Customer) getLoggedInAccount()).getCart()));
+            Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+            });
+        }
+    }
+
+    public void syncLogs() {
+        syncPurchaseLogs();
+        syncSellLogs();
+    }
+
+    public void syncPurchaseLogs() {
+        ArrayList<PurchaseLog> purchaseLogs = new ArrayList<>();
+        for (Log log : getAllLogs()) {
+            if (log instanceof PurchaseLog) purchaseLogs.add((PurchaseLog) log);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncPurchaseLogs");
+        cv.put("logs", new Gson().toJson(purchaseLogs));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncSellLogs() {
+        ArrayList<SellLog> sellLogs = new ArrayList<>();
+        for (Log log : getAllLogs()) {
+            if (log instanceof SellLog) sellLogs.add((SellLog) log);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncSellLogs");
+        cv.put("logs", new Gson().toJson(sellLogs));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
+    public void syncTemporaryCart() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncTemporaryCart");
+        cv.put("cart", new Gson().toJson(getTemporaryCart()));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
+    }
+
     public DataManager.AccountType login(String username, String password) {
         for (Account account : getAllAccounts()) {
             if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
                 loggedInAccount = account;
-                saveData();
+                ContentValues cv = new ContentValues();
+                cv.put("action", "login");
+                cv.put("username", username);
+                cv.put("password", password);
+                // TODO: Repeated username/password is checked where??
+                Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+                    try {
+                        JSONObject jo = new JSONObject(s);
+                        setToken(jo.getString("token"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
                 if (account instanceof Customer) {
                     return DataManager.AccountType.CUSTOMER;
                 } else if (account instanceof Administrator) {
@@ -295,7 +810,7 @@ public class DataManager {
             }
         }
         loggedInAccount = null;
-        saveData();
+        logout();
         return DataManager.AccountType.NONE;
     }
 
@@ -316,14 +831,34 @@ public class DataManager {
     }
 
     public void registerAccount(Account account) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "register");
+        cv.put("username", account.getUsername());
+        cv.put("password", account.getPassword());
+        cv.put("email", account.getPassword());
+        cv.put("phoneNumber", account.getPassword());
+        cv.put("firstName", account.getPassword());
+        cv.put("lastName", account.getPassword());
         if (account instanceof Customer) {
             allCustomers.add((Customer) account);
+            cv.put("type", "customer");
         } else if (account instanceof Seller) {
             allSellers.add((Seller) account);
+            cv.put("type", "seller");
+            cv.put("companyDetails", ((Seller) account).getCompanyDetails());
         } else if (account instanceof Administrator) {
             allAdministrators.add((Administrator) account);
+            cv.put("type", "administrator");
         }
-        saveData();
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+            try {
+                JSONObject jo = new JSONObject(s);
+                // TODO: Does the next line work correctly??
+                setToken(jo.getString("token"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public boolean givenUsernameHasGivenPassword(String username, String password) {
@@ -336,64 +871,107 @@ public class DataManager {
     }
 
     public void addLog(Log log) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addLog");
         if (log instanceof SellLog) {
             sellLogs.add((SellLog) log);
+            cv.put("log", new Gson().toJson((SellLog) log));
+            cv.put("logType", "SellLog");
         } else if (log instanceof PurchaseLog) {
             purchaseLogs.add((PurchaseLog) log);
+            cv.put("log", new Gson().toJson((PurchaseLog) log));
+            cv.put("logType", "PurchaseLog");
         }
-        saveData();
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
     }
 
     public void addSale(Sale sale) {
         allSales.add(sale);
-        saveData();
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addSale");
+        cv.put("sale", new Gson().toJson(sale));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
     }
 
     public void addProduct(Product product) {
         allProducts.add(product);
-        saveData();
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addProduct");
+        cv.put("product", new Gson().toJson(product));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
     }
 
     public void addCoupon(Coupon coupon) {
         allCoupons.add(coupon);
-        saveData();
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addCoupon");
+        cv.put("coupon", new Gson().toJson(coupon));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
     }
 
     public void addCategory(Category category) {
         allCategories.add(category);
-        saveData();
+        ContentValues cv = new ContentValues();
+        cv.put("action", "addCategory");
+        cv.put("category", new Gson().toJson(category));
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
     }
 
     public void removeCoupon(Coupon coupon) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "removeCoupon");
+        cv.put("id", coupon.getId());
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
         allCoupons.remove(coupon);
-        saveData();
     }
 
     public void removeRequest(Request request) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "removeRequest");
+        cv.put("id", request.getId());
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
         addProductBySellerRequests.remove(request);
         addSaleBySellerRequests.remove(request);
         editProductBySellerRequests.remove(request);
         editSaleBySellerRequests.remove(request);
         sellerRegistrationRequests.remove(request);
         adRequests.remove(request);
-        saveData();
     }
 
     public void removeSale(Sale sale) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "removeSale");
+        cv.put("id", sale.getOffId());
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
         allSales.remove(sale);
-        saveData();
     }
 
     public void removeAccount(Account account) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "removeAccount");
+        cv.put("username", account.getUsername());
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
         allCustomers.remove(account);
         allSellers.remove(account);
         allAdministrators.remove(account);
-        saveData();
     }
 
-    public void removeCategory(Category category, Category parent) {
+    public void removeCategory(Category category) {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "removeCategory");
+        cv.put("id", category.getId());
+        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        });
         allCategories.removeIf(c -> c.getId().equals(category.getId()));
-        saveData();
     }
 
     public Coupon getCouponWithId(String id) {
@@ -428,10 +1006,20 @@ public class DataManager {
         CUSTOMER, ADMINISTRATOR, SELLER, NONE
     }
 
+    public static LocalDateTime dateFromString(String string) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
+        return LocalDateTime.parse(string, formatter);
+    }
+
+    public static String stringFromDate(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
+        return dateTime.format(formatter);
+    }
+
 }
 
 class LocalDateTimeSerializer implements JsonSerializer<LocalDateTime> {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
 
     @Override
     public JsonElement serialize(LocalDateTime localDateTime, Type srcType, JsonSerializationContext context) {
@@ -444,7 +1032,7 @@ class LocalDateTimeDeserializer implements JsonDeserializer<LocalDateTime> {
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         return LocalDateTime.parse(json.getAsString(),
-                DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss").withLocale(Locale.ENGLISH));
+                DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss").withLocale(Locale.ENGLISH));
     }
 }
 
