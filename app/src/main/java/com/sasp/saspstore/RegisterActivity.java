@@ -205,8 +205,21 @@ public class RegisterActivity extends AppCompatActivity {
                                            String password, String email, String phone,
                                            String companyDetails) {
         return checkEmptyUsernameOrPassword(username, password) ||
-                checkForRepeatedUsername(username) || checkEmail(email) || checkPhoneNumber(phone)
-                || checkSellerCompanyDetails(type, companyDetails);
+                checkForRepeatedUsername(username) || checkWeakPassword(password) || checkEmail(email) ||
+                checkPhoneNumber(phone) || checkSellerCompanyDetails(type, companyDetails);
+    }
+
+    private boolean checkWeakPassword(String password) {
+        if (!isPasswordStrong(password)) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("خطا");
+            alertDialog.setMessage("لطفا رمز عبوری قوی‌تر انتخاب نمایید");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
+                    "بازگشت", (dialog, which) -> dialog.dismiss());
+            alertDialog.show();
+            return false;
+        }
+        return true;
     }
 
     private boolean checkEmptyUsernameOrPassword(String username, String password) {
@@ -295,5 +308,33 @@ public class RegisterActivity extends AppCompatActivity {
             type = UserRole.ADMIN;
         }
         return type;
+    }
+
+    // TODO: Better password strength alg... both in server and client!
+
+//    private boolean isPasswordStrong(String password) {
+//        return true;
+//    }
+
+    private boolean isPasswordStrong(String password) {
+        if (password.length() < 8) return false;
+        int charCount = 0, numCount = 0;
+        for (int i = 0; i < password.length(); i++) {
+            char ch = password.charAt(i);
+            if (isNumeric(ch)) numCount++;
+            else if (isLetter(ch)) charCount++;
+            else return false;
+        }
+        return (charCount >= 2 && numCount >= 2);
+    }
+
+    private boolean isLetter(char ch) {
+        ch = Character.toUpperCase(ch);
+        return (ch >= 'A' && ch <= 'Z');
+    }
+
+
+    private boolean isNumeric(char ch) {
+        return (ch >= '0' && ch <= '9');
     }
 }

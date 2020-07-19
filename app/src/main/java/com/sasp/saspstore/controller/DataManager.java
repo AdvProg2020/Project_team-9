@@ -38,7 +38,6 @@ import com.sasp.saspstore.model.SellerRegistrationRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
