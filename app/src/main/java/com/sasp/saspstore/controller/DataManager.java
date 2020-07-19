@@ -852,10 +852,10 @@ public class DataManager {
         cv.put("action", "register");
         cv.put("username", account.getUsername());
         cv.put("password", account.getPassword());
-        cv.put("email", account.getPassword());
-        cv.put("phoneNumber", account.getPassword());
-        cv.put("firstName", account.getPassword());
-        cv.put("lastName", account.getPassword());
+        cv.put("email", account.getEmail());
+        cv.put("phoneNumber", account.getPhoneNumber());
+        cv.put("firstName", account.getFirstName());
+        cv.put("lastName", account.getLastName());
         if (account instanceof Customer) {
             allCustomers.add((Customer) account);
             cv.put("type", "customer");
