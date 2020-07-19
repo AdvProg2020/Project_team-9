@@ -52,6 +52,7 @@ import java.util.UUID;
 // TODO: IMPORTANT: All LocalDateTimes are removed!!
 
 public class DataManager {
+    public static final String IP_SERVER = "http://10.0.2.2:8111/";
     public static Context context;
     private static DataManager sharedInstance;
     private Account loggedInAccount;
@@ -123,7 +124,7 @@ public class DataManager {
     }
 
     public void populateDataa() {
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllAds", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
             ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
             }.getType());
             DataManager.shared().setAllAds(allAds);
@@ -131,83 +132,83 @@ public class DataManager {
     }
 
     public void populateData() {
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllAds", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
             ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
             }.getType());
             DataManager.shared().setAllAds(allAds);
         });
-        Gonnect.getData("http://10.0.2.2:8111/?action=getAllPurchaseLogs", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "?action=getAllPurchaseLogs", (b, s) -> {
             ArrayList<PurchaseLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<PurchaseLog>>() {
             }.getType());
             DataManager.shared().setPurchaseLogs(allLogs);
         });
-        Gonnect.getData("http://10.0.2.2:8111/?action=getAllSellLogs", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "?action=getAllSellLogs", (b, s) -> {
             ArrayList<SellLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<SellLog>>() {
             }.getType());
             DataManager.shared().setSellLogs(allLogs);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getTemporaryCart", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getTemporaryCart", (b, s) -> {
             Cart cart = new Gson().fromJson(s, Cart.class);
             DataManager.shared().setTemporaryCart(cart);
         });
         populateAllAccountsData();
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCategories", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllCategories", (b, s) -> {
             ArrayList<Category> categories = new Gson().fromJson(s, new TypeToken<ArrayList<Category>>() {
             }.getType());
             DataManager.shared().setAllCategories(categories);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAddProductBySellerRequests", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAddProductBySellerRequests", (b, s) -> {
             ArrayList<AddProductBySellerRequest> requests = new Gson().fromJson(s,
                     new TypeToken<ArrayList<AddProductBySellerRequest>>() {
                     }.getType());
             DataManager.shared().setAddProductBySellerRequests(requests);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAddSaleBySellerRequests", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAddSaleBySellerRequests", (b, s) -> {
             ArrayList<AddSaleBySellerRequest> requests = new Gson().fromJson(s,
                     new TypeToken<ArrayList<AddSaleBySellerRequest>>() {
                     }.getType());
             DataManager.shared().setAddSaleBySellerRequests(requests);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getEditProductBySellerRequests", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getEditProductBySellerRequests", (b, s) -> {
             ArrayList<EditProductBySellerRequest> requests = new Gson().fromJson(s,
                     new TypeToken<ArrayList<EditProductBySellerRequest>>() {
                     }.getType());
             DataManager.shared().setEditProductBySellerRequests(requests);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getEditSaleBySellerRequests", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getEditSaleBySellerRequests", (b, s) -> {
             ArrayList<EditSaleBySellerRequest> requests = new Gson().fromJson(s,
                     new TypeToken<ArrayList<EditSaleBySellerRequest>>() {
                     }.getType());
             DataManager.shared().setEditSaleBySellerRequests(requests);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getSellerRegistrationRequests", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getSellerRegistrationRequests", (b, s) -> {
             ArrayList<SellerRegistrationRequest> requests = new Gson().fromJson(s,
                     new TypeToken<ArrayList<SellerRegistrationRequest>>() {
                     }.getType());
             DataManager.shared().setSellerRegistrationRequests(requests);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAdRequests", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAdRequests", (b, s) -> {
             ArrayList<AddAdBySellerRequest> requests = new Gson().fromJson(s,
                     new TypeToken<ArrayList<AddAdBySellerRequest>>() {
                     }.getType());
             DataManager.shared().setAdRequests(requests);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCoupons", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllCoupons", (b, s) -> {
             ArrayList<Coupon> coupons = new Gson().fromJson(s,
                     new TypeToken<ArrayList<Coupon>>() {
                     }.getType());
             DataManager.shared().setAllCoupons(coupons);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllProducts", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllProducts", (b, s) -> {
             ArrayList<Product> products = new Gson().fromJson(s,
                     new TypeToken<ArrayList<Product>>() {
                     }.getType());
             DataManager.shared().setAllProducts(products);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAdminBankAccountNumber", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAdminBankAccountNumber", (b, s) -> {
             DataManager.shared().setAdminBankAccountNumber(s);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getOnlineUsernames", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getOnlineUsernames", (b, s) -> {
             ArrayList<String> usernames = new Gson().fromJson(s,
                     new TypeToken<ArrayList<String>>() {
                     }.getType());
@@ -218,17 +219,17 @@ public class DataManager {
     // TODO: Online users not tested...
 
     public void populateAllAccountsData() {
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllCustomers", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllCustomers", (b, s) -> {
             ArrayList<Customer> customers = new Gson().fromJson(s, new TypeToken<ArrayList<Customer>>() {
             }.getType());
             DataManager.shared().setAllCustomers(customers);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllSellers", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllSellers", (b, s) -> {
             ArrayList<Seller> sellers = new Gson().fromJson(s, new TypeToken<ArrayList<Seller>>() {
             }.getType());
             DataManager.shared().setAllSellers(sellers);
         });
-        Gonnect.getData("http://10.0.2.2:8111/req?action=getAllAdministrators", (b, s) -> {
+        Gonnect.getData(IP_SERVER + "req?action=getAllAdministrators", (b, s) -> {
             ArrayList<Administrator> administrators = new Gson().fromJson(s, new TypeToken<ArrayList<Administrator>>() {
             }.getType());
             DataManager.shared().setAllAdministrators(administrators);
@@ -534,7 +535,7 @@ public class DataManager {
             cv.put("token", getToken());
 //            Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
 //            });
-            Gonnect.getData("http://10.0.2.2:8111/req?action=logout&token="
+            Gonnect.getData(IP_SERVER + "req?action=logout&token="
                     + DataManager.encode(getToken()), (b, s) -> {
             });
         }
@@ -546,7 +547,7 @@ public class DataManager {
         cv.put("action", "addAd");
         cv.put("id", ad.getId());
         cv.put("content", ad.getContent());
-        Gonnect.getData("http://10.0.2.2:8111/req?action=addAd&id=" + ad.getId() + "&content="
+        Gonnect.getData(IP_SERVER + "req?action=addAd&id=" + ad.getId() + "&content="
                 + DataManager.encode(ad.getContent()), (b, s) -> {
         });
     }
@@ -624,7 +625,7 @@ public class DataManager {
             type = "AddAdBySellerRequest";
         }
         cv.put("requestType", type);
-        Gonnect.getData("http://10.0.2.2:8111/req?action=addRequest&requestType=" + type + "&request="
+        Gonnect.getData(IP_SERVER + "req?action=addRequest&requestType=" + type + "&request="
                 + DataManager.encode(requestStr), (b, s) -> {
         });
     }
@@ -661,7 +662,7 @@ public class DataManager {
                 ContentValues cv = new ContentValues();
                 cv.put("action", "removeProduct");
                 cv.put("id", product.getProductId());
-                Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+                Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
                 });
                 allProducts.remove(product);
                 return;
@@ -680,7 +681,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncProducts");
         cv.put("products", new Gson().toJson(getAllProducts()));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -698,7 +699,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncCustomers");
         cv.put("customers", new Gson().toJson(customers));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -710,7 +711,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncSellers");
         cv.put("sellers", new Gson().toJson(sellers));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -722,7 +723,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncAdministrators");
         cv.put("administrators", new Gson().toJson(administrators));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -730,7 +731,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncCategories");
         cv.put("categories", new Gson().toJson(getAllCategories()));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -738,7 +739,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncSales");
         cv.put("sales", new Gson().toJson(getAllSales()));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -746,7 +747,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncCoupons");
         cv.put("coupons", new Gson().toJson(getAllCoupons()));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -757,7 +758,7 @@ public class DataManager {
             cv.put("action", "syncCartForUser");
             cv.put("token", getToken());
             cv.put("cart", new Gson().toJson(((Customer) getLoggedInAccount()).getCart()));
-            Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+            Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
             });
         }
     }
@@ -775,7 +776,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncPurchaseLogs");
         cv.put("logs", new Gson().toJson(purchaseLogs));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -787,7 +788,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncSellLogs");
         cv.put("logs", new Gson().toJson(sellLogs));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -795,7 +796,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncTemporaryCart");
         cv.put("cart", new Gson().toJson(getTemporaryCart()));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -808,7 +809,7 @@ public class DataManager {
                 cv.put("username", username);
                 cv.put("password", password);
                 // TODO: Repeated username/password is checked where??
-                Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+                Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
                     try {
                         JSONObject jo = new JSONObject(s);
                         setToken(jo.getString("token"));
@@ -867,7 +868,7 @@ public class DataManager {
             allAdministrators.add((Administrator) account);
             cv.put("type", "administrator");
         }
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
             try {
                 JSONObject jo = new JSONObject(s);
                 // TODO: Does the next line work correctly??
@@ -899,7 +900,7 @@ public class DataManager {
             cv.put("log", new Gson().toJson((PurchaseLog) log));
             cv.put("logType", "PurchaseLog");
         }
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -908,7 +909,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "addSale");
         cv.put("sale", new Gson().toJson(sale));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -917,7 +918,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "addProduct");
         cv.put("product", new Gson().toJson(product));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -926,7 +927,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "addCoupon");
         cv.put("coupon", new Gson().toJson(coupon));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -935,7 +936,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "addCategory");
         cv.put("category", new Gson().toJson(category));
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
 
@@ -943,7 +944,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "removeCoupon");
         cv.put("id", coupon.getId());
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
         allCoupons.remove(coupon);
     }
@@ -952,7 +953,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "removeRequest");
         cv.put("id", request.getId());
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
         addProductBySellerRequests.remove(request);
         addSaleBySellerRequests.remove(request);
@@ -966,7 +967,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "removeSale");
         cv.put("id", sale.getOffId());
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
         allSales.remove(sale);
     }
@@ -975,7 +976,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "removeAccount");
         cv.put("username", account.getUsername());
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
         allCustomers.remove(account);
         allSellers.remove(account);
@@ -986,7 +987,7 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "removeCategory");
         cv.put("id", category.getId());
-        Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
         allCategories.removeIf(c -> c.getId().equals(category.getId()));
     }

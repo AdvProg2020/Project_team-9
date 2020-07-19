@@ -254,9 +254,10 @@ public class EachProductActivity extends AppCompatActivity {
             cv.put("cart", new Gson().toJson(DataManager.shared().getTemporaryCart()));
 //            Gonnect.sendRequest("http://10.0.2.2:8111/", cv, (b, s) -> {
 //            });
-            Gonnect.getData("http://10.0.2.2:8111/req?action=setTemporaryCart&cart="
+            Gonnect.getData(DataManager.IP_SERVER + "req?action=setTemporaryCart&cart="
                     + DataManager.encode(new Gson().toJson(DataManager.shared().getTemporaryCart())), (b, s) -> {
             });
+            DataManager.shared().syncCartForUser();
         }
         Toast.makeText(this, "کالا با موفقیت به سبد خرید افزوده شد", Toast.LENGTH_LONG).show();
     }
