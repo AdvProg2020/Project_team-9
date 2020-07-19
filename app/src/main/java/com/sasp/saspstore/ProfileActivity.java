@@ -49,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button addCreditButton;
     Button removeCreditButton;
     Button inSellProductListButton;
+    Button seeAuctionsButton;
     ImageView proPic;
 
     @Override
@@ -72,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         addCreditButton = findViewById(R.id.addCreditButton);
         removeCreditButton = findViewById(R.id.removeCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
+        seeAuctionsButton = findViewById(R.id.seeAuctionsButton);
         creditTxt = findViewById(R.id.profile_creditTxt);
 
         populateData();
@@ -98,6 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
+        seeAuctionsButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         if (account != null) {
             txtName.setText(account.getFirstName() + " " + account.getLastName());
             try {
@@ -294,5 +297,9 @@ public class ProfileActivity extends AppCompatActivity {
                                 updateTxtCreditText();
                             })));
         });
+    }
+
+    public void seeAuctionsTapped(View view) {
+        Gonnect.getDataAndLaunchActivity(DataManager.IP_SERVER + "?action=getAuctions", AllAuctionsActivity.class, this);
     }
 }

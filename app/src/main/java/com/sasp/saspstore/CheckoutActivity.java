@@ -192,6 +192,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
     // TODO: Select seller when adding to the cart in each product page...?
 
+    // TODO: All Changes to this activity should also be done while receiving auction prizes...
+
+    // TODO: No Log or... while auctioning and receiving the prize...
+
     public void finishEverything() {
         customer.setAddress(txtAddress.getText().toString());
         coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());

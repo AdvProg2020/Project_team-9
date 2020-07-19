@@ -92,6 +92,16 @@
             android:theme="@style/buttonTexts"
             android:onClick="seeCartTapped"/>
 
+        <Button
+            android:id="@+id/seeAuctionsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="مشاهده مزایده‌ها"
+            android:background="@drawable/buttons"
+            android:theme="@style/buttonTexts"
+            android:onClick="seeAuctionsTapped"/>
+
 <!--        <Button-->
 <!--            android:id="@+id/addCreditButton"-->
 <!--            android:layout_width="match_parent"-->

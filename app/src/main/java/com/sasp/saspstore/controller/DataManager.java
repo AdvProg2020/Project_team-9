@@ -19,6 +19,7 @@ import com.sasp.saspstore.model.AddAdBySellerRequest;
 import com.sasp.saspstore.model.AddProductBySellerRequest;
 import com.sasp.saspstore.model.AddSaleBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Auction;
 import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Category;
 import com.sasp.saspstore.model.Coupon;
@@ -52,7 +53,8 @@ import java.util.UUID;
 // TODO: IMPORTANT: All LocalDateTimes are removed!!
 
 public class DataManager {
-    public static final String IP_SERVER = "http://10.0.2.2:8111/";
+    public static final String IP_SERVER = "http://10.0.2.2:8111/"; // AVD
+//    public static final String IP_SERVER = "http://10.0.3.2:8111/"; // Genymotion
     public static Context context;
     private static DataManager sharedInstance;
     private Account loggedInAccount;
@@ -73,11 +75,20 @@ public class DataManager {
     private ArrayList<Sale> allSales = new ArrayList<>();
     private ArrayList<PurchaseLog> purchaseLogs = new ArrayList<>();
     private ArrayList<SellLog> sellLogs = new ArrayList<>();
+    private ArrayList<Auction> auctions = new ArrayList<>();
     private Cart temporaryCart = new Cart();
 
     private String token = "";
     private String adminBankAccountNumber = "";
     private ArrayList<String> onlineUsernames;
+
+    public ArrayList<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(ArrayList<Auction> auctions) {
+        this.auctions = auctions;
+    }
 
     public boolean isMadeAdminBankAccount() {
         return !adminBankAccountNumber.equals("");
@@ -89,6 +100,10 @@ public class DataManager {
 
     public void setOnlineUsernames(ArrayList<String> onlineUsernames) {
         this.onlineUsernames = onlineUsernames;
+    }
+
+    public void addAuction(Auction auction) {
+        auctions.add(auction);
     }
 
     public String getAdminBankAccountNumber() {
@@ -685,6 +700,14 @@ public class DataManager {
         });
     }
 
+    public void syncAuctions() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncAuctions");
+        cv.put("auctions", new Gson().toJson(getAuctions()));
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
+        });
+    }
+
     public void syncAccounts() {
         syncCustomers();
         syncSellers();
@@ -1006,6 +1029,10 @@ public class DataManager {
 
     public Product getProductWithId(String id) {
         return allProducts.stream().filter(product -> product.getProductId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Auction getAuctionWithId(String id) {
+        return auctions.stream().filter(auction -> auction.getId().equals(id)).findFirst().orElse(null);
     }
 
     public Ad getAdWithId(String id) {

@@ -42,6 +42,10 @@ public class Product {
         return features;
     }
 
+    public int getRoundedPriceAfterDiscount() {
+        return (int)(((double) price) * ((double) discountPercent) / 100);
+    }
+
     public void setFeatures(HashMap<String, String> features) {
         this.features = features;
     }

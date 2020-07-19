@@ -71,6 +71,18 @@
         android:fontFamily="@font/yekan"
         android:textSize="25sp" />
 
+<!--    TODO: Can sellers enter this activity in order to make auction? -->
+
+    <Button
+        android:id="@+id/eachProduct_makeAuctionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="به مزایده گذاشتن"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="makeAuctionTapped"/>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

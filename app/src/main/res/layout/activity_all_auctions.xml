@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sasp.saspstore.CommentsListActivity"
+    tools:context="com.sasp.saspstore.AllAuctionsActivity"
     android:orientation="vertical">
     <ListView
-        android:id="@+id/comments_list"
+        android:id="@+id/auctions_list"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
     </ListView>
@@ -17,5 +17,5 @@
         android:text="ورود به پروفایل"
         android:background="@drawable/buttons"
         android:theme="@style/buttonTexts"
-        android:onClick="profileTapped"/>
+        android:onClick="profileTapped" />
 </LinearLayout>

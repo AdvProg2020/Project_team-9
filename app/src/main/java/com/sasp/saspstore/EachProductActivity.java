@@ -11,15 +11,19 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Auction;
 import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Category;
 import com.sasp.saspstore.model.Comment;
@@ -30,8 +34,13 @@ import com.sasp.saspstore.ui.LargeImageViewActivity;
 import com.sasp.saspstore.ui.VideoActivity;
 
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class EachProductActivity extends AppCompatActivity {
 
@@ -44,6 +53,7 @@ public class EachProductActivity extends AppCompatActivity {
     TextView eachProductDateCreated;
     TextView eachProductScore;
     EditText eachProductCompareProductID;
+    Button makeAuctionButton;
 
     Product currentProduct;
 
@@ -66,6 +76,7 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductDateCreated = (TextView) findViewById(R.id.eachProductDateCreated);
         eachProductScore = (TextView) findViewById(R.id.eachProductScore);
         eachProductCompareProductID = findViewById(R.id.eachProductCompareProductID);
+        makeAuctionButton = findViewById(R.id.eachProduct_makeAuctionButton);
 
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");
@@ -397,4 +408,32 @@ public class EachProductActivity extends AppCompatActivity {
         return p[n];
     }
 
+    // TODO: Not tested
+
+    public void makeAuctionTapped(View view) {
+        final View dialogView = View.inflate(this, R.layout.date_time_picker, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        dialogView.findViewById(R.id.date_time_set).setOnClickListener(view1 -> {
+            DatePicker datePicker = dialogView.findViewById(R.id.date_picker);
+            TimePicker timePicker = dialogView.findViewById(R.id.time_picker);
+            Calendar calendar = new GregorianCalendar(datePicker.getYear(),
+                    datePicker.getMonth(),
+                    datePicker.getDayOfMonth(),
+                    timePicker.getHour(),
+                    timePicker.getMinute());
+
+            TimeZone tz = calendar.getTimeZone();
+            ZoneId zid = tz.toZoneId();
+            LocalDateTime endDate = LocalDateTime.ofInstant(calendar.toInstant(), zid);
+            Auction auction = new Auction(DataManager.getNewId(), currentProduct);
+            auction.setEndTime(endDate);
+            DataManager.shared().addAuction(auction);
+            DataManager.shared().syncAuctions();
+            Toast.makeText(EachProductActivity.this, "کالا با موفقیت به مزایده گذاشته شد", Toast.LENGTH_LONG).show();
+            alertDialog.dismiss();
+        });
+        alertDialog.setView(dialogView);
+        alertDialog.show();
+    }
 }
