@@ -56,8 +56,10 @@ public class Account {
     }
 
     public void decreaseCredit(int amount) {
-        credit -= amount;
-        DataManager.shared().syncAccounts();
+        if (credit - amount >= DataManager.shared().getMimimumCredit()) {
+            credit -= amount;
+            DataManager.shared().syncAccounts();
+        }
     }
 
     public void setCredit(int credit) {

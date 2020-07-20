@@ -2,6 +2,7 @@ package com.sasp.saspstore.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -80,9 +81,18 @@ public class DataManager {
     private String token = "";
     private String adminBankAccountNumber = "";
     private ArrayList<String> onlineUsernames;
+    private int mimimumCredit = 0;
 
     public ArrayList<Auction> getAuctions() {
         return auctions;
+    }
+
+    public int getMimimumCredit() {
+        return mimimumCredit;
+    }
+
+    public void setMimimumCredit(int mimimumCredit) {
+        this.mimimumCredit = mimimumCredit;
     }
 
     public void setAuctions(ArrayList<Auction> auctions) {
@@ -146,6 +156,13 @@ public class DataManager {
     }
 
     public void populateData() {
+        Gonnect.getData(IP_SERVER + "req?action=getMinimumCredit", (b, s) -> {
+            try {
+                DataManager.shared().setMimimumCredit(Integer.parseInt(s));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        });
         Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
             ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
             }.getType());

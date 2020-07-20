@@ -89,7 +89,7 @@ public class CheckoutActivity extends AppCompatActivity {
         }
         txtTotalPriceText.append("میزان تخفیف: ").append(totalPrice - priceAfterDiscount).append("\n");
         txtTotalPriceText.append("مبلغ قابل پرداخت: ").append(priceAfterDiscount);
-        if (customer.getCredit() < priceAfterDiscount) {
+        if (customer.getCredit() - priceAfterDiscount < DataManager.shared().getMimimumCredit()) {
             txtTotalPriceText.append("\n").append("شما ").append(customer.getCredit()).append(" تومان در حساب خود دارید و متاسفانه نمی‌توانید هزینه این کالاها را از کیف پول خود پرداخت کنید.");
             finishButton.setVisibility(View.GONE);
         } else {
@@ -237,8 +237,11 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     public void payByCreditTapped(View view) {
-        customer.decreaseCredit((int) priceAfterDiscount);
-        finishEverything();
+        Account account = DataManager.shared().getLoggedInAccount();
+        if (account.getCredit() - ((int) priceAfterDiscount) > DataManager.shared().getMimimumCredit()) {
+            customer.decreaseCredit((int) priceAfterDiscount);
+            finishEverything();
+        }
     }
 
     public void payByBankTapped(View view) {

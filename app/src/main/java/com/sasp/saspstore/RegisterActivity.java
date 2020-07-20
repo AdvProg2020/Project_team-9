@@ -163,11 +163,14 @@ public class RegisterActivity extends AppCompatActivity {
             Customer customer =
                     new Customer(username, password, email,
                             phone, name, lastName, profilePicturePath);
+            customer.setCredit(DataManager.shared().getMimimumCredit());
             DataManager.shared().registerAccount(customer);
         } else if (type == UserRole.ADMIN) {
             Administrator administrator =
                     new Administrator(username, password, email,
                             phone, name, lastName, profilePicturePath);
+            // TODO: Is credit shown in admin page?? Should not be!!
+            administrator.setCredit(DataManager.shared().getMimimumCredit());
             DataManager.shared().registerAccount(administrator);
         }
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -185,6 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
             Seller seller =
                     new Seller(username, password, email, phone,
                             name, lastName, companyDetails, profilePicturePath);
+            seller.setCredit(DataManager.shared().getMimimumCredit());
             DataManager.shared().registerAccount(seller);
             SellerRegistrationRequest request =
                     new SellerRegistrationRequest(DataManager.getNewId(), seller);
@@ -217,9 +221,9 @@ public class RegisterActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
                     "بازگشت", (dialog, which) -> dialog.dismiss());
             alertDialog.show();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private boolean checkEmptyUsernameOrPassword(String username, String password) {

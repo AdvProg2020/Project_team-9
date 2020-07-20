@@ -56,6 +56,7 @@ public class EditProfileActivity extends AppCompatActivity {
         DataManager.shared().getLoggedInAccount().setLastName(txtLastName.getText().toString());
         DataManager.shared().getLoggedInAccount().setEmail(txtEmail.getText().toString());
         DataManager.shared().getLoggedInAccount().setPhoneNumber(txtPhoneNumber.getText().toString());
+        DataManager.shared().syncAccounts();
         finish();
     }
 }

@@ -112,6 +112,30 @@
 <!--            android:theme="@style/buttonTexts"-->
 <!--            android:onClick="addCreditTapped"/>-->
 
+        <EditText android:id="@+id/profile_minimumCreditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:theme="@style/usualTexts"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="20dp"
+            android:text=""
+            android:hint="حداقل مبلغ مجاز در کیف پول"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/setMinimumCreditButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="ثبت حداقل مبلغ مجاز در کیف پول"
+            android:background="@drawable/buttons"
+            android:theme="@style/buttonTexts"
+            android:onClick="setMinimumCreditTapped"
+            android:visibility="gone" />
+
         <EditText android:id="@+id/profile_creditTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

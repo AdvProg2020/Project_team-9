@@ -66,7 +66,7 @@ public class CheckOutMenu extends Menu {
         }
         System.out.println("Amount of discount: -$" + (totalPrice - priceAfterDiscount));
         System.out.println("Price to pay: $" + priceAfterDiscount);
-        if (customer.getCredit() < priceAfterDiscount) {
+        if (customer.getCredit() - priceAfterDiscount < DataManager.shared().getMimimumCredit()) {
             System.out.println("You have $" + customer.getCredit() + " in your account; unfortunately, you're not able to purchase these products.");
         } else {
             System.out.print("If you are sure you want to purchase these products, type \"yes\"; anything else will be regarded as a discard message: ");

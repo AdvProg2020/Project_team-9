@@ -34,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     EditText adTxt;
     EditText creditTxt;
+    EditText minimumCreditTxt;
     Button adBtn;
     TextView txtName;
     TextView txtUsernameAndRole;
@@ -50,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button removeCreditButton;
     Button inSellProductListButton;
     Button seeAuctionsButton;
+    Button setMinimumCreditButton;
     ImageView proPic;
 
     @Override
@@ -59,11 +61,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         adTxt = findViewById(R.id.profile_adTxt);
         adBtn = findViewById(R.id.profile_adBtn);
-        txtName = (TextView) findViewById(R.id.fragment_profile_name);
-        txtUsernameAndRole = (TextView) findViewById(R.id.fragment_profile_usernameAndRole);
-        txtEmail = (TextView) findViewById(R.id.fragment_profile_email);
-        txtPhoneNumber = (TextView) findViewById(R.id.fragment_profile_phoneNumber);
-        txtCredit = (TextView) findViewById(R.id.fragment_profile_credit);
+        txtName = findViewById(R.id.fragment_profile_name);
+        txtUsernameAndRole = findViewById(R.id.fragment_profile_usernameAndRole);
+        txtEmail = findViewById(R.id.fragment_profile_email);
+        txtPhoneNumber = findViewById(R.id.fragment_profile_phoneNumber);
+        txtCredit = findViewById(R.id.fragment_profile_credit);
         txtCompanyDetails = findViewById(R.id.fragment_profile_companyDetails);
         seeAllCouponsButton = findViewById(R.id.seeAllCouponsButton);
         seeAllUsersButton = findViewById(R.id.seeAllUsersButton);
@@ -74,7 +76,9 @@ public class ProfileActivity extends AppCompatActivity {
         removeCreditButton = findViewById(R.id.removeCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
         seeAuctionsButton = findViewById(R.id.seeAuctionsButton);
+        setMinimumCreditButton = findViewById(R.id.setMinimumCreditButton);
         creditTxt = findViewById(R.id.profile_creditTxt);
+        minimumCreditTxt = findViewById(R.id.profile_minimumCreditTxt);
 
         populateData();
     }
@@ -87,6 +91,10 @@ public class ProfileActivity extends AppCompatActivity {
     private void populateData() {
         DataManager.shared().populateData();
         Account account = DataManager.shared().getLoggedInAccount();
+        if (account.getCredit() < DataManager.shared().getMimimumCredit()) {
+            account.setCredit(DataManager.shared().getMimimumCredit());
+            DataManager.shared().syncAccounts();
+        }
         adBtn.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         adTxt.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         seeAllCouponsButton.setVisibility(account instanceof Seller ? View.GONE : View.VISIBLE);
@@ -94,7 +102,9 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllCategoriesButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        setMinimumCreditButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         creditTxt.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        minimumCreditTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         addCreditButton.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
         removeCreditButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
@@ -242,7 +252,7 @@ public class ProfileActivity extends AppCompatActivity {
         String ad = adTxt.getText().toString();
         Account account = DataManager.shared().getLoggedInAccount();
         if (!ad.equals("") && account instanceof Seller) {
-            if (account.getCredit() < 5) {
+            if (account.getCredit() - 5 < DataManager.shared().getMimimumCredit()) {
                 Toast.makeText(this, "اعتبار حساب شما ناکافی است", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -282,7 +292,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void removeCreditTapped(View view) {
         Account account = DataManager.shared().getLoggedInAccount();
-        if (Integer.parseInt(creditTxt.getText().toString()) > account.getCredit()) {
+        if (Integer.parseInt(creditTxt.getText().toString()) > account.getCredit() - DataManager.shared().getMimimumCredit()) {
             Toast.makeText(this, "اعتبار حساب شما ناکافی است", Toast.LENGTH_LONG).show();
             return;
         }
@@ -301,5 +311,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void seeAuctionsTapped(View view) {
         Gonnect.getDataAndLaunchActivity(DataManager.IP_SERVER + "?action=getAuctions", AllAuctionsActivity.class, this);
+    }
+
+    public void setMinimumCreditTapped(View view) {
+        try {
+            int credit = Integer.parseInt(minimumCreditTxt.getText().toString());
+            DataManager.shared().setMimimumCredit(credit);
+            Gonnect.getData(DataManager.IP_SERVER + "req?action=setMinimumCredit&credit=" + credit, (b, s) -> {
+            });
+            Toast.makeText(this, "حداقل اعتبار کیف‌های پول با موفقیت ثبت شد", Toast.LENGTH_LONG).show();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 }

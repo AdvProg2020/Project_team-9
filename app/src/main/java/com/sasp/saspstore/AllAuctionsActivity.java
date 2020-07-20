@@ -60,7 +60,7 @@ public class AllAuctionsActivity extends AppCompatActivity {
                 if (customer.getUsername().equals(auction.getLastCustomer().getUsername())) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllAuctionsActivity.this)
                             .setTitle("تبریک! شما برنده مزایده شدید");
-                    if (customer.getCredit() < auction.getProduct().getRoundedPriceAfterDiscount()) {
+                    if (customer.getCredit() - auction.getProduct().getRoundedPriceAfterDiscount() < DataManager.shared().getMimimumCredit()) {
                         alertDialog.setMessage("متاسفانه اعتبار شما برای دریافت محصول خود کافی نیست!");
                         alertDialog.setNeutralButton("بازگشت", null);
                     } else {
@@ -106,7 +106,7 @@ public class AllAuctionsActivity extends AppCompatActivity {
         dialogBuilder.setTitle("مزایده").setMessage("").setPositiveButton("ثبت مبلغ پیشنهادی", (dialog, whichButton) -> {
             int newPrice = Integer.parseInt(firstEditText.getText().toString());
             Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
-            if (newPrice > auction.getPriceUpToNow() && newPrice <= customer.getCredit()) {
+            if (newPrice > auction.getPriceUpToNow() && newPrice <= customer.getCredit() - DataManager.shared().getMimimumCredit()) {
                 auction.setLastCustomer(customer);
                 auction.setPriceUpToNow(newPrice);
                 DataManager.shared().syncAuctions();
