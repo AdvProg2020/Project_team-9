@@ -34,6 +34,8 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         this.products = products;
     }
 
+    // TODO: Image not tested at all! The beginning???
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -49,7 +51,7 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         if (product == null) return rowView;
 //        Glide.with(context).load(product.getImageURL()).into(imageView);
 //        Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
-        byte[] decodedString = Base64.decode(product.getImageBase64(), Base64.DEFAULT);
+        byte[] decodedString = Base64.decode(product.getImageBase64(), Base64.URL_SAFE);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         imageView.setImageBitmap(bitmap);
         txtTitle.setText(product.getName());

@@ -102,7 +102,7 @@ public class AddProductActivity extends AppCompatActivity {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            String encoded = Base64.encodeToString(byteArray, Base64.URL_SAFE);
 //            new ImageSaver(this).setFileName(newProductID + ".png").setDirectoryName("images").save(bitmap);
             HashMap<String, String> hashMap = new HashMap<>();
             if (finalCategory != null) {
