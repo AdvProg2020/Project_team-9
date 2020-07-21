@@ -185,8 +185,8 @@ public class AddSaleActivity extends AppCompatActivity {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         dialogView.findViewById(R.id.date_time_set).setOnClickListener((View.OnClickListener) view1 -> {
-            DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
-            TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.time_picker);
+            DatePicker datePicker = dialogView.findViewById(R.id.date_picker);
+            TimePicker timePicker = dialogView.findViewById(R.id.time_picker);
             Calendar calendar = new GregorianCalendar(datePicker.getYear(),
                     datePicker.getMonth(),
                     datePicker.getDayOfMonth(),

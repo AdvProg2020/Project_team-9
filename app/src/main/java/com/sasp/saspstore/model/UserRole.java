@@ -3,7 +3,7 @@ package com.sasp.saspstore.model;
 import androidx.annotation.NonNull;
 
 public enum UserRole {
-    CUSTOMER, SELLER, ADMIN;
+    CUSTOMER, SELLER, ADMIN, ASSISTANT;
 
     @NonNull
     @Override
@@ -15,6 +15,8 @@ public enum UserRole {
                 return "seller";
             case CUSTOMER:
                 return "customer";
+            case ASSISTANT:
+                return "assistant";
             default:
                 return "";
         }

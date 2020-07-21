@@ -14,6 +14,15 @@
         android:background="@drawable/buttons"
         android:theme="@style/buttonTexts"
         android:onClick="addAdminTapped"/>
+    <Button
+        android:id="@+id/allUsersList_addAssistantButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="افزودن پشتیبان"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="addAssistantTapped"/>
     <ListView
         android:id="@+id/allUsersList"
         android:layout_height="wrap_content"

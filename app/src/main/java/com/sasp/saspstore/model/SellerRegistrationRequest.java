@@ -18,5 +18,6 @@ public class SellerRegistrationRequest extends Request {
     public void fulfill() {
         getSeller().setPermittedToSell(true);
         DataManager.shared().syncAccounts();
+        DataManager.shared().removeRequest(this);
     }
 }

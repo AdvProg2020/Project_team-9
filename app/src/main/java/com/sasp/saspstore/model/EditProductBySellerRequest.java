@@ -30,5 +30,6 @@ public class EditProductBySellerRequest extends Request {
     public void fulfill() {
         DataManager.shared().removeProduct(oldProduct);
         DataManager.shared().addProduct(getNewProduct());
+        DataManager.shared().removeRequest(this);
     }
 }

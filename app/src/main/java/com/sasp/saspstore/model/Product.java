@@ -1,8 +1,18 @@
 package com.sasp.saspstore.model;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.controller.DataManager;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +31,8 @@ public class Product {
     private int numberAvailable;
     private String category;
     private String description;
-//    private String imageURL;
-    private String imageBase64;
+    //    private String imageURL;
+//    private String imageBase64;
     private int[] slides;
     private ArrayList<Comment> comments;
     private ArrayList<Score> scores;
@@ -44,7 +54,7 @@ public class Product {
     }
 
     public int getRoundedPriceAfterDiscount() {
-        return (int)(((double) price) * ((double) discountPercent) / 100);
+        return (int) (((double) price) * ((double) discountPercent) / 100);
     }
 
     public void setFeatures(HashMap<String, String> features) {
@@ -61,11 +71,53 @@ public class Product {
 
 
     public String getImageBase64() {
-        return imageBase64;
+//        String ret = "";
+//        try {
+//            InputStream inputStream = DataManager.context.openFileInput("image.txt");
+//            if (inputStream != null) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//                String receiveString;
+//                StringBuilder stringBuilder = new StringBuilder();
+//                while ((receiveString = bufferedReader.readLine()) != null) {
+//                    stringBuilder.append("\n").append(receiveString);
+//                }
+//                inputStream.close();
+//                ret = stringBuilder.toString();
+//            }
+//        } catch (FileNotFoundException e) {
+//            Log.wtf("Err", "File not found: " + e.toString());
+//        } catch (IOException e) {
+//            Log.wtf("Err", "Can not read file: " + e.toString());
+//        }
+//        return ret;
+        return readTextFile(DataManager.context.getResources().openRawResource(R.raw.image));
+    }
+
+    private String readTextFile(InputStream inputStream) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        int len;
+        try {
+            while ((len = inputStream.read(buf)) != -1) {
+                outputStream.write(buf, 0, len);
+            }
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+            Log.wtf("Err", e.getLocalizedMessage());
+        }
+        return outputStream.toString();
     }
 
     public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
+//        try {
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(DataManager.context.openFileOutput(productId + ".txt", Context.MODE_PRIVATE));
+//            outputStreamWriter.write(imageBase64);
+//            outputStreamWriter.close();
+//        } catch (IOException e) {
+//            Log.e("Exception", "File write failed: " + e.toString());
+//        }
     }
 
     public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
@@ -87,7 +139,8 @@ public class Product {
     }
 
     public Seller getCurrentSeller() {
-        if (currentSeller.equals("") && sellers.size() > 0) return (Seller) DataManager.shared().getAccountWithGivenUsername(sellers.get(0));
+        if (currentSeller.equals("") && sellers.size() > 0)
+            return (Seller) DataManager.shared().getAccountWithGivenUsername(sellers.get(0));
         return (Seller) DataManager.shared().getAccountWithGivenUsername(currentSeller);
     }
 

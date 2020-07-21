@@ -65,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         addAdmin = intent.getStringExtra("addAdmin");
-        addAssistant = intent.getStringExtra("addAdmin");
+        addAssistant = intent.getStringExtra("addAssistant");
         if ((addAdmin != null && addAdmin.equals("true")) ||
                 (addAssistant != null && addAssistant.equals("true"))) {
             txtCompanyDetails.setVisibility(View.GONE);
@@ -317,6 +317,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private UserRole getAccountType() {
         if (addAdmin != null && addAdmin.equals("true")) return UserRole.ADMIN;
+        if (addAssistant != null && addAssistant.equals("true")) return UserRole.ASSISTANT;
         UserRole type = UserRole.CUSTOMER;
         int selectedId = radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);

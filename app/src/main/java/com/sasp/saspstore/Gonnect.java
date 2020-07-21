@@ -807,7 +807,7 @@ public class Gonnect {
 
                 Intent intent=new Intent(context,activity);
                 intent.putExtra("response",response.body().string());
-                context.startActivity(new Intent(context,activity));
+                context.startActivity(intent);
             }
         });
 

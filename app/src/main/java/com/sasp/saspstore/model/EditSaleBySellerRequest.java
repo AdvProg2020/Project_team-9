@@ -30,5 +30,6 @@ public class EditSaleBySellerRequest extends Request {
     public void fulfill() {
         DataManager.shared().removeSale(getOldSale());
         DataManager.shared().addSale(getNewSale());
+        DataManager.shared().removeRequest(this);
     }
 }

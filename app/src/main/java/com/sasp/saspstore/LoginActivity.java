@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
+import com.sasp.saspstore.model.Seller;
 
 import java.util.HashMap;
 
@@ -71,6 +72,16 @@ public class LoginActivity extends AppCompatActivity {
             DataManager.shared().getTemporaryCart().setProducts(new HashMap<>());
             DataManager.shared().syncTemporaryCart();
             DataManager.shared().syncCartForUser();
+        } else if (result == DataManager.AccountType.SELLER) {
+            if (!((Seller) (DataManager.shared().getLoggedInAccount())).isPermittedToSell()) {
+                DataManager.shared().logout();
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle("خطا");
+                alertDialog.setMessage("شما توسط مدیر تایید نشده‌اید");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> dialog.dismiss());
+                alertDialog.show();
+                return;
+            }
         }
         finish();
         Intent intent = new Intent(this, ProfileActivity.class);

@@ -23,5 +23,6 @@ public class AddSaleBySellerRequest extends Request {
     @Override
     public void fulfill() {
         DataManager.shared().addSale(getSale());
+        DataManager.shared().removeRequest(this);
     }
 }

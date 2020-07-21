@@ -52,10 +52,11 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "شماره تلفن را به درستی وارد نمایید", Toast.LENGTH_SHORT).show();
             return;
         }
-        DataManager.shared().getLoggedInAccount().setFirstName(txtFirstName.getText().toString());
-        DataManager.shared().getLoggedInAccount().setLastName(txtLastName.getText().toString());
-        DataManager.shared().getLoggedInAccount().setEmail(txtEmail.getText().toString());
-        DataManager.shared().getLoggedInAccount().setPhoneNumber(txtPhoneNumber.getText().toString());
+        Account account = DataManager.shared().getAccountWithGivenUsername(DataManager.shared().getLoggedInAccount().getUsername());
+        account.setFirstName(txtFirstName.getText().toString());
+        account.setLastName(txtLastName.getText().toString());
+        account.setEmail(txtEmail.getText().toString());
+        account.setPhoneNumber(txtPhoneNumber.getText().toString());
         DataManager.shared().syncAccounts();
         finish();
     }

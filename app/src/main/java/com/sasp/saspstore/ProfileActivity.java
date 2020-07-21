@@ -1,6 +1,7 @@
 package com.sasp.saspstore;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,11 +17,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
 import com.sasp.saspstore.model.Ad;
 import com.sasp.saspstore.model.AddAdBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Assistant;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.SellLog;
@@ -55,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button setMinimumCreditButton;
     Button setKarmozdButton;
     Button seeOnlineAssistantsButton;
+    Button seeMessagesToCurrentAssistantButton;
     ImageView proPic;
 
     @Override
@@ -78,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
         addCreditButton = findViewById(R.id.addCreditButton);
         removeCreditButton = findViewById(R.id.removeCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
+        seeMessagesToCurrentAssistantButton = findViewById(R.id.seeMessagesToCurrentAssistantButton);
         seeAuctionsButton = findViewById(R.id.seeAuctionsButton);
         setMinimumCreditButton = findViewById(R.id.setMinimumCreditButton);
         setKarmozdButton = findViewById(R.id.setKarmozdButton);
@@ -97,10 +102,6 @@ public class ProfileActivity extends AppCompatActivity {
     private void populateData() {
         DataManager.shared().populateData();
         Account account = DataManager.shared().getLoggedInAccount();
-        if (account.getCredit() < DataManager.shared().getMimimumCredit()) {
-            account.setCredit(DataManager.shared().getMimimumCredit());
-            DataManager.shared().syncAccounts();
-        }
         adBtn.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         adTxt.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         seeAllCouponsButton.setVisibility(account instanceof Seller ? View.GONE : View.VISIBLE);
@@ -109,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         setMinimumCreditButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
-        creditTxt.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        creditTxt.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         minimumCreditTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         karmozdTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         addCreditButton.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
@@ -117,10 +118,15 @@ public class ProfileActivity extends AppCompatActivity {
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
+        seeMessagesToCurrentAssistantButton.setVisibility(account instanceof Assistant ? View.VISIBLE : View.GONE);
         seeAuctionsButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         setKarmozdButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeOnlineAssistantsButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         if (account != null) {
+            if (account.getCredit() < DataManager.shared().getMimimumCredit()) {
+                account.setCredit(DataManager.shared().getMimimumCredit());
+                DataManager.shared().syncAccounts();
+            }
             txtName.setText(account.getFirstName() + " " + account.getLastName());
             try {
                 File imageFile = new File(account.getProfilePicPath());
@@ -135,6 +141,8 @@ public class ProfileActivity extends AppCompatActivity {
                 role = "seller";
             } else if (account instanceof Administrator) {
                 role = "administrator";
+            } else if (account instanceof Assistant) {
+                role = "assistant";
             }
             if (account instanceof Seller)
                 txtCompanyDetails.setText(((Seller) account).getCompanyDetails());
@@ -319,7 +327,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void seeAuctionsTapped(View view) {
-        Gonnect.getDataAndLaunchActivity(DataManager.IP_SERVER + "?action=getAuctions", AllAuctionsActivity.class, this);
+        Gonnect.getDataAndLaunchActivity(DataManager.IP_SERVER + "?action=getAuctions", AllAuctionsActivity.class, ProfileActivity.this);
     }
 
     public void setMinimumCreditTapped(View view) {
@@ -347,9 +355,20 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void seeOnlineAssistantsTapped(View view) {
-        Gonnect.getData(DataManager.IP_SERVER + "?action=syncAssistants", (isSuccess, errorOrResponse) ->
-                runOnUiThread(() -> Gonnect.getDataAndLaunchActivity(
-                        DataManager.IP_SERVER + "?action=getOnlineAssistants",
-                        OnlineAssistantsListActivity.class, this)));
+        ArrayList<Assistant> assistants = new ArrayList<>();
+        for (Account account : DataManager.shared().getAllAccounts()) {
+            if (account instanceof Assistant) assistants.add((Assistant) account);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncAssistants");
+        cv.put("assistants", new Gson().toJson(assistants));
+        Gonnect.sendRequest(DataManager.IP_SERVER, cv, (b, s) -> runOnUiThread(() -> Gonnect.getDataAndLaunchActivity(
+                DataManager.IP_SERVER + "?action=getOnlineAssistants",
+                OnlineAssistantsListActivity.class, ProfileActivity.this)));
+    }
+
+    public void seeMessagesToCurrentAssistantTapped(View view) {
+        Intent intent = new Intent(this, AssistantChatActivity.class);
+        startActivity(intent);
     }
 }

@@ -22,6 +22,7 @@ public class UsersListActivity extends AppCompatActivity {
 
     ListView listView;
     Button addAdminButton;
+    Button addAssistantButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class UsersListActivity extends AppCompatActivity {
         String sender = receivedIntent.getStringExtra("sender");
         listView = findViewById(R.id.allUsersList);
         addAdminButton = findViewById(R.id.allUsersList_addAdminButton);
+        addAssistantButton = findViewById(R.id.allUsersList_addAssistantButton);
         // TODO: Should sometimes show only customers... and not sellers and...!!!
         ArrayList<Account> accounts = new ArrayList<>(DataManager.shared().getAllAccounts());
         ArrayAdapter<Account> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
@@ -74,6 +76,12 @@ public class UsersListActivity extends AppCompatActivity {
     public void addAdminTapped(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         intent.putExtra("addAdmin", "true");
+        startActivity(intent);
+    }
+
+    public void addAssistantTapped(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("addAssistant", "true");
         startActivity(intent);
     }
 }

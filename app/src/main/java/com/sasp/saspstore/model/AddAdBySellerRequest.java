@@ -19,5 +19,6 @@ public class AddAdBySellerRequest extends Request {
     @Override
     public void fulfill() {
         DataManager.shared().addAd(new Ad(DataManager.getNewId(), ad));
+        DataManager.shared().removeRequest(this);
     }
 }

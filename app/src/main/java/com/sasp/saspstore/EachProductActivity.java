@@ -7,8 +7,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -83,8 +85,9 @@ public class EachProductActivity extends AppCompatActivity {
         if (productID == null || productID.equals("")) return;
         currentProduct = DataManager.shared().getProductWithId(productID);
 
-        // TODO: ImageView file source??
-        Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
+//        Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
+        byte[] decodedString = Base64.decode(currentProduct.getImageBase64(), Base64.URL_SAFE);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         eachProductImageView.setImageBitmap(bitmap);
         //TODO: color overlay. Is this working?
         if (currentProduct.getNumberAvailable() == 0)
@@ -103,7 +106,7 @@ public class EachProductActivity extends AppCompatActivity {
             }
         });
         eachProductTitle.setText(currentProduct.getName() + (currentProduct.getNumberAvailable() <= 0 ? " (تمام شده)" : ""));
-        eachProductBrand.setText("برند: " + currentProduct.getName());
+        eachProductBrand.setText("برند: " + currentProduct.getBrand());
         if (currentProduct.getDiscountPercent() != 0) {
             eachProductPriceAndDiscountPercent.setText("مبلغ اصلی: " + currentProduct.getPrice() + " تومان، با " +
                     currentProduct.getDiscountPercent() + " درصد تخفیف، " +
@@ -116,12 +119,9 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductDateCreated.setText("اضافه شده در " + currentProduct.getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         starRating((int) currentProduct.getAverageScore());
 
-        findViewById(R.id.show_video_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), VideoActivity.class);
-                startActivity(intent);
-            }
+        findViewById(R.id.show_video_button).setOnClickListener(v -> {
+            Intent intent1 = new Intent(getApplicationContext(), VideoActivity.class);
+            startActivity(intent1);
         });
     }
 

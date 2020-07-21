@@ -21,6 +21,16 @@
             android:theme="@style/buttonTexts" />
 
         <Button
+            android:id="@+id/seeMessagesToCurrentAssistantButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="seeMessagesToCurrentAssistantTapped"
+            android:text="مشاهده پیام‌ها"
+            android:theme="@style/buttonTexts" />
+
+        <Button
             android:id="@+id/seeOnlineAssistantsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -141,7 +141,7 @@ public class AssistantChatActivity extends AppCompatActivity {
     }
 
     private boolean doesMessagesArrayContainMessageWithID(String id) {
-        for (AssistantMessage message : messages) {
+        for (AssistantMessage message : DataManager.shared().getAllAssistantMessages()) {
             if (message.getId().equals(id)) return true;
         }
         return false;

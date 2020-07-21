@@ -55,8 +55,8 @@ import java.util.UUID;
 // TODO: IMPORTANT: All LocalDateTimes are removed!!
 
 public class DataManager {
-    public static final String IP_SERVER = "http://10.0.2.2:8111/"; // AVD
-//    public static final String IP_SERVER = "http://10.0.3.2:8111/"; // Genymotion
+//        public static final String IP_SERVER = "http://10.0.2.2:8111/"; // AVD
+    public static final String IP_SERVER = "http://10.0.3.2:8111/"; // Genymotion
     public static Context context;
     private static DataManager sharedInstance;
     private Account loggedInAccount;
@@ -774,6 +774,7 @@ public class DataManager {
         syncCustomers();
         syncSellers();
         syncAdministrators();
+        syncAssistants();
     }
 
     public void syncCustomers() {
@@ -808,6 +809,18 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncAdministrators");
         cv.put("administrators", new Gson().toJson(administrators));
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
+        });
+    }
+
+    public void syncAssistants() {
+        ArrayList<Assistant> assistants = new ArrayList<>();
+        for (Account account : getAllAccounts()) {
+            if (account instanceof Assistant) assistants.add((Assistant) account);
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncAssistants");
+        cv.put("assistants", new Gson().toJson(assistants));
         Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
@@ -954,6 +967,8 @@ public class DataManager {
         } else if (account instanceof Administrator) {
             allAdministrators.add((Administrator) account);
             cv.put("type", "administrator");
+            String currentToken = getToken();
+            if (currentToken != null && !currentToken.equals("")) cv.put("token", currentToken);
         } else if (account instanceof Assistant) {
             allAssistants.add((Assistant) account);
             cv.put("type", "assistant");
@@ -1004,12 +1019,19 @@ public class DataManager {
     }
 
     public void addProduct(Product product) {
+        if (getProductWithId(product.getProductId()) != null) return;
         allProducts.add(product);
         ContentValues cv = new ContentValues();
         cv.put("action", "addProduct");
         cv.put("product", new Gson().toJson(product));
         Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
+//        ContentValues cv2 = new ContentValues();
+//        cv2.put("action", "setImageForProduct");
+//        cv2.put("productID", product.getProductId());
+//        cv2.put("base64", product.getImageBase64());
+//        Gonnect.sendRequest(IP_SERVER, cv2, (b, s) -> {
+//        });
     }
 
     public void addCoupon(Coupon coupon) {
