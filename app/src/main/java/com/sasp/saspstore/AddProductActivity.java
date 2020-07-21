@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ import com.sasp.saspstore.model.Status;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -97,7 +99,11 @@ public class AddProductActivity extends AppCompatActivity {
             String newProductID = DataManager.getNewId();
             Drawable drawable = Drawable.createFromStream(imageInputStream, newProductID);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            new ImageSaver(this).setFileName(newProductID + ".png").setDirectoryName("images").save(bitmap);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//            new ImageSaver(this).setFileName(newProductID + ".png").setDirectoryName("images").save(bitmap);
             HashMap<String, String> hashMap = new HashMap<>();
             if (finalCategory != null) {
                 hashMap.put(finalCategory.getUniqueFeatures().get(0), txtFirstFeature.getText().toString());
@@ -113,6 +119,7 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, sellers, numberAvailable,
                         DataManager.shared().getCategoryWithId(categoryID), txtProductDescription.getText().toString(),
                         LocalDateTime.now(), hashMap);
+                product.setImageBase64(encoded);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
                 DataManager.shared().addRequest(request);
                 Toast.makeText(this, "درخواست افزودن کالا با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();
@@ -123,6 +130,7 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, oldProduct.getSellers(),
                         numberAvailable, oldProduct.getCategory(),
                         txtProductDescription.getText().toString(), oldProduct.getDateCreated(), hashMap);
+                newProduct.setImageBase64(oldProduct.getImageBase64());
                 EditProductBySellerRequest request = new EditProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), oldProduct, newProduct);
                 DataManager.shared().addRequest(request);
                 Toast.makeText(this, "درخواست ویرایش کالا با موفقیت به مدیر ارسال شد", Toast.LENGTH_LONG).show();

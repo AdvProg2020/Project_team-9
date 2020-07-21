@@ -2,7 +2,9 @@ package com.sasp.saspstore.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,10 +46,11 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
         RatingBar ratingBar = rowView.findViewById(R.id.product_list_item_score);
 
         Product product = products.get(position);
-        if (product == null)
-            return rowView;
+        if (product == null) return rowView;
 //        Glide.with(context).load(product.getImageURL()).into(imageView);
-        Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
+//        Bitmap bitmap = new ImageSaver(DataManager.context).setFileName(product.getProductId() + ".png").setDirectoryName("images").load();
+        byte[] decodedString = Base64.decode(product.getImageBase64(), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         imageView.setImageBitmap(bitmap);
         txtTitle.setText(product.getName());
         if (product.getNumberAvailable() == 0) {
