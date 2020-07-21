@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sasp.saspstore.AssistantChatActivity"
+    android:orientation="vertical">
+    <EditText android:id="@+id/assistant_chatTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:theme="@style/usualTexts"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
+        android:height="10dp"
+        android:hint="پیام شما"/>
+    <Button
+        android:id="@+id/assistant_chatButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="ارسال پیام"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="sendMessageTapped"/>
+    <ListView
+        android:id="@+id/assistantChat_list"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+    </ListView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="ورود به پروفایل"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="profileTapped" />
+</LinearLayout>

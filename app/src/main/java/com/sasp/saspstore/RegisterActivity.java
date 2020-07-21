@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.controller.Validator;
 import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Assistant;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.model.SellerRegistrationRequest;
@@ -43,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText txtCompanyDetails;
     RadioGroup radioGroup;
     String addAdmin;
+    String addAssistant;
     private String profilePicturePath;
 
     @Override
@@ -63,7 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         addAdmin = intent.getStringExtra("addAdmin");
-        if (addAdmin != null && addAdmin.equals("true")) {
+        addAssistant = intent.getStringExtra("addAdmin");
+        if ((addAdmin != null && addAdmin.equals("true")) ||
+                (addAssistant != null && addAssistant.equals("true"))) {
             txtCompanyDetails.setVisibility(View.GONE);
             radioGroup.setVisibility(View.GONE);
         }
@@ -74,31 +78,24 @@ public class RegisterActivity extends AppCompatActivity {
             txtCompanyDetails.setVisibility(View.GONE);
         }
 
-        profilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        profilePicture.setOnClickListener(v -> {
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
 
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
+            Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-
-                startActivityForResult(chooserIntent, PICK_IMAGE);
-            }
+            startActivityForResult(chooserIntent, PICK_IMAGE);
         });
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.radioButton_seller) {
-                    txtCompanyDetails.setVisibility(View.VISIBLE);
-                } else {
-                    txtCompanyDetails.setVisibility(View.GONE);
-                }
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioButton_seller) {
+                txtCompanyDetails.setVisibility(View.VISIBLE);
+            } else {
+                txtCompanyDetails.setVisibility(View.GONE);
             }
         });
     }
@@ -150,11 +147,30 @@ public class RegisterActivity extends AppCompatActivity {
             registerCustomerOrAdmin(type, username, password, name, lastName, email, phone);
             return;
         }
+        if (addAssistant != null && addAssistant.equals("true")) {
+            registerAssistant(username, password, name, lastName, email, phone);
+            return;
+        }
         if (checkForAdmin(type)) return;
         if (hasAnyValidationFailed(type, username, password, email, phone, companyDetails)) return;
         if (registerIfSeller(type, username, password, name,
                 lastName, email, phone, companyDetails)) return;
         registerCustomerOrAdmin(type, username, password, name, lastName, email, phone);
+    }
+
+    private void registerAssistant(String username, String password,
+                                   String name, String lastName, String email, String phone) {
+        Assistant assistant = new Assistant(username, password, email, phone, name,
+                lastName, profilePicturePath);
+        // TODO: Is credit shown in assistant page?? Should not be!!
+        assistant.setCredit(DataManager.shared().getMimimumCredit());
+        DataManager.shared().registerAccount(assistant);
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("ثبت نام با موفقیت انجام شد");
+        alertDialog.setMessage("می‌توانید به حساب ساخته‌شده، از طریق صفحه ورود وارد شوید.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت",
+                (dialog, which) -> {dialog.dismiss();finish();});
+        alertDialog.show();
     }
 
     private void registerCustomerOrAdmin(UserRole type, String username, String password,

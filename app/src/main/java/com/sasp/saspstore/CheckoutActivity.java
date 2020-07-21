@@ -215,7 +215,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     countOfSellLogsAdded += 1;
                     DataManager.shared().addLog(sellLog);
                 }
-                pair.getKey().getCurrentSeller().increaseCredit((int) priceAfterDiscount);
+                pair.getKey().getCurrentSeller().increaseCredit((int) (priceAfterDiscount * ((double) (100 - DataManager.shared().getKarmozd())) / 100));
             }
         }
         ((Customer) DataManager.shared().getLoggedInAccount()).emptyCart();

@@ -20,6 +20,8 @@ import com.sasp.saspstore.model.AddAdBySellerRequest;
 import com.sasp.saspstore.model.AddProductBySellerRequest;
 import com.sasp.saspstore.model.AddSaleBySellerRequest;
 import com.sasp.saspstore.model.Administrator;
+import com.sasp.saspstore.model.Assistant;
+import com.sasp.saspstore.model.AssistantMessage;
 import com.sasp.saspstore.model.Auction;
 import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Category;
@@ -61,6 +63,7 @@ public class DataManager {
     private ArrayList<Customer> allCustomers = new ArrayList<>();
     private ArrayList<Seller> allSellers = new ArrayList<>();
     private ArrayList<Administrator> allAdministrators = new ArrayList<>();
+    private ArrayList<Assistant> allAssistants = new ArrayList<>();
     private ArrayList<Product> allProducts = new ArrayList<>();
     private ArrayList<Coupon> allCoupons = new ArrayList<>();
     private ArrayList<AddProductBySellerRequest> addProductBySellerRequests = new ArrayList<>();
@@ -70,6 +73,7 @@ public class DataManager {
     private ArrayList<SellerRegistrationRequest> sellerRegistrationRequests = new ArrayList<>();
     private ArrayList<Ad> allAds = new ArrayList<>();
     private ArrayList<AddAdBySellerRequest> adRequests = new ArrayList<>();
+    private ArrayList<AssistantMessage> allAssistantMessages = new ArrayList<>();
 
     private ArrayList<Category> allCategories = new ArrayList<>();
     private ArrayList<Sale> allSales = new ArrayList<>();
@@ -82,6 +86,19 @@ public class DataManager {
     private String adminBankAccountNumber = "";
     private ArrayList<String> onlineUsernames;
     private int mimimumCredit = 0;
+    private int karmozd = 0;
+
+    public ArrayList<AssistantMessage> getAllAssistantMessages() {
+        return allAssistantMessages;
+    }
+
+    public int getKarmozd() {
+        return karmozd;
+    }
+
+    public void setKarmozd(int karmozd) {
+        this.karmozd = karmozd;
+    }
 
     public ArrayList<Auction> getAuctions() {
         return auctions;
@@ -156,6 +173,13 @@ public class DataManager {
     }
 
     public void populateData() {
+        Gonnect.getData(IP_SERVER + "req?action=getKarmozd", (b, s) -> {
+            try {
+                DataManager.shared().setKarmozd(Integer.parseInt(s));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        });
         Gonnect.getData(IP_SERVER + "req?action=getMinimumCredit", (b, s) -> {
             try {
                 DataManager.shared().setMimimumCredit(Integer.parseInt(s));
@@ -265,6 +289,19 @@ public class DataManager {
             }.getType());
             DataManager.shared().setAllAdministrators(administrators);
         });
+        Gonnect.getData(IP_SERVER + "req?action=getAllAssistants", (b, s) -> {
+            ArrayList<Assistant> assistants = new Gson().fromJson(s, new TypeToken<ArrayList<Assistant>>() {
+            }.getType());
+            DataManager.shared().setAllAssistants(assistants);
+        });
+    }
+
+    public ArrayList<Assistant> getAllAssistants() {
+        return allAssistants;
+    }
+
+    public void setAllAssistants(ArrayList<Assistant> allAssistants) {
+        this.allAssistants = allAssistants;
     }
 
     // populateData
@@ -607,6 +644,7 @@ public class DataManager {
         result.addAll(allCustomers);
         result.addAll(allSellers);
         result.addAll(allAdministrators);
+        result.addAll(allAssistants);
         return result;
     }
 
@@ -720,6 +758,14 @@ public class DataManager {
         ContentValues cv = new ContentValues();
         cv.put("action", "syncAuctions");
         cv.put("auctions", new Gson().toJson(getAuctions()));
+        Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
+        });
+    }
+
+    public void syncAssistantMessages() {
+        ContentValues cv = new ContentValues();
+        cv.put("action", "syncAssistantMessages");
+        cv.put("messages", new Gson().toJson(getAllAssistantMessages()));
         Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
         });
     }
@@ -862,6 +908,8 @@ public class DataManager {
                     return DataManager.AccountType.ADMINISTRATOR;
                 } else if (account instanceof Seller) {
                     return DataManager.AccountType.SELLER;
+                } else if (account instanceof Assistant) {
+                    return DataManager.AccountType.ASSISTANT;
                 }
                 break;
             }
@@ -906,6 +954,9 @@ public class DataManager {
         } else if (account instanceof Administrator) {
             allAdministrators.add((Administrator) account);
             cv.put("type", "administrator");
+        } else if (account instanceof Assistant) {
+            allAssistants.add((Assistant) account);
+            cv.put("type", "assistant");
         }
         Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
             try {
@@ -1020,6 +1071,7 @@ public class DataManager {
         allCustomers.remove(account);
         allSellers.remove(account);
         allAdministrators.remove(account);
+        allAssistants.remove(account);
     }
 
     public void removeCategory(Category category) {
@@ -1064,7 +1116,7 @@ public class DataManager {
     }
 
     public enum AccountType {
-        CUSTOMER, ADMINISTRATOR, SELLER, NONE
+        CUSTOMER, ADMINISTRATOR, SELLER, ASSISTANT, NONE
     }
 
     public static LocalDateTime dateFromString(String string) {

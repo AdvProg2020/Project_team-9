@@ -35,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     EditText adTxt;
     EditText creditTxt;
     EditText minimumCreditTxt;
+    EditText karmozdTxt;
     Button adBtn;
     TextView txtName;
     TextView txtUsernameAndRole;
@@ -52,6 +53,8 @@ public class ProfileActivity extends AppCompatActivity {
     Button inSellProductListButton;
     Button seeAuctionsButton;
     Button setMinimumCreditButton;
+    Button setKarmozdButton;
+    Button seeOnlineAssistantsButton;
     ImageView proPic;
 
     @Override
@@ -77,8 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
         seeAuctionsButton = findViewById(R.id.seeAuctionsButton);
         setMinimumCreditButton = findViewById(R.id.setMinimumCreditButton);
+        setKarmozdButton = findViewById(R.id.setKarmozdButton);
         creditTxt = findViewById(R.id.profile_creditTxt);
         minimumCreditTxt = findViewById(R.id.profile_minimumCreditTxt);
+        karmozdTxt = findViewById(R.id.profile_karmozdTxt);
+        seeOnlineAssistantsButton = findViewById(R.id.seeOnlineAssistantsButton);
 
         populateData();
     }
@@ -105,12 +111,15 @@ public class ProfileActivity extends AppCompatActivity {
         setMinimumCreditButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         creditTxt.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         minimumCreditTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        karmozdTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         addCreditButton.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
         removeCreditButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         inSellProductListButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         seeAuctionsButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
+        setKarmozdButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
+        seeOnlineAssistantsButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         if (account != null) {
             txtName.setText(account.getFirstName() + " " + account.getLastName());
             try {
@@ -323,5 +332,24 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setKarmozdTapped(View view) {
+        try {
+            int karmozd = Integer.parseInt(karmozdTxt.getText().toString());
+            DataManager.shared().setKarmozd(karmozd);
+            Gonnect.getData(DataManager.IP_SERVER + "req?action=setKarmozd&credit=" + karmozd, (b, s) -> {
+            });
+            Toast.makeText(this, "میزان کارمزد با موفقیت ثبت شد", Toast.LENGTH_LONG).show();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void seeOnlineAssistantsTapped(View view) {
+        Gonnect.getData(DataManager.IP_SERVER + "?action=syncAssistants", (isSuccess, errorOrResponse) ->
+                runOnUiThread(() -> Gonnect.getDataAndLaunchActivity(
+                        DataManager.IP_SERVER + "?action=getOnlineAssistants",
+                        OnlineAssistantsListActivity.class, this)));
     }
 }

@@ -1,264 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.sasp.saspstore.ProfileActivity"
         android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView android:id="@+id/fragment_profile_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/titleTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="" />
-
-        <TextView android:id="@+id/fragment_profile_usernameAndRole"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="" />
-
-        <TextView android:id="@+id/fragment_profile_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="" />
-
-        <TextView android:id="@+id/fragment_profile_phoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="" />
-
-        <TextView android:id="@+id/fragment_profile_companyDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text=""
-            android:visibility="gone"/>
-
-        <TextView android:id="@+id/fragment_profile_credit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="اعتبار: "
-            android:visibility="gone"
-            tools:ignore="RtlHardcoded" />
+        android:orientation="vertical"
+        tools:context="com.sasp.saspstore.ProfileActivity">
 
         <Button
             android:id="@+id/seeCartButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="مشاهده سبد خرید"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="seeCartTapped"/>
+            android:onClick="seeCartTapped"
+            android:text="مشاهده سبد خرید"
+            android:theme="@style/buttonTexts" />
+
+        <Button
+            android:id="@+id/seeOnlineAssistantsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="seeOnlineAssistantsTapped"
+            android:text="مشاهده پشتیبان‌های آنلاین"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/seeAuctionsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="مشاهده مزایده‌ها"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="seeAuctionsTapped"/>
+            android:onClick="seeAuctionsTapped"
+            android:text="مشاهده مزایده‌ها"
+            android:theme="@style/buttonTexts" />
 
-<!--        <Button-->
-<!--            android:id="@+id/addCreditButton"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="20dp"-->
-<!--            android:text="افزایش ۵ تومانی اعتبار حساب"-->
-<!--            android:background="@drawable/buttons"-->
-<!--            android:theme="@style/buttonTexts"-->
-<!--            android:onClick="addCreditTapped"/>-->
-
-        <EditText android:id="@+id/profile_minimumCreditTxt"
+        <Button
+            android:id="@+id/setKarmozdButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text=""
-            android:hint="حداقل مبلغ مجاز در کیف پول"
-            android:visibility="gone"/>
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="setKarmozdTapped"
+            android:text="ثبت میزان کارمزد"
+            android:theme="@style/buttonTexts"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/setMinimumCreditButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="ثبت حداقل مبلغ مجاز در کیف پول"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
             android:onClick="setMinimumCreditTapped"
+            android:text="ثبت حداقل مبلغ مجاز در کیف پول"
+            android:theme="@style/buttonTexts"
             android:visibility="gone" />
-
-        <EditText android:id="@+id/profile_creditTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text=""
-            android:hint="مبلغ"
-            android:visibility="gone"/>
 
         <Button
             android:id="@+id/addCreditButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="شارژ کردن کیف پول به میزان تعیین شده در فوق"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="addCreditTapped"/>
+            android:onClick="addCreditTapped"
+            android:text="شارژ کردن کیف پول به میزان تعیین شده در فوق"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/removeCreditButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="برداشت از کیف پول به میزان تعیین شده در فوق"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="removeCreditTapped"/>
+            android:onClick="removeCreditTapped"
+            android:text="برداشت از کیف پول به میزان تعیین شده در فوق"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="تاریخچه تراکنش‌ها"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="logTapped"/>
+            android:onClick="logTapped"
+            android:text="تاریخچه تراکنش‌ها"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/inSellProductListButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="لیست کالاهای فروشی"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="inSellProductListTapped"/>
+            android:onClick="inSellProductListTapped"
+            android:text="لیست کالاهای فروشی"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/seeAllCouponsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="مشاهده کدهای تخفیف"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="seeAllCouponsTapped"/>
+            android:onClick="seeAllCouponsTapped"
+            android:text="مشاهده کدهای تخفیف"
+            android:theme="@style/buttonTexts" />
+
+        <!--        <Button-->
+        <!--            android:id="@+id/addCreditButton"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="20dp"-->
+        <!--            android:text="افزایش ۵ تومانی اعتبار حساب"-->
+        <!--            android:background="@drawable/buttons"-->
+        <!--            android:theme="@style/buttonTexts"-->
+        <!--            android:onClick="addCreditTapped"/>-->
 
         <Button
             android:id="@+id/seeAllUsersButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="مشاهده لیست کاربران"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="seeAllUsersTapped"/>
+            android:onClick="seeAllUsersTapped"
+            android:text="مشاهده لیست کاربران"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/seeAllRequestsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="مشاهده لیست درخواست‌ها"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="seeAllRequestsTapped"/>
+            android:onClick="seeAllRequestsTapped"
+            android:text="مشاهده لیست درخواست‌ها"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/seeAllCategoriesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="مشاهده لیست دسته‌بندی‌ها"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="seeAllCategoriesTapped"/>
-
-        <EditText android:id="@+id/profile_adTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:theme="@style/usualTexts"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="20dp"
-            android:text=""
-            android:hint="متن تبلیغ"
-            android:visibility="gone"/>
+            android:onClick="seeAllCategoriesTapped"
+            android:text="مشاهده لیست دسته‌بندی‌ها"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/profile_adBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="درخواست تبلیغ"
             android:background="@drawable/buttons"
+            android:onClick="addAdTapped"
+            android:text="درخواست تبلیغ"
             android:theme="@style/buttonTexts"
-            android:visibility="gone"
-            android:onClick="addAdTapped"/>
+            android:visibility="gone" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="خروج از حساب"
             android:background="@drawable/buttons"
-            android:theme="@style/buttonTexts"
-            android:onClick="logoutTapped"/>
+            android:onClick="logoutTapped"
+            android:text="خروج از حساب"
+            android:theme="@style/buttonTexts" />
 
-    </LinearLayout></ScrollView>
+        <EditText
+            android:id="@+id/profile_karmozdTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="کارمزد"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/profile_minimumCreditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="حداقل مبلغ مجاز در کیف پول"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/profile_creditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="مبلغ"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/profile_adTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="متن تبلیغ"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fragment_profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/titleTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_usernameAndRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_companyDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/fragment_profile_credit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text="اعتبار: "
+            android:theme="@style/usualTexts"
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
+
+    </LinearLayout>
+</ScrollView>

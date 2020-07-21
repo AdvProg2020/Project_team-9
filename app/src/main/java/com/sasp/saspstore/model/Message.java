@@ -8,6 +8,7 @@ public class Message {
     private String content;
 
     public Message(String id, String sender, String content) {
+        this.id = id;
         this.sender = sender;
         this.content = content;
     }
@@ -16,8 +17,8 @@ public class Message {
         return id;
     }
 
-    public Customer getSender() {
-        return (Customer) DataManager.shared().getAccountWithGivenUsername(sender);
+    public Account getSender() {
+        return DataManager.shared().getAccountWithGivenUsername(sender);
     }
 
     public String getContent() {
@@ -26,7 +27,7 @@ public class Message {
 
     @Override
     public String toString() {
-        Customer sender = getSender();
+        Account sender = getSender();
         return sender.getFirstName() + " " + sender.getLastName() + ": " + getContent();
     }
 }

@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AuctionChatActivity"></activity>
+        <activity android:name=".AssistantChatActivity"></activity>
+        <activity android:name=".OnlineAssistantsListActivity" />
+        <activity android:name=".AuctionChatActivity" />
         <activity android:name=".AllAuctionsActivity" />
         <activity android:name=".ui.VideoActivity" />
         <activity android:name=".ui.LargeImageViewActivity" />
