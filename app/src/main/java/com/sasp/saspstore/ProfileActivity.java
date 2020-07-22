@@ -346,7 +346,7 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             int karmozd = Integer.parseInt(karmozdTxt.getText().toString());
             DataManager.shared().setKarmozd(karmozd);
-            Gonnect.getData(DataManager.IP_SERVER + "req?action=setKarmozd&credit=" + karmozd, (b, s) -> {
+            Gonnect.getData(DataManager.IP_SERVER + "req?action=setKarmozd&karmozd=" + karmozd, (b, s) -> {
             });
             Toast.makeText(this, "میزان کارمزد با موفقیت ثبت شد", Toast.LENGTH_LONG).show();
         } catch (NumberFormatException e) {

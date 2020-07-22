@@ -15,6 +15,7 @@ import com.sasp.saspstore.controller.DataManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -659,7 +660,7 @@ public class Gonnect {
     //Simple Get Data
 
     public static void getData(String url, final ResponseListener listener){
-
+        url += "&time=" + DataManager.stringFromDate(LocalDateTime.now());
         queue= Volley.newRequestQueue(DataManager.context);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
                 new com.android.volley.Response.Listener<String>() {

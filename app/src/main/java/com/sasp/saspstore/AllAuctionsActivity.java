@@ -57,28 +57,33 @@ public class AllAuctionsActivity extends AppCompatActivity {
             Auction auction = (Auction) listView.getItemAtPosition(i);
             if (auction.getEndTime().isBefore(LocalDateTime.now())) {
                 Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
-                if (customer.getUsername().equals(auction.getLastCustomer().getUsername())) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllAuctionsActivity.this)
-                            .setTitle("تبریک! شما برنده مزایده شدید");
-                    if (customer.getCredit() - auction.getProduct().getRoundedPriceAfterDiscount() < DataManager.shared().getMimimumCredit()) {
-                        alertDialog.setMessage("متاسفانه اعتبار شما برای دریافت محصول خود کافی نیست!");
-                        alertDialog.setNeutralButton("بازگشت", null);
-                    } else {
-                        alertDialog.setMessage("با کلیک روی دکمه دریافت، کالای برنده شده را از آن خود کنید!");
-                        alertDialog.setPositiveButton("دریافت کالا", (dialogInterface, i1) -> showAlertForCustomersWhileWinnerAndHasCredit(auction));
-                    }
-                    alertDialog.show();
-                }
+                if (customer.getUsername().equals(auction.getLastCustomer().getUsername()))
+                    showAlertForWinner(auction, customer);
             } else showAlertForCustomersWhileInAuction(auction);
         });
 
     }
 
+    private void showAlertForWinner(Auction auction, Customer customer) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllAuctionsActivity.this)
+                .setTitle("تبریک! شما برنده مزایده شدید");
+        if (customer.getCredit() - auction.getProduct().getRoundedPriceAfterDiscount() < DataManager.shared().getMimimumCredit()) {
+            alertDialog.setMessage("متاسفانه اعتبار شما برای دریافت محصول خود کافی نیست!");
+            alertDialog.setNeutralButton("بازگشت", null);
+        } else {
+            alertDialog.setMessage("با کلیک روی دکمه دریافت، کالای برنده شده را از آن خود کنید!");
+            alertDialog.setPositiveButton("دریافت کالا", (dialogInterface, i1) -> showAlertForCustomersWhileWinnerAndHasCredit(auction, customer));
+        }
+        alertDialog.show();
+    }
+
     // TODO: Nothing tested here!!
 
-    private void showAlertForCustomersWhileWinnerAndHasCredit(Auction auction) {
+    private void showAlertForCustomersWhileWinnerAndHasCredit(Auction auction, Customer customer) {
         auction.getProduct().decrementNumberAvailable();
-        auction.getProduct().getCurrentSeller().increaseCredit(auction.getProduct().getRoundedPriceAfterDiscount());
+        auction.getProduct().getCurrentSeller().increaseCredit((int) (auction.getProduct().getRoundedPriceAfterDiscount() *
+                ((double) (100 - DataManager.shared().getKarmozd())) / 100));
+        customer.decreaseCredit(auction.getProduct().getRoundedPriceAfterDiscount());
         HashMap<Product, Integer> hashMap = new HashMap<>();
         hashMap.put(auction.getProduct(), 1);
         PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(),
