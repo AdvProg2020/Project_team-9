@@ -79,7 +79,7 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductScore = (TextView) findViewById(R.id.eachProductScore);
         eachProductCompareProductID = findViewById(R.id.eachProductCompareProductID);
         makeAuctionButton = findViewById(R.id.eachProduct_makeAuctionButton);
-
+        makeAuctionButton.setVisibility(DataManager.shared().getLoggedInAccount() instanceof Seller ? View.VISIBLE : View.GONE);
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");
         if (productID == null || productID.equals("")) return;
@@ -254,6 +254,10 @@ public class EachProductActivity extends AppCompatActivity {
     }
 
     private void addToCart() {
+        if (DataManager.shared().productIsUsedInAnyAuction(currentProduct)) {
+            Toast.makeText(this, "کالا در مزایده است", Toast.LENGTH_LONG).show();
+            return;
+        }
         Account account = DataManager.shared().getLoggedInAccount();
         Cart cart;
         if (account instanceof Customer) cart = ((Customer) account).getCart();
@@ -268,8 +272,7 @@ public class EachProductActivity extends AppCompatActivity {
             Gonnect.getData(DataManager.IP_SERVER + "req?action=setTemporaryCart&cart="
                     + DataManager.encode(new Gson().toJson(DataManager.shared().getTemporaryCart())), (b, s) -> {
             });
-            DataManager.shared().syncCartForUser();
-        }
+        } else DataManager.shared().syncCartForUser();
         Toast.makeText(this, "کالا با موفقیت به سبد خرید افزوده شد", Toast.LENGTH_LONG).show();
     }
 
@@ -428,6 +431,7 @@ public class EachProductActivity extends AppCompatActivity {
             LocalDateTime endDate = LocalDateTime.ofInstant(calendar.toInstant(), zid);
             Auction auction = new Auction(DataManager.getNewId(), currentProduct);
             auction.setEndTime(endDate);
+            auction.setPriceUpToNow(currentProduct.getRoundedPriceAfterDiscount());
             DataManager.shared().addAuction(auction);
             DataManager.shared().syncAuctions();
             Toast.makeText(EachProductActivity.this, "کالا با موفقیت به مزایده گذاشته شد", Toast.LENGTH_LONG).show();
