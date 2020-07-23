@@ -13,26 +13,28 @@ public class BankAPI {
     private static DataInputStream inputStream;
 
     public static void tellBankAndReceiveResponse(String message, ResponseListener listener) {
-        try {
-            Socket socket = new Socket(IP, PORT);
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
-            new Thread(() -> {
-                try {
-                    outputStream.writeUTF(message);
-                    while (true) {
-                        String response = inputStream.readUTF();
-                        if (response.equals("")) continue;
-                        listener.responseReceived(response);
-                        break;
+        new Thread(() -> {
+            try {
+                Socket socket = new Socket(IP, PORT);
+                outputStream = new DataOutputStream(socket.getOutputStream());
+                inputStream = new DataInputStream(socket.getInputStream());
+                new Thread(() -> {
+                    try {
+                        outputStream.writeUTF(message);
+                        while (true) {
+                            String response = inputStream.readUTF();
+                            if (response.equals("")) continue;
+                            listener.responseReceived(response);
+                            break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        } catch (IOException e) {
-            System.out.println("Exception while initiating connection: " + e.getLocalizedMessage());
-        }
+                }).start();
+            } catch (IOException e) {
+                System.out.println("Exception while initiating connection: " + e.getLocalizedMessage());
+            }
+        }).start();
     }
 }
 
