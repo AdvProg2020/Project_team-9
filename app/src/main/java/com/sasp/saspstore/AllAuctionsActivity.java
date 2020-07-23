@@ -57,7 +57,8 @@ public class AllAuctionsActivity extends AppCompatActivity {
             Auction auction = (Auction) listView.getItemAtPosition(i);
             if (auction.getEndTime().isBefore(LocalDateTime.now())) {
                 Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
-                if (customer.getUsername().equals(auction.getLastCustomer().getUsername()))
+                Customer auctionLastCustomer = auction.getLastCustomer();
+                if (auctionLastCustomer != null && customer.getUsername().equals(auctionLastCustomer.getUsername()))
                     showAlertForWinner(auction, customer);
             } else showAlertForCustomersWhileInAuction(auction);
         });
@@ -67,13 +68,13 @@ public class AllAuctionsActivity extends AppCompatActivity {
     private void showAlertForWinner(Auction auction, Customer customer) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(AllAuctionsActivity.this)
                 .setTitle("تبریک! شما برنده مزایده شدید");
-        if (customer.getCredit() - auction.getProduct().getRoundedPriceAfterDiscount() < DataManager.shared().getMimimumCredit()) {
-            alertDialog.setMessage("متاسفانه اعتبار شما برای دریافت محصول خود کافی نیست!");
-            alertDialog.setNeutralButton("بازگشت", null);
-        } else {
-            alertDialog.setMessage("با کلیک روی دکمه دریافت، کالای برنده شده را از آن خود کنید!");
-            alertDialog.setPositiveButton("دریافت کالا", (dialogInterface, i1) -> showAlertForCustomersWhileWinnerAndHasCredit(auction, customer));
-        }
+//        if (customer.getCredit() - auction.getProduct().getRoundedPriceAfterDiscount() < DataManager.shared().getMimimumCredit()) {
+//            alertDialog.setMessage("متاسفانه اعتبار شما برای دریافت محصول خود کافی نیست!");
+//            alertDialog.setNeutralButton("بازگشت", null);
+//        } else {
+        alertDialog.setMessage("با کلیک روی دکمه دریافت، کالای برنده شده را از آن خود کنید!");
+        alertDialog.setPositiveButton("دریافت کالا", (dialogInterface, i1) -> showAlertForCustomersWhileWinnerAndHasCredit(auction, customer));
+//        }
         alertDialog.show();
     }
 
@@ -81,14 +82,13 @@ public class AllAuctionsActivity extends AppCompatActivity {
 
     private void showAlertForCustomersWhileWinnerAndHasCredit(Auction auction, Customer customer) {
         auction.getProduct().decrementNumberAvailable();
-        auction.getProduct().getCurrentSeller().increaseCredit((int) (auction.getProduct().getRoundedPriceAfterDiscount() *
+        auction.getProduct().getCurrentSeller().increaseCredit((int) (auction.getPriceUpToNow() *
                 ((double) (100 - DataManager.shared().getKarmozd())) / 100));
-        customer.decreaseCredit(auction.getProduct().getRoundedPriceAfterDiscount());
+//        customer.decreaseCredit(auction.getProduct().getRoundedPriceAfterDiscount());
         HashMap<Product, Integer> hashMap = new HashMap<>();
         hashMap.put(auction.getProduct(), 1);
-        PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(),
-                auction.getProduct().getPrice(), auction.getProduct().getPrice() - auction.getProduct().getRoundedPriceAfterDiscount(),
-                hashMap, DeliveryStatus.WAITING, (Customer) DataManager.shared().getLoggedInAccount());
+        PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), auction.getPriceUpToNow(),
+                0, hashMap, DeliveryStatus.WAITING, (Customer) DataManager.shared().getLoggedInAccount());
         DataManager.shared().addLog(purchaseLog);
         DataManager.shared().syncCustomers();
         DataManager.shared().syncProducts();
@@ -112,6 +112,7 @@ public class AllAuctionsActivity extends AppCompatActivity {
             int newPrice = Integer.parseInt(firstEditText.getText().toString());
             Customer customer = (Customer) DataManager.shared().getLoggedInAccount();
             if (newPrice > auction.getPriceUpToNow() && newPrice <= customer.getCredit() - DataManager.shared().getMimimumCredit()) {
+                customer.decreaseCredit(newPrice);
                 auction.setLastCustomer(customer);
                 auction.setPriceUpToNow(newPrice);
                 DataManager.shared().syncAuctions();
