@@ -13,6 +13,7 @@ import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 // b5d985b9114243fd93a73d871816d728
@@ -73,7 +74,8 @@ public class LoginActivity extends AppCompatActivity {
             DataManager.shared().syncTemporaryCart();
             DataManager.shared().syncCartForUser();
         } else if (result == DataManager.AccountType.SELLER) {
-            if (!((Seller) (DataManager.shared().getLoggedInAccount())).isPermittedToSell()) {
+            Seller seller = (Seller) (DataManager.shared().getLoggedInAccount());
+            if (!(seller).isPermittedToSell()) {
                 DataManager.shared().logout();
                 AlertDialog alertDialog = new AlertDialog.Builder(this).create();
                 alertDialog.setTitle("خطا");
@@ -81,6 +83,13 @@ public class LoginActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "بازگشت", (dialog, which) -> dialog.dismiss());
                 alertDialog.show();
                 return;
+            }
+            try {
+                FileServer fileServer = new FileServer(0, seller);
+                (seller).setFileServer(fileServer);
+                fileServer.start();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         finish();

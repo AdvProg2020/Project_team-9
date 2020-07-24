@@ -3,6 +3,8 @@ package com.sasp.saspstore.model;
 import com.sasp.saspstore.controller.DataManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Account {
@@ -17,6 +19,7 @@ public class Account {
     private ArrayList<String> logs;
     private int credit;
     private String bankAccountNumber = "";
+    private Set<String> buyerUserNames;
 
     public String getBankAccountNumber() {
         return bankAccountNumber;
@@ -42,6 +45,7 @@ public class Account {
         this.logs = new ArrayList<>();
         this.credit = 0;
         this.profilePicPath = profilePicPath;
+        buyerUserNames = new HashSet<>();
     }
 
     // TODO: DataManager.saveData() should be also added to all places calling new()...
@@ -139,6 +143,10 @@ public class Account {
             password = newPassword;
             DataManager.shared().syncAccounts();
         }
+    }
+
+    public void addBuyer(String username) {
+        buyerUserNames.add(username);
     }
 
     public boolean doesPasswordMatch(String password) {

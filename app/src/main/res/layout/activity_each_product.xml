@@ -93,6 +93,17 @@
         android:onClick="addToCartTapped"/>
 
     <Button
+        android:id="@+id/get_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="دریافت فایل"
+        android:visibility="gone"
+        android:background="@drawable/buttons"
+        android:theme="@style/buttonTexts"
+        android:onClick="getFileTapped" />
+
+    <Button
         android:id="@+id/show_video_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

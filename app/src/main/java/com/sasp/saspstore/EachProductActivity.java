@@ -56,6 +56,7 @@ public class EachProductActivity extends AppCompatActivity {
     TextView eachProductScore;
     EditText eachProductCompareProductID;
     Button makeAuctionButton;
+    Button getFileButton;
 
     Product currentProduct;
 
@@ -79,6 +80,7 @@ public class EachProductActivity extends AppCompatActivity {
         eachProductScore = (TextView) findViewById(R.id.eachProductScore);
         eachProductCompareProductID = findViewById(R.id.eachProductCompareProductID);
         makeAuctionButton = findViewById(R.id.eachProduct_makeAuctionButton);
+        getFileButton = findViewById(R.id.get_file);
 
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");
@@ -123,6 +125,10 @@ public class EachProductActivity extends AppCompatActivity {
             Intent intent1 = new Intent(getApplicationContext(), VideoActivity.class);
             startActivity(intent1);
         });
+    }
+
+    public void getFileTapped() {
+
     }
 
     private void starRating(int score) {

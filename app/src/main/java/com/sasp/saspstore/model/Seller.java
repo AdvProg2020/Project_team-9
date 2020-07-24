@@ -1,5 +1,6 @@
 package com.sasp.saspstore.model;
 
+import com.sasp.saspstore.FileServer;
 import com.sasp.saspstore.controller.DataManager;
 
 import java.util.ArrayList;
@@ -8,14 +9,7 @@ import java.util.stream.Collectors;
 public class Seller extends Account {
     private String companyDetails;
     private boolean isPermittedToSell;
-
-    public boolean isPermittedToSell() {
-        return isPermittedToSell;
-    }
-
-    public void setPermittedToSell(boolean permittedToSell) {
-        isPermittedToSell = permittedToSell;
-    }
+    private FileServer fileServer;
 
     public Seller(String username, String password, String email, String phone, String firstName,
                   String lastName, String companyDetails, String profilePicPath) {
@@ -35,6 +29,22 @@ public class Seller extends Account {
                 seller.getPhoneNumber(), seller.getFirstName(), seller.getLastName(),
                 seller.getCompanyDetails(), seller.getCompanyDetails());
         isPermittedToSell = false;
+    }
+
+    public boolean isPermittedToSell() {
+        return isPermittedToSell;
+    }
+
+    public void setPermittedToSell(boolean permittedToSell) {
+        isPermittedToSell = permittedToSell;
+    }
+
+    public FileServer getFileServer() {
+        return fileServer;
+    }
+
+    public void setFileServer(FileServer fileServer) {
+        this.fileServer = fileServer;
     }
 
     public String getCompanyDetails() {
