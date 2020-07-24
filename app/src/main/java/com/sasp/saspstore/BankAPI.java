@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class BankAPI {
-    public static final int PORT = 2222;
-    public static final String IP = "10.0.2.2";
+    public static final int PORT = 18633;
+//    public static final int PORT = 2222;
+    public static final String IP = "http://2.tcp.ngrok.io/";
+//    public static final String IP = "10.0.2.2";
 
     private static DataOutputStream outputStream;
     private static DataInputStream inputStream;

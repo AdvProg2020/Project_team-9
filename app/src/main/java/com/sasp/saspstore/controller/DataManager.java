@@ -55,7 +55,8 @@ import java.util.UUID;
 // TODO: IMPORTANT: All LocalDateTimes are removed!!
 
 public class DataManager {
-    public static final String IP_SERVER = "http://10.0.2.2:8112/"; // AVD
+    public static final String IP_SERVER = "http://0.tcp.ngrok.io:17482/"; // AVD
+//    public static final String IP_SERVER = "http://10.0.2.2:8112/"; // AVD
     //    public static final String IP_SERVER = "http://10.0.3.2:8112/"; // Genymotion
     public static Context context;
     private static DataManager sharedInstance;
@@ -705,6 +706,7 @@ public class DataManager {
         cv.put("requestType", type);
         Gonnect.getData(IP_SERVER + "req?action=addRequest&requestType=" + type + "&request="
                 + DataManager.encode(requestStr), (b, s) -> {
+            int i = 5;
         });
     }
 
