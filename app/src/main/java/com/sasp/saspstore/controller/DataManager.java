@@ -2,6 +2,7 @@ package com.sasp.saspstore.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -87,49 +88,17 @@ public class DataManager {
     private int mimimumCredit = 0;
     private int karmozd = 0;
 
-    private DataManager() {
-    }
-
-    public static String encode(String input) {
-        try {
-            return URLEncoder.encode(input, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
-        try {
-            return Integer.parseInt(scanner.nextLine());
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
-    public static String getNewId() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
-
-    public static DataManager shared() {
-        if (sharedInstance == null) {
-            sharedInstance = new DataManager();
-        }
-        return sharedInstance;
-    }
-
-    public static LocalDateTime dateFromString(String string) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
-        return LocalDateTime.parse(string, formatter);
-    }
-
-    public static String stringFromDate(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
-        return dateTime.format(formatter);
-    }
-
     public ArrayList<AssistantMessage> getAllAssistantMessages() {
         return allAssistantMessages;
+    }
+
+    public boolean productIsUsedInAnyAuction(Product product) {
+        String productID = product.getProductId();
+        for (Auction auction : auctions) {
+            if (auction.getProduct() != null && auction.getProduct().getProductId().equals(productID))
+                return true;
+        }
+        return false;
     }
 
     public int getKarmozd() {
@@ -144,16 +113,16 @@ public class DataManager {
         return auctions;
     }
 
-    public void setAuctions(ArrayList<Auction> auctions) {
-        this.auctions = auctions;
-    }
-
     public int getMimimumCredit() {
         return mimimumCredit;
     }
 
     public void setMimimumCredit(int mimimumCredit) {
         this.mimimumCredit = mimimumCredit;
+    }
+
+    public void setAuctions(ArrayList<Auction> auctions) {
+        this.auctions = auctions;
     }
 
     public boolean isMadeAdminBankAccount() {
@@ -180,7 +149,8 @@ public class DataManager {
         this.adminBankAccountNumber = adminBankAccountNumber;
     }
 
-    // TODO: Online users not tested...
+    private DataManager() {
+    }
 
     public String getToken() {
         return token;
@@ -192,6 +162,155 @@ public class DataManager {
 
     public ArrayList<Ad> getAllAds() {
         return allAds;
+    }
+
+    public static String encode(String input) {
+        try {
+            return URLEncoder.encode(input, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public void populateDataa() {
+        Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
+            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
+            }.getType());
+            DataManager.shared().setAllAds(allAds);
+        });
+    }
+
+    public void populateData() {
+        Gonnect.getData(IP_SERVER + "req?action=getKarmozd", (b, s) -> {
+            try {
+                DataManager.shared().setKarmozd(Integer.parseInt(s));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getMinimumCredit", (b, s) -> {
+            try {
+                DataManager.shared().setMimimumCredit(Integer.parseInt(s));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
+            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
+            }.getType());
+            DataManager.shared().setAllAds(allAds);
+        });
+        Gonnect.getData(IP_SERVER + "?action=getAllPurchaseLogs", (b, s) -> {
+            ArrayList<PurchaseLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<PurchaseLog>>() {
+            }.getType());
+            DataManager.shared().setPurchaseLogs(allLogs);
+        });
+        Gonnect.getData(IP_SERVER + "?action=getAllSellLogs", (b, s) -> {
+            ArrayList<SellLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<SellLog>>() {
+            }.getType());
+            DataManager.shared().setSellLogs(allLogs);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getTemporaryCart", (b, s) -> {
+            Cart cart = new Gson().fromJson(s, Cart.class);
+            DataManager.shared().setTemporaryCart(cart);
+        });
+        populateAllAccountsData();
+        Gonnect.getData(IP_SERVER + "req?action=getAllCategories", (b, s) -> {
+            ArrayList<Category> categories = new Gson().fromJson(s, new TypeToken<ArrayList<Category>>() {
+            }.getType());
+            DataManager.shared().setAllCategories(categories);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAddProductBySellerRequests", (b, s) -> {
+            ArrayList<AddProductBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<AddProductBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setAddProductBySellerRequests(requests);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAddSaleBySellerRequests", (b, s) -> {
+            ArrayList<AddSaleBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<AddSaleBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setAddSaleBySellerRequests(requests);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getEditProductBySellerRequests", (b, s) -> {
+            ArrayList<EditProductBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<EditProductBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setEditProductBySellerRequests(requests);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getEditSaleBySellerRequests", (b, s) -> {
+            ArrayList<EditSaleBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<EditSaleBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setEditSaleBySellerRequests(requests);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getSellerRegistrationRequests", (b, s) -> {
+            ArrayList<SellerRegistrationRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<SellerRegistrationRequest>>() {
+                    }.getType());
+            DataManager.shared().setSellerRegistrationRequests(requests);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAdRequests", (b, s) -> {
+            ArrayList<AddAdBySellerRequest> requests = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<AddAdBySellerRequest>>() {
+                    }.getType());
+            DataManager.shared().setAdRequests(requests);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAllCoupons", (b, s) -> {
+            ArrayList<Coupon> coupons = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<Coupon>>() {
+                    }.getType());
+            DataManager.shared().setAllCoupons(coupons);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAllProducts", (b, s) -> {
+            ArrayList<Product> products = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<Product>>() {
+                    }.getType());
+            DataManager.shared().setAllProducts(products);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAdminBankAccountNumber", (b, s) -> {
+            DataManager.shared().setAdminBankAccountNumber(s);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getOnlineUsernames", (b, s) -> {
+            ArrayList<String> usernames = new Gson().fromJson(s,
+                    new TypeToken<ArrayList<String>>() {
+                    }.getType());
+            DataManager.shared().setOnlineUsernames(usernames);
+        });
+    }
+
+    // TODO: Online users not tested...
+
+    public void populateAllAccountsData() {
+        Gonnect.getData(IP_SERVER + "req?action=getAllCustomers", (b, s) -> {
+            ArrayList<Customer> customers = new Gson().fromJson(s, new TypeToken<ArrayList<Customer>>() {
+            }.getType());
+            DataManager.shared().setAllCustomers(customers);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAllSellers", (b, s) -> {
+            ArrayList<Seller> sellers = new Gson().fromJson(s, new TypeToken<ArrayList<Seller>>() {
+            }.getType());
+            DataManager.shared().setAllSellers(sellers);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAllAdministrators", (b, s) -> {
+            ArrayList<Administrator> administrators = new Gson().fromJson(s, new TypeToken<ArrayList<Administrator>>() {
+            }.getType());
+            DataManager.shared().setAllAdministrators(administrators);
+        });
+        Gonnect.getData(IP_SERVER + "req?action=getAllAssistants", (b, s) -> {
+            ArrayList<Assistant> assistants = new Gson().fromJson(s, new TypeToken<ArrayList<Assistant>>() {
+            }.getType());
+            DataManager.shared().setAllAssistants(assistants);
+        });
+    }
+
+    public ArrayList<Assistant> getAllAssistants() {
+        return allAssistants;
+    }
+
+    public void setAllAssistants(ArrayList<Assistant> allAssistants) {
+        this.allAssistants = allAssistants;
     }
 
     // populateData
@@ -337,146 +456,12 @@ public class DataManager {
 //        });
 //    }
 
-    public void setAllAds(ArrayList<Ad> allAds) {
-        this.allAds = allAds;
+    public void setAllProducts(ArrayList<Product> allProducts) {
+        this.allProducts = allProducts;
     }
 
-    public void populateDataa() {
-        Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
-            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
-            }.getType());
-            DataManager.shared().setAllAds(allAds);
-        });
-    }
-
-    public void populateData() {
-        Gonnect.getData(IP_SERVER + "req?action=getKarmozd", (b, s) -> {
-            try {
-                DataManager.shared().setKarmozd(Integer.parseInt(s));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getMinimumCredit", (b, s) -> {
-            try {
-                DataManager.shared().setMimimumCredit(Integer.parseInt(s));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAllAds", (b, s) -> {
-            ArrayList<Ad> allAds = new Gson().fromJson(s, new TypeToken<ArrayList<Ad>>() {
-            }.getType());
-            DataManager.shared().setAllAds(allAds);
-        });
-        Gonnect.getData(IP_SERVER + "?action=getAllPurchaseLogs", (b, s) -> {
-            ArrayList<PurchaseLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<PurchaseLog>>() {
-            }.getType());
-            DataManager.shared().setPurchaseLogs(allLogs);
-        });
-        Gonnect.getData(IP_SERVER + "?action=getAllSellLogs", (b, s) -> {
-            ArrayList<SellLog> allLogs = new Gson().fromJson(s, new TypeToken<ArrayList<SellLog>>() {
-            }.getType());
-            DataManager.shared().setSellLogs(allLogs);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getTemporaryCart", (b, s) -> {
-            Cart cart = new Gson().fromJson(s, Cart.class);
-            DataManager.shared().setTemporaryCart(cart);
-        });
-        populateAllAccountsData();
-        Gonnect.getData(IP_SERVER + "req?action=getAllCategories", (b, s) -> {
-            ArrayList<Category> categories = new Gson().fromJson(s, new TypeToken<ArrayList<Category>>() {
-            }.getType());
-            DataManager.shared().setAllCategories(categories);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAddProductBySellerRequests", (b, s) -> {
-            ArrayList<AddProductBySellerRequest> requests = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<AddProductBySellerRequest>>() {
-                    }.getType());
-            DataManager.shared().setAddProductBySellerRequests(requests);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAddSaleBySellerRequests", (b, s) -> {
-            ArrayList<AddSaleBySellerRequest> requests = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<AddSaleBySellerRequest>>() {
-                    }.getType());
-            DataManager.shared().setAddSaleBySellerRequests(requests);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getEditProductBySellerRequests", (b, s) -> {
-            ArrayList<EditProductBySellerRequest> requests = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<EditProductBySellerRequest>>() {
-                    }.getType());
-            DataManager.shared().setEditProductBySellerRequests(requests);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getEditSaleBySellerRequests", (b, s) -> {
-            ArrayList<EditSaleBySellerRequest> requests = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<EditSaleBySellerRequest>>() {
-                    }.getType());
-            DataManager.shared().setEditSaleBySellerRequests(requests);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getSellerRegistrationRequests", (b, s) -> {
-            ArrayList<SellerRegistrationRequest> requests = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<SellerRegistrationRequest>>() {
-                    }.getType());
-            DataManager.shared().setSellerRegistrationRequests(requests);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAdRequests", (b, s) -> {
-            ArrayList<AddAdBySellerRequest> requests = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<AddAdBySellerRequest>>() {
-                    }.getType());
-            DataManager.shared().setAdRequests(requests);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAllCoupons", (b, s) -> {
-            ArrayList<Coupon> coupons = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<Coupon>>() {
-                    }.getType());
-            DataManager.shared().setAllCoupons(coupons);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAllProducts", (b, s) -> {
-            ArrayList<Product> products = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<Product>>() {
-                    }.getType());
-            DataManager.shared().setAllProducts(products);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAdminBankAccountNumber", (b, s) -> {
-            DataManager.shared().setAdminBankAccountNumber(s);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getOnlineUsernames", (b, s) -> {
-            ArrayList<String> usernames = new Gson().fromJson(s,
-                    new TypeToken<ArrayList<String>>() {
-                    }.getType());
-            DataManager.shared().setOnlineUsernames(usernames);
-        });
-    }
-
-    public void populateAllAccountsData() {
-        Gonnect.getData(IP_SERVER + "req?action=getAllCustomers", (b, s) -> {
-            ArrayList<Customer> customers = new Gson().fromJson(s, new TypeToken<ArrayList<Customer>>() {
-            }.getType());
-            DataManager.shared().setAllCustomers(customers);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAllSellers", (b, s) -> {
-            ArrayList<Seller> sellers = new Gson().fromJson(s, new TypeToken<ArrayList<Seller>>() {
-            }.getType());
-            DataManager.shared().setAllSellers(sellers);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAllAdministrators", (b, s) -> {
-            ArrayList<Administrator> administrators = new Gson().fromJson(s, new TypeToken<ArrayList<Administrator>>() {
-            }.getType());
-            DataManager.shared().setAllAdministrators(administrators);
-        });
-        Gonnect.getData(IP_SERVER + "req?action=getAllAssistants", (b, s) -> {
-            ArrayList<Assistant> assistants = new Gson().fromJson(s, new TypeToken<ArrayList<Assistant>>() {
-            }.getType());
-            DataManager.shared().setAllAssistants(assistants);
-        });
-    }
-
-    public ArrayList<Assistant> getAllAssistants() {
-        return allAssistants;
-    }
-
-    public void setAllAssistants(ArrayList<Assistant> allAssistants) {
-        this.allAssistants = allAssistants;
+    public void setAllCoupons(ArrayList<Coupon> allCoupons) {
+        this.allCoupons = allCoupons;
     }
 
     public void setAddProductBySellerRequests(ArrayList<AddProductBySellerRequest> addProductBySellerRequests) {
@@ -513,6 +498,29 @@ public class DataManager {
 
     public void setAllAdministrators(ArrayList<Administrator> allAdministrators) {
         this.allAdministrators = allAdministrators;
+    }
+
+    public void setAllCategories(ArrayList<Category> allCategories) {
+        this.allCategories = allCategories;
+    }
+
+    public static int nextInt(Scanner scanner) { // returns -1 if it hits problem
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    public static String getNewId() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    public static DataManager shared() {
+        if (sharedInstance == null) {
+            sharedInstance = new DataManager();
+        }
+        return sharedInstance;
     }
 
 //    public static void saveData() {
@@ -576,6 +584,10 @@ public class DataManager {
 //        Gson gson = gsonBuilder.setPrettyPrinting().create();
 //        sharedInstance = gson.fromJson(json, DataManager.class);
 //    }
+
+    public void setAllAds(ArrayList<Ad> allAds) {
+        this.allAds = allAds;
+    }
 
     public ArrayList<Log> getAllLogs() {
         ArrayList<Log> result = new ArrayList<>();
@@ -653,10 +665,6 @@ public class DataManager {
         return allCategories;
     }
 
-    public void setAllCategories(ArrayList<Category> allCategories) {
-        this.allCategories = allCategories;
-    }
-
     public ArrayList<Request> getAllRequests() {
         ArrayList<Request> result = new ArrayList<>();
         result.addAll(addProductBySellerRequests);
@@ -726,16 +734,8 @@ public class DataManager {
         return allCoupons;
     }
 
-    public void setAllCoupons(ArrayList<Coupon> allCoupons) {
-        this.allCoupons = allCoupons;
-    }
-
     public ArrayList<Product> getAllProducts() {
         return allProducts;
-    }
-
-    public void setAllProducts(ArrayList<Product> allProducts) {
-        this.allProducts = allProducts;
     }
 
     public void removeProduct(String productID) {
@@ -864,12 +864,15 @@ public class DataManager {
 
     // TODO: Cart should be get on login
     public void syncCartForUser() {
+        Account account = getLoggedInAccount();
         if (getLoggedInAccount() instanceof Customer) {
             ContentValues cv = new ContentValues();
             cv.put("action", "syncCartForUser");
             cv.put("token", getToken());
+            cv.put("username", account.getUsername());
             cv.put("cart", new Gson().toJson(((Customer) getLoggedInAccount()).getCart()));
             Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
+                int i = 0;
             });
         }
     }
@@ -1152,6 +1155,16 @@ public class DataManager {
 
     public enum AccountType {
         CUSTOMER, ADMINISTRATOR, SELLER, ASSISTANT, NONE
+    }
+
+    public static LocalDateTime dateFromString(String string) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
+        return LocalDateTime.parse(string, formatter);
+    }
+
+    public static String stringFromDate(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-uuuu-HH-mm-ss");
+        return dateTime.format(formatter);
     }
 
 }

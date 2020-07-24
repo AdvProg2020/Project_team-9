@@ -52,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button seeAllRequestsButton;
     Button seeCartButton;
     Button addCreditButton;
+    Button chargeBankAccountButton;
     Button removeCreditButton;
     Button inSellProductListButton;
     Button seeAuctionsButton;
@@ -80,6 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
         seeCartButton = findViewById(R.id.seeCartButton);
         seeAllRequestsButton = findViewById(R.id.seeAllRequestsButton);
         addCreditButton = findViewById(R.id.addCreditButton);
+        chargeBankAccountButton = findViewById(R.id.chargeBankAccountButton);
         removeCreditButton = findViewById(R.id.removeCreditButton);
         inSellProductListButton = findViewById(R.id.inSellProductListButton);
         seeMessagesToCurrentAssistantButton = findViewById(R.id.seeMessagesToCurrentAssistantButton);
@@ -110,10 +112,11 @@ public class ProfileActivity extends AppCompatActivity {
         seeAllRequestsButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         seeCartButton.setVisibility(account instanceof Customer ? View.VISIBLE : View.GONE);
         setMinimumCreditButton.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
-        creditTxt.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
+        creditTxt.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
         minimumCreditTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         karmozdTxt.setVisibility(account instanceof Administrator ? View.VISIBLE : View.GONE);
         addCreditButton.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
+        chargeBankAccountButton.setVisibility((account instanceof Customer || account instanceof Seller) ? View.VISIBLE : View.GONE);
         removeCreditButton.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
         txtCredit.setVisibility((account instanceof Customer) || (account instanceof Seller) ? View.VISIBLE : View.GONE);
         txtCompanyDetails.setVisibility(account instanceof Seller ? View.VISIBLE : View.GONE);
@@ -370,5 +373,20 @@ public class ProfileActivity extends AppCompatActivity {
     public void seeMessagesToCurrentAssistantTapped(View view) {
         Intent intent = new Intent(this, AssistantChatActivity.class);
         startActivity(intent);
+    }
+
+    public void chargeBankAccountTapped(View view) {
+        Account account = DataManager.shared().getLoggedInAccount();
+        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
+            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+                    "deposit" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
+                    "-1" + " " + account.getBankAccountNumber() + " deposit", receiptID ->
+                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+                            runOnUiThread(() -> {
+                                if (response.equals("done successfully")) {
+                                    Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
+                                }
+                            })));
+        });
     }
 }

@@ -89,8 +89,8 @@ public class Gonnect {
         }
 
 //        builder.addPart(setupRequestBody(values));
-               builder.addFormDataPart(uploadKey, filename,
-                        RequestBody.create(mediaType, file));
+        builder.addFormDataPart(uploadKey, filename,
+                RequestBody.create(mediaType, file));
         return builder.build();
 
     }
@@ -228,7 +228,7 @@ public class Gonnect {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                listener.responseRecieved(true,response);
+                        listener.responseRecieved(true,response);
                     }
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
@@ -386,7 +386,7 @@ public class Gonnect {
 
     public static void sendCancelableRequest(String url, final ContentValues values, String tag,final ResponseSuccessListener listener,final ResponseFailureListener failureListener){
 
-                queue = Volley.newRequestQueue(DataManager.context);
+        queue = Volley.newRequestQueue(DataManager.context);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -728,7 +728,7 @@ public class Gonnect {
 
     public static void getData(String url, final ResponseSuccessListener listener,final ResponseFailureListener failureListener){
 
-         queue = Volley.newRequestQueue(DataManager.context);
+        queue = Volley.newRequestQueue(DataManager.context);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -791,7 +791,7 @@ public class Gonnect {
     //Launch Activity Get Data(s)
 
     public static void getDataAndLaunchActivity(String url,final Class activity, final Context context){
-
+        url += "&time=" + DataManager.stringFromDate(LocalDateTime.now());
 
         Request request=new Request.Builder()
                 .url(url)

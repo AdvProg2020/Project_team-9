@@ -130,6 +130,20 @@
             android:text="مشاهده مزایده‌ها"
             android:theme="@style/buttonTexts" />
 
+        <EditText
+            android:id="@+id/profile_karmozdTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="کارمزد"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/setKarmozdButton"
             android:layout_width="match_parent"
@@ -139,6 +153,20 @@
             android:onClick="setKarmozdTapped"
             android:text="ثبت میزان کارمزد"
             android:theme="@style/buttonTexts"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/profile_minimumCreditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="حداقل مبلغ مجاز در کیف پول"
+            android:text=""
+            android:theme="@style/usualTexts"
             android:visibility="gone" />
 
         <Button
@@ -151,6 +179,30 @@
             android:text="ثبت حداقل مبلغ مجاز در کیف پول"
             android:theme="@style/buttonTexts"
             android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/profile_creditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="مبلغ"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/chargeBankAccountButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="chargeBankAccountTapped"
+            android:text="افزایش اعتبار حساب بانکی به میزان تعیین شده در فوق"
+            android:theme="@style/buttonTexts" />
 
         <Button
             android:id="@+id/addCreditButton"
@@ -241,6 +293,20 @@
             android:text="مشاهده لیست دسته‌بندی‌ها"
             android:theme="@style/buttonTexts" />
 
+        <EditText
+            android:id="@+id/profile_adTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:hint="متن تبلیغ"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/profile_adBtn"
             android:layout_width="match_parent"
@@ -260,62 +326,6 @@
             android:onClick="logoutTapped"
             android:text="خروج از حساب"
             android:theme="@style/buttonTexts" />
-
-        <EditText
-            android:id="@+id/profile_karmozdTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:hint="کارمزد"
-            android:text=""
-            android:theme="@style/usualTexts"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/profile_minimumCreditTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:hint="حداقل مبلغ مجاز در کیف پول"
-            android:text=""
-            android:theme="@style/usualTexts"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/profile_creditTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:hint="مبلغ"
-            android:text=""
-            android:theme="@style/usualTexts"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/profile_adTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:hint="متن تبلیغ"
-            android:text=""
-            android:theme="@style/usualTexts"
-            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

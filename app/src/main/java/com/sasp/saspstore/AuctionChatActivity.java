@@ -67,19 +67,18 @@ public class AuctionChatActivity extends AppCompatActivity {
     }
 
     private void reloadMessages() {
-        Gonnect.getData(DataManager.IP_SERVER + "?action=getMessagesForAuction", (isSuccess, errorOrResponse) -> {
-            runOnUiThread(() -> {
-                if (isSuccess) {
-                    ArrayList<Message> allMessagesFromServer = new Gson().fromJson(errorOrResponse, new TypeToken<ArrayList<Message>>() {
-                    }.getType());
-                    for (Message message : allMessagesFromServer) {
-                        if (!auction.doesContainMessageWithID(message.getId())) auction.addMessage(message);
+        Gonnect.getData(DataManager.IP_SERVER + "?action=getMessagesForAuction&auctionID=" + auction.getId(),
+                (isSuccess, errorOrResponse) -> runOnUiThread(() -> {
+                    if (isSuccess) {
+                        ArrayList<Message> allMessagesFromServer = new Gson().fromJson(errorOrResponse, new TypeToken<ArrayList<Message>>() {
+                        }.getType());
+                        for (Message message : allMessagesFromServer) {
+                            if (!auction.doesContainMessageWithID(message.getId())) auction.addMessage(message);
+                        }
+                        DataManager.shared().syncAuctions();
+                        adapter.notifyDataSetChanged();
                     }
-                    DataManager.shared().syncAuctions();
-                    adapter.notifyDataSetChanged();
-                }
-            });
-        });
+                }));
     }
 
     @Override
