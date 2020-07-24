@@ -82,16 +82,16 @@ public class EachProductActivity extends AppCompatActivity {
         makeAuctionButton = findViewById(R.id.eachProduct_makeAuctionButton);
         getFileButton = findViewById(R.id.get_file);
 
-        if (currentProduct.getFilePath() != null)
-            getFileButton.setVisibility(View.VISIBLE);
-        else
-            getFileButton.setVisibility(View.GONE);
-
         makeAuctionButton.setVisibility(DataManager.shared().getLoggedInAccount() instanceof Seller ? View.VISIBLE : View.GONE);
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");
         if (productID == null || productID.equals("")) return;
         currentProduct = DataManager.shared().getProductWithId(productID);
+
+        if (currentProduct.getFilePath() != null)
+            getFileButton.setVisibility(View.VISIBLE);
+        else
+            getFileButton.setVisibility(View.GONE);
 
 //        Bitmap bitmap = new ImageSaver(this).setFileName(productID + ".png").setDirectoryName("images").load();
         byte[] decodedString = Base64.decode(currentProduct.getImageBase64(), Base64.URL_SAFE);
