@@ -62,6 +62,8 @@ public class LogActivity extends AppCompatActivity {
                     "\n" +
                     "لیست کالاها:" +
                     "\n");
+            for (Product product : log.getProducts().keySet())
+                message.append(product.getName()).append("\n");
             if (log instanceof PurchaseLog) {
                 PurchaseLog purchaseLog = (PurchaseLog) log;
                 message.append("نام خریدار: ").append(purchaseLog.getCustomer().getFirstName())
@@ -69,8 +71,6 @@ public class LogActivity extends AppCompatActivity {
                         .append("آدرس خریدار: ").append(purchaseLog.getCustomer().getAddress())
                         .append("\n").append("وضعیت سفارش: ").append(purchaseLog.getDeliveryStatus());
             }
-            for (Product product : log.getProducts().keySet())
-                message.append(product.getName()).append("\n");
             AlertDialog.Builder builder = new AlertDialog.Builder(LogActivity.this);
             builder.setTitle("اطلاعات تراکنش");
             builder.setMessage(message);
@@ -78,6 +78,7 @@ public class LogActivity extends AppCompatActivity {
             if (isAdministrator && (log instanceof PurchaseLog) && log.getDeliveryStatus() == DeliveryStatus.WAITING) {
                 builder.setPositiveButton("تغییر وضعیت درخواست به ارسال شده", (dialogInterface, i) -> {
                     log.setDeliveryStatus(DeliveryStatus.SENT);
+                    DataManager.shared().getLogWithId(log.getId()).setDeliveryStatus(DeliveryStatus.SENT);
                     DataManager.shared().syncPurchaseLogs();
                 });
             }

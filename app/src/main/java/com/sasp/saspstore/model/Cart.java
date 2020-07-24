@@ -13,6 +13,8 @@ public class Cart {
         products = new HashMap<>();
     }
 
+    public HashMap<String, Integer> getRawProducts() { return products; }
+
     public HashMap<Product, Integer> getProducts() {
         HashMap<Product, Integer> result = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : products.entrySet()) {

@@ -15,16 +15,15 @@ import android.widget.TextView;
 import com.sasp.saspstore.ImageSaver;
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.controller.DataManager;
+import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.CartItem;
+import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
 
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by Seyyed Parsa Neshaei on 6/24/20
- * All Rights Reserved
- */
 public class CartRowAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<CartItem> list;
     private Context context;
@@ -80,11 +79,19 @@ public class CartRowAdapter extends BaseAdapter implements ListAdapter {
 
         increaseButton.setOnClickListener(v -> {
             cartItem.setCount(cartItem.getCount() + 1);
+            Account account = DataManager.shared().getLoggedInAccount();
+            Cart cart = (account instanceof Customer) ? ((Customer) account).getCart() : DataManager.shared().getTemporaryCart();
+            cart.getRawProducts().put(cartItem.getProductId(), cartItem.getCount());
+            DataManager.shared().syncCartForUser();
             notifyDataSetChanged();
         });
         decreaseButton.setOnClickListener(v -> {
             if (cartItem.getCount() != 0) {
                 cartItem.setCount(cartItem.getCount() - 1);
+                Account account = DataManager.shared().getLoggedInAccount();
+                Cart cart = (account instanceof Customer) ? ((Customer) account).getCart() : DataManager.shared().getTemporaryCart();
+                cart.getRawProducts().put(cartItem.getProductId(), cartItem.getCount());
+                DataManager.shared().syncCartForUser();
                 notifyDataSetChanged();
             }
         });

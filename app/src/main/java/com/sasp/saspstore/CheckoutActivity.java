@@ -106,7 +106,7 @@ public class CheckoutActivity extends AppCompatActivity {
         double totalPrice = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            double price = ((Product) pair.getKey()).getPrice() * (int) pair.getValue();
+            double price = ((Product) pair.getKey()).getRoundedPriceAfterDiscount() * (int) pair.getValue();
             if (((Product) pair.getKey()).getNumberAvailable() > 0) {
                 for (Sale sale : DataManager.shared().getAllSales()) {
                     if (sale.getProducts().contains(pair.getKey()) && sale.getStartTime().isBefore(LocalDateTime.now()) && sale.getEndTime().isAfter(LocalDateTime.now())) {
@@ -201,6 +201,8 @@ public class CheckoutActivity extends AppCompatActivity {
 
     public void finishEverything() {
         customer.setAddress(txtAddress.getText().toString());
+        Customer c = (Customer) (DataManager.shared().getAccountWithGivenUsername(customer.getUsername()));
+        c.setAddress(txtAddress.getText().toString());
         coupon.decrementRemainingUsagesCountForAccount(DataManager.shared().getLoggedInAccount());
         PurchaseLog purchaseLog = new PurchaseLog(DataManager.getNewId(), LocalDateTime.now(), (int) totalPrice,
                 (int) (totalPrice - priceAfterDiscount), products, DeliveryStatus.WAITING, customer);

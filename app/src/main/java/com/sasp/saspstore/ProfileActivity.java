@@ -292,7 +292,8 @@ public class ProfileActivity extends AppCompatActivity {
         Account account = DataManager.shared().getLoggedInAccount();
         Gonnect.getData(DataManager.IP_SERVER + "req?action=addCreditTapped&username=" + account.getUsername() + "&password=" +
                 account.getPassword() + "&credit=" + creditTxt.getText().toString() +
-                "&accountBankAccountNumber=" + account.getBankAccountNumber(), (b, s) -> {
+                "&accountBankAccountNumber=" + account.getBankAccountNumber() +
+                "&adminBankAccountNumber" + DataManager.shared().getAdminBankAccountNumber(), (b, s) -> {
             runOnUiThread(() -> Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show());
         });
 //        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {

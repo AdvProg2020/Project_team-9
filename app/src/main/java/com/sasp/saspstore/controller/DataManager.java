@@ -55,7 +55,8 @@ import java.util.UUID;
 // TODO: IMPORTANT: All LocalDateTimes are removed!!
 
 public class DataManager {
-    public static final String IP_SERVER = "http://10.0.2.2:1234/"; // AVD //"http://0.tcp.ngrok.io:13066/";
+    public static final String IP_SERVER = "http://0.tcp.ngrok.io:13148/"; // AVD
+    //    public static final String IP_SERVER = "http://10.0.2.2:8112/"; // AVD
     //    public static final String IP_SERVER = "http://10.0.3.2:8112/"; // Genymotion
     public static Context context;
     private static DataManager sharedInstance;
@@ -606,10 +607,6 @@ public class DataManager {
 
     public void logout() {
         if (loggedInAccount != null) {
-            if (loggedInAccount instanceof Seller) {
-                ((Seller) loggedInAccount).getFileServer().end();
-                ((Seller) loggedInAccount).setFileServer(null);
-            }
             loggedInAccount = null;
             ContentValues cv = new ContentValues();
             cv.put("action", "logout");
