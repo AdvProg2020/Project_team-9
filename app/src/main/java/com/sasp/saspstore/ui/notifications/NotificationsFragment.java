@@ -85,6 +85,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void populateData() {
+        DataManager.shared().populateAllAccountsData();
         Account account = DataManager.shared().getLoggedInAccount();
         if (account == null) {
             textView.setText("برای ورود به ناحیه کاربری، باید ابتدا در سامانه ثبت‌نام نمایید");
