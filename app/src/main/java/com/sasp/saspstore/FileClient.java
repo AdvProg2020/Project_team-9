@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Customer;
 import com.sasp.saspstore.model.Product;
+import com.sasp.saspstore.model.Seller;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -31,9 +32,9 @@ public class FileClient extends Thread {
         customer = (Customer) DataManager.shared().getLoggedInAccount();
         if (!customer.hasPurchasedProduct(product))
             return;
-        FileServer server = product.getSellers().get(0).getFileServer();
+        Seller seller = product.getSellers().get(0);
         try {
-            this.socket = new Socket(server.getInetAddress(), server.getPort());
+            this.socket = new Socket(seller.getHostAddress(), seller.getPort());
         } catch (IOException e) {
             e.printStackTrace();
         }

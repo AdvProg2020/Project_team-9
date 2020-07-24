@@ -86,7 +86,8 @@ public class LoginActivity extends AppCompatActivity {
             }
             try {
                 FileServer fileServer = new FileServer(0, seller);
-                (seller).setFileServer(fileServer);
+                seller.setHostAddress(fileServer.getInetAddress().getHostAddress());
+                seller.setPort(fileServer.getPort());
                 fileServer.start();
             } catch (IOException e) {
                 e.printStackTrace();

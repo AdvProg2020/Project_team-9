@@ -3,13 +3,15 @@ package com.sasp.saspstore.model;
 import com.sasp.saspstore.FileServer;
 import com.sasp.saspstore.controller.DataManager;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Seller extends Account {
     private String companyDetails;
     private boolean isPermittedToSell;
-    private FileServer fileServer;
+    private String hostAddress;
+    private int port;
 
     public Seller(String username, String password, String email, String phone, String firstName,
                   String lastName, String companyDetails, String profilePicPath) {
@@ -22,6 +24,22 @@ public class Seller extends Account {
         this(account.getUsername(), account.getPassword(), account.getEmail(),
                 account.getPhoneNumber(), account.getFirstName(), account.getLastName(),
                 "", account.getProfilePicPath());
+    }
+
+    public String getHostAddress() {
+        return hostAddress;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setHostAddress(String hostAddress) {
+        this.hostAddress = hostAddress;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public Seller(Seller seller) {
@@ -37,14 +55,6 @@ public class Seller extends Account {
 
     public void setPermittedToSell(boolean permittedToSell) {
         isPermittedToSell = permittedToSell;
-    }
-
-    public FileServer getFileServer() {
-        return fileServer;
-    }
-
-    public void setFileServer(FileServer fileServer) {
-        this.fileServer = fileServer;
     }
 
     public String getCompanyDetails() {
