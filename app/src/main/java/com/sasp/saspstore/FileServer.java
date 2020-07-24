@@ -116,7 +116,7 @@ public class FileServer {
                     if (product == null) {
                         writeToOutputStream("no-such-file");
                     } else {
-                        File file = new File(product.getFileUri().getPath());
+                        File file = new File(product.getFilePath());
                         Scanner scanner = new Scanner(file);
                         while (scanner.hasNextLine()) {
                             writeToOutputStream(scanner.nextLine());

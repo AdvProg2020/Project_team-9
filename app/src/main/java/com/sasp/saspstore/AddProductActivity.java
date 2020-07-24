@@ -139,7 +139,7 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, sellers, numberAvailable,
                         DataManager.shared().getCategoryWithId(categoryID), txtProductDescription.getText().toString(),
                         LocalDateTime.now(), hashMap);
-                product.setFileUri(fileUri);
+                product.setFilePath(fileUri.getPath());
                 product.setImageBase64(encoded);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
                 DataManager.shared().addRequest(request);
@@ -151,7 +151,7 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, oldProduct.getSellers(),
                         numberAvailable, oldProduct.getCategory(),
                         txtProductDescription.getText().toString(), oldProduct.getDateCreated(), hashMap);
-                newProduct.setFileUri(fileUri);
+                newProduct.setFilePath(fileUri.getPath());
                 newProduct.setImageBase64(oldProduct.getImageBase64());
                 EditProductBySellerRequest request = new EditProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), oldProduct, newProduct);
                 DataManager.shared().addRequest(request);

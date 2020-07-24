@@ -36,7 +36,7 @@ public class Product {
     private String currentSeller = "";
     private boolean isSelected = false;
     private HashMap<String, String> features;
-    private Uri fileUri;
+    private String filePath;
 
     public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
         this.productId = productId;
@@ -56,12 +56,12 @@ public class Product {
         this.slides = new int[]{R.drawable.image_asset1};
     }
 
-    public void setFileUri(Uri fileUri) {
-        this.fileUri = fileUri;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
-    public Uri getFileUri() {
-        return fileUri;
+    public String getFilePath() {
+        return filePath;
     }
 
     public boolean isSelected() {
