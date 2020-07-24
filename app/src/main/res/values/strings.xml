@@ -30,4 +30,7 @@
     <string name="last_name">نام خانوادگی</string>
     <string name="company_details">اطلاعات شرکت</string>
     <string name="profile_picture">عکس پروفایل</string>
+    <string name="product_radio">محصول</string>
+    <string name="file_radio">فایل</string>
+    <string name="unlimited_file_download">دانلود به تعداد نامحدود</string>
 </resources>

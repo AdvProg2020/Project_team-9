@@ -1,164 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_height="match_parent" android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"><LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.sasp.saspstore.AddProductActivity"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="نام محصول"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtProductName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="نام محصول"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="نام برند"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtBrandName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="نام برند"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="قیمت"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="قیمت"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <!-- TODO: Check validity of numbers + multiple sellers for one product??? -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="درصد تخفیف"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtDiscountPercent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="درصد تخفیف"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="تعداد موجود در انبار"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtAvailableCount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:inputType="number"
-        android:autofillHints="تعداد موجود در انبار"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="توضیحات محصول"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtProductDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="توضیحات محصول"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/addProduct_lblFirstFeature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="ویژگی اول دسته"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtFirstFeature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="ویژگی اول دسته"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/addProduct_lblSecondFeature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="ویژگی دوم دسته"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <EditText
-        android:id="@+id/addProduct_txtSecondFeature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:autofillHints="ویژگی دوم دسته"
-        android:fontFamily="@font/yekan"
-        android:textSize="20sp"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="انتخاب عکس"
-        android:background="@drawable/buttons"
-        android:theme="@style/buttonTexts"
-        android:onClick="selectPictureTapped"/>
-    <ImageView
-        android:id="@+id/selectedImageView"
-        android:layout_width="match_parent"
-        android:layout_height="30sp"
-        android:layout_gravity="center" />
-    <!-- TODO: Features + video -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/submitAddProduct_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:contentDescription="Submit"
-        android:layout_margin="16dp" />
+    android:layout_height="match_parent">
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="ورود به پروفایل"
-        android:background="@drawable/buttons"
-        android:theme="@style/buttonTexts"
-        android:onClick="profileTapped"/>
-</LinearLayout></ScrollView>
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context="com.sasp.saspstore.AddProductActivity">
+
+        <RadioGroup
+            android:id="@+id/product_type_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <RadioButton
+                android:id="@+id/product_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/product_radio" />
+
+            <RadioButton
+                android:id="@+id/file_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/file_radio" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/choose_file_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="selectFileTapped"
+            android:text="انتخاب فایل"
+            android:theme="@style/buttonTexts" />
+
+        <TextView
+            android:id="@+id/addProduct_txtFileAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="آدرس فایل"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="نام محصول"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="نام محصول"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="نام برند"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtBrandName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="نام برند"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="قیمت"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="قیمت"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:inputType="number"
+            android:textSize="20sp" />
+        <!-- TODO: Check validity of numbers + multiple sellers for one product??? -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="درصد تخفیف"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtDiscountPercent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="درصد تخفیف"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addProduct_lblAvailableCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="تعداد موجود در انبار"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtAvailableCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="تعداد موجود در انبار"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:inputType="number"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addFile_labelAvailableCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="تعداد مجاز دانلود فابل"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/addFile_txtAvailableCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="تعداد موجود در انبار"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:inputType="number"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/unlimited_file_download_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unlimited_file_download"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="توضیحات محصول"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtProductDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="توضیحات محصول"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addProduct_lblFirstFeature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="ویژگی اول دسته"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtFirstFeature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="ویژگی اول دسته"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addProduct_lblSecondFeature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:text="ویژگی دوم دسته"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/addProduct_txtSecondFeature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="ویژگی دوم دسته"
+            android:fontFamily="@font/yekan"
+            android:gravity="right"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="selectFileTapped"
+            android:text="انتخاب فایل"
+            android:theme="@style/buttonTexts"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="selectPictureTapped"
+            android:text="انتخاب عکس"
+            android:theme="@style/buttonTexts" />
+
+        <ImageView
+            android:id="@+id/selectedImageView"
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:layout_gravity="center" />
+        <!-- TODO: Features + video -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/submitAddProduct_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="Submit" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/buttons"
+            android:onClick="profileTapped"
+            android:text="ورود به پروفایل"
+            android:theme="@style/buttonTexts" />
+    </LinearLayout>
+</ScrollView>

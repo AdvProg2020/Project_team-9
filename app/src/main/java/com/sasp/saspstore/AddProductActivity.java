@@ -1,9 +1,5 @@
 package com.sasp.saspstore;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,16 +7,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.AddProductBySellerRequest;
 import com.sasp.saspstore.model.Category;
@@ -29,11 +29,8 @@ import com.sasp.saspstore.model.Product;
 import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.model.Status;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,6 +38,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class AddProductActivity extends AppCompatActivity {
+
+    public static final int PICK_IMAGE = 10;
+    public static final int PICK_FILE_RESULT_CODE = 1;
 
     EditText txtProductName;
     EditText txtBrandName;
@@ -52,11 +52,15 @@ public class AddProductActivity extends AppCompatActivity {
     EditText txtSecondFeature;
     TextView lblFirstFeature;
     TextView lblSecondFeature;
+    CheckBox unlimitedDownloadCheckBox;
     ImageView selectedImageView;
     String productID = "";
-    String categoryID = "";
+    Uri fileUri;
+    TextView txtFileAddress;
 
     // TODO: Assumed ONLY SELLERS can enter this activity. Else, crash :)
+    String categoryID = "";
+    InputStream imageInputStream;
 
     public void profileTapped(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
@@ -89,6 +93,22 @@ public class AddProductActivity extends AppCompatActivity {
             } else productID = "";
         } else productID = "";
 
+//        RadioGroup radioGroup = findViewById(R.id.product_type_radio);
+//        int selectedId = radioGroup.getCheckedRadioButtonId();
+//        if (selectedId == R.id.product_radio) {
+//            findViewById(R.id.unlimited_file_download_checkbox).setVisibility(View.GONE);
+//            findViewById(R.id.addFile_labelAvailableCount).setVisibility(View.GONE);
+//            findViewById(R.id.addFile_txtAvailableCount).setVisibility(View.GONE);
+//            findViewById(R.id.addProduct_lblAvailableCount).setVisibility(View.VISIBLE);
+//            findViewById(R.id.addProduct_txtAvailableCount).setVisibility(View.VISIBLE);
+//        } else {
+//            findViewById(R.id.unlimited_file_download_checkbox).setVisibility(View.VISIBLE);
+//            findViewById(R.id.addFile_labelAvailableCount).setVisibility(View.VISIBLE);
+//            findViewById(R.id.addFile_txtAvailableCount).setVisibility(View.VISIBLE);
+//            findViewById(R.id.addProduct_lblAvailableCount).setVisibility(View.GONE);
+//            findViewById(R.id.addProduct_txtAvailableCount).setVisibility(View.GONE);
+//        }
+
         FloatingActionButton fab = findViewById(R.id.submitAddProduct_fab);
         fab.setImageBitmap(textAsBitmap("✓", 40, Color.WHITE));
         Category finalCategory = category;
@@ -101,7 +121,7 @@ public class AddProductActivity extends AppCompatActivity {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.URL_SAFE);
 //            new ImageSaver(this).setFileName(newProductID + ".png").setDirectoryName("images").save(bitmap);
             HashMap<String, String> hashMap = new HashMap<>();
@@ -119,6 +139,7 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, sellers, numberAvailable,
                         DataManager.shared().getCategoryWithId(categoryID), txtProductDescription.getText().toString(),
                         LocalDateTime.now(), hashMap);
+                product.setFileUri(fileUri);
                 product.setImageBase64(encoded);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
                 DataManager.shared().addRequest(request);
@@ -130,6 +151,7 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, oldProduct.getSellers(),
                         numberAvailable, oldProduct.getCategory(),
                         txtProductDescription.getText().toString(), oldProduct.getDateCreated(), hashMap);
+                newProduct.setFileUri(fileUri);
                 newProduct.setImageBase64(oldProduct.getImageBase64());
                 EditProductBySellerRequest request = new EditProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), oldProduct, newProduct);
                 DataManager.shared().addRequest(request);
@@ -164,9 +186,24 @@ public class AddProductActivity extends AppCompatActivity {
         txtSecondFeature = findViewById(R.id.addProduct_txtSecondFeature);
         lblFirstFeature = findViewById(R.id.addProduct_lblFirstFeature);
         lblSecondFeature = findViewById(R.id.addProduct_lblSecondFeature);
+        txtFileAddress = findViewById(R.id.addProduct_txtFileAddress);
     }
 
-    public static final int PICK_IMAGE = 10;
+    private void setModeToProduct() {
+        findViewById(R.id.unlimited_file_download_checkbox).setVisibility(View.GONE);
+        findViewById(R.id.addFile_labelAvailableCount).setVisibility(View.GONE);
+        findViewById(R.id.addFile_txtAvailableCount).setVisibility(View.GONE);
+        findViewById(R.id.addProduct_lblAvailableCount).setVisibility(View.VISIBLE);
+        findViewById(R.id.addProduct_txtAvailableCount).setVisibility(View.VISIBLE);
+    }
+
+    private void setModeToFile() {
+        findViewById(R.id.unlimited_file_download_checkbox).setVisibility(View.GONE);
+        findViewById(R.id.addFile_labelAvailableCount).setVisibility(View.GONE);
+        findViewById(R.id.addFile_txtAvailableCount).setVisibility(View.GONE);
+        findViewById(R.id.addProduct_lblAvailableCount).setVisibility(View.VISIBLE);
+        findViewById(R.id.addProduct_txtAvailableCount).setVisibility(View.VISIBLE);
+    }
 
     public void selectPictureTapped(View view) {
         Intent intent = new Intent();
@@ -175,19 +212,31 @@ public class AddProductActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "انتخاب عکس"), PICK_IMAGE);
     }
 
-    InputStream imageInputStream;
+    public void selectFileTapped(View view) {
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        startActivityForResult(Intent.createChooser(chooseFile, "انتخاب فایل"), PICK_FILE_RESULT_CODE);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // TODO: The next line???
         super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            if (data == null) return;
             try {
                 imageInputStream = getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+        if (requestCode == PICK_FILE_RESULT_CODE && resultCode == RESULT_OK) {
+            fileUri = data.getData();
+            if (fileUri == null) {
+                txtFileAddress.setText("");
+                return;
+            }
+            txtFileAddress.setText(fileUri.getPath());
         }
     }
 }

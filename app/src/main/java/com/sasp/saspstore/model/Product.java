@@ -1,18 +1,14 @@
 package com.sasp.saspstore.model;
 
-import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.sasp.saspstore.R;
 import com.sasp.saspstore.controller.DataManager;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +36,33 @@ public class Product {
     private String currentSeller = "";
     private boolean isSelected = false;
     private HashMap<String, String> features;
+    private Uri fileUri;
+
+    public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
+        this.productId = productId;
+        this.status = status;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.discountPercent = discountPercent;
+        this.sellers = sellers.stream().map(Account::getUsername).collect(Collectors.toCollection(ArrayList::new));
+        this.numberAvailable = numberAvailable;
+        this.category = category.getId();
+        this.description = description;
+        this.comments = new ArrayList<>();
+        this.scores = new ArrayList<>();
+        this.dateCreated = DataManager.stringFromDate(dateCreated);
+        this.features = features;
+        this.slides = new int[]{R.drawable.image_asset1};
+    }
+
+    public void setFileUri(Uri fileUri) {
+        this.fileUri = fileUri;
+    }
+
+    public Uri getFileUri() {
+        return fileUri;
+    }
 
     public boolean isSelected() {
         return isSelected;
@@ -51,10 +74,6 @@ public class Product {
 
     public HashMap<String, String> getFeatures() {
         return features;
-    }
-
-    public int getRoundedPriceAfterDiscount() {
-        return (int) (((double) price) * ((double) discountPercent) / 100);
     }
 
     public void setFeatures(HashMap<String, String> features) {
@@ -69,6 +88,9 @@ public class Product {
 //        this.imageURL = imageURL;
 //    }
 
+    public int getRoundedPriceAfterDiscount() {
+        return (int) (((double) price) * ((double) discountPercent) / 100);
+    }
 
     public String getImageBase64() {
 //        String ret = "";
@@ -94,6 +116,16 @@ public class Product {
         return readTextFile(DataManager.context.getResources().openRawResource(R.raw.image));
     }
 
+    public void setImageBase64(String imageBase64) {
+//        try {
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(DataManager.context.openFileOutput(productId + ".txt", Context.MODE_PRIVATE));
+//            outputStreamWriter.write(imageBase64);
+//            outputStreamWriter.close();
+//        } catch (IOException e) {
+//            Log.e("Exception", "File write failed: " + e.toString());
+//        }
+    }
+
     private String readTextFile(InputStream inputStream) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] buf = new byte[1024];
@@ -108,34 +140,6 @@ public class Product {
             Log.wtf("Err", e.getLocalizedMessage());
         }
         return outputStream.toString();
-    }
-
-    public void setImageBase64(String imageBase64) {
-//        try {
-//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(DataManager.context.openFileOutput(productId + ".txt", Context.MODE_PRIVATE));
-//            outputStreamWriter.write(imageBase64);
-//            outputStreamWriter.close();
-//        } catch (IOException e) {
-//            Log.e("Exception", "File write failed: " + e.toString());
-//        }
-    }
-
-    public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
-        this.productId = productId;
-        this.status = status;
-        this.name = name;
-        this.brand = brand;
-        this.price = price;
-        this.discountPercent = discountPercent;
-        this.sellers = sellers.stream().map(Account::getUsername).collect(Collectors.toCollection(ArrayList::new));
-        this.numberAvailable = numberAvailable;
-        this.category = category.getId();
-        this.description = description;
-        this.comments = new ArrayList<>();
-        this.scores = new ArrayList<>();
-        this.dateCreated = DataManager.stringFromDate(dateCreated);
-        this.features = features;
-        this.slides = new int[]{R.drawable.image_asset1, R.raw.lightness};
     }
 
     public Seller getCurrentSeller() {

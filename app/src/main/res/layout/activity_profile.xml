@@ -10,6 +10,86 @@
         android:orientation="vertical"
         tools:context="com.sasp.saspstore.ProfileActivity">
 
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fragment_profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/titleTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_usernameAndRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts" />
+
+        <TextView
+            android:id="@+id/fragment_profile_companyDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text=""
+            android:theme="@style/usualTexts"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/fragment_profile_credit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="right"
+            android:text="اعتبار: "
+            android:theme="@style/usualTexts"
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
+
         <Button
             android:id="@+id/seeCartButton"
             android:layout_width="match_parent"
@@ -236,86 +316,6 @@
             android:text=""
             android:theme="@style/usualTexts"
             android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/fragment_profile_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:text=""
-            android:theme="@style/titleTexts" />
-
-        <TextView
-            android:id="@+id/fragment_profile_usernameAndRole"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:text=""
-            android:theme="@style/usualTexts" />
-
-        <TextView
-            android:id="@+id/fragment_profile_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:text=""
-            android:theme="@style/usualTexts" />
-
-        <TextView
-            android:id="@+id/fragment_profile_phoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:text=""
-            android:theme="@style/usualTexts" />
-
-        <TextView
-            android:id="@+id/fragment_profile_companyDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:text=""
-            android:theme="@style/usualTexts"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/fragment_profile_credit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="right"
-            android:text="اعتبار: "
-            android:theme="@style/usualTexts"
-            android:visibility="gone"
-            tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
 </ScrollView>
