@@ -35,6 +35,11 @@ import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.ui.LargeImageViewActivity;
 import com.sasp.saspstore.ui.VideoActivity;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -42,6 +47,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 import java.util.TimeZone;
 
 public class EachProductActivity extends AppCompatActivity {
@@ -133,9 +139,24 @@ public class EachProductActivity extends AppCompatActivity {
         });
     }
 
-    public void getFileTapped() {
-        FileClient fileClient = new FileClient(currentProduct, getApplicationContext());
-        fileClient.start();
+    public void getFileTapped(View view) {
+//        FileClient fileClient = new FileClient(currentProduct, getApplicationContext());
+////        fileClient.start();
+        File dir = new File(getFilesDir(), "mydir");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        try {
+            File file = new File(dir, currentProduct.getFileName());
+            String fileContents = currentProduct.getFileContents();
+            FileWriter writer = new FileWriter(file);
+            writer.write(fileContents);
+            writer.flush();
+            writer.close();
+            Toast.makeText(this, "Download completed", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void starRating(int score) {

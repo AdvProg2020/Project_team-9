@@ -30,12 +30,15 @@ import com.sasp.saspstore.model.Seller;
 import com.sasp.saspstore.model.Status;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class AddProductActivity extends AppCompatActivity {
 
@@ -139,8 +142,19 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, sellers, numberAvailable,
                         DataManager.shared().getCategoryWithId(categoryID), txtProductDescription.getText().toString(),
                         LocalDateTime.now(), hashMap);
-                if (fileUri != null)
+                if (fileUri != null) {
                     product.setFilePath(fileUri.getPath());
+                    product.setFileName(fileUri.getLastPathSegment());
+                    StringBuilder fileContents = new StringBuilder();
+                    try {
+                        Scanner scanner = new Scanner(new File(fileUri.getPath()));
+                        while (scanner.hasNextLine())
+                            fileContents.append(scanner.nextLine());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    product.setFileContents(fileContents.toString());
+                }
                 product.setImageBase64(encoded);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
                 DataManager.shared().addRequest(request);

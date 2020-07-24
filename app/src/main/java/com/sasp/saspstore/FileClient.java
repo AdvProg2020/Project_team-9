@@ -1,6 +1,7 @@
 package com.sasp.saspstore;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.sasp.saspstore.controller.DataManager;
@@ -33,16 +34,12 @@ public class FileClient extends Thread {
         if (!customer.hasPurchasedProduct(product))
             return;
         Seller seller = product.getSellers().get(0);
-        try {
-            this.socket = new Socket(seller.getHostAddress(), seller.getPort());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void run() {
         try {
+            this.socket = new Socket("2.tcp.ngrok.io", 15009);
             DataInputStream inputStream =
                     new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             DataOutputStream outputStream =

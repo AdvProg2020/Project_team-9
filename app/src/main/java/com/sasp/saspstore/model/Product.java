@@ -37,6 +37,8 @@ public class Product {
     private boolean isSelected = false;
     private HashMap<String, String> features;
     private String filePath;
+    private String fileName;
+    private String fileContents;
 
     public Product(String productId, Status status, String name, String brand, int price, int discountPercent, ArrayList<Seller> sellers, int numberAvailable, Category category, String description, LocalDateTime dateCreated, HashMap<String, String> features) {
         this.productId = productId;
@@ -54,6 +56,22 @@ public class Product {
         this.dateCreated = DataManager.stringFromDate(dateCreated);
         this.features = features;
         this.slides = new int[]{R.drawable.image_asset1};
+    }
+
+    public void setFileContents(String fileContents) {
+        this.fileContents = fileContents;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileContents() {
+        return fileContents;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     public void setFilePath(String filePath) {
