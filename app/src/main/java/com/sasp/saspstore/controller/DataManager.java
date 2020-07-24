@@ -860,12 +860,15 @@ public class DataManager {
 
     // TODO: Cart should be get on login
     public void syncCartForUser() {
+        Account account = getLoggedInAccount();
         if (getLoggedInAccount() instanceof Customer) {
             ContentValues cv = new ContentValues();
             cv.put("action", "syncCartForUser");
             cv.put("token", getToken());
+            cv.put("username", account.getUsername());
             cv.put("cart", new Gson().toJson(((Customer) getLoggedInAccount()).getCart()));
             Gonnect.sendRequest(IP_SERVER, cv, (b, s) -> {
+                int i = 0;
             });
         }
     }
