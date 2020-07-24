@@ -139,7 +139,8 @@ public class AddProductActivity extends AppCompatActivity {
                         txtBrandName.getText().toString(), price, discountPercent, sellers, numberAvailable,
                         DataManager.shared().getCategoryWithId(categoryID), txtProductDescription.getText().toString(),
                         LocalDateTime.now(), hashMap);
-                product.setFilePath(fileUri.getPath());
+                if (fileUri != null)
+                    product.setFilePath(fileUri.getPath());
                 product.setImageBase64(encoded);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
                 DataManager.shared().addRequest(request);
