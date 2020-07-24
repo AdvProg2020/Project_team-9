@@ -50,7 +50,7 @@ public class FileClient extends Thread {
             outputStream.flush();
             String res = inputStream.readUTF();
             if (res.equalsIgnoreCase("no-such-file")) {
-                Toast.makeText(context, "The file cannot be found", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "The file cannot be found", Toast.LENGTH_SHORT).show();
                 return;
             }
             File dir = new File(context.getFilesDir(), "mydir");
@@ -58,12 +58,14 @@ public class FileClient extends Thread {
                 dir.mkdir();
             }
             try {
+                Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show();
                 File file = new File(dir, product.getName());
                 FileWriter writer = new FileWriter(file);
                 while (!((res = inputStream.readUTF()).equals("\0")))
                     writer.append(res);
                 writer.flush();
                 writer.close();
+                Toast.makeText(context, "Download completed", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }

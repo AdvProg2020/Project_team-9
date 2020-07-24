@@ -129,7 +129,8 @@ public class EachProductActivity extends AppCompatActivity {
     }
 
     public void getFileTapped() {
-
+        FileClient fileClient = new FileClient(currentProduct, getApplicationContext());
+        fileClient.start();
     }
 
     private void starRating(int score) {
