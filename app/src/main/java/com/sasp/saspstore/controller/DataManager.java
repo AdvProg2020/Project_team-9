@@ -709,6 +709,7 @@ public class DataManager {
         cv.put("requestType", type);
         Gonnect.getData(IP_SERVER + "req?action=addRequest&requestType=" + type + "&request="
                 + DataManager.encode(requestStr), (b, s) -> {
+            int i = 5;
         });
     }
 

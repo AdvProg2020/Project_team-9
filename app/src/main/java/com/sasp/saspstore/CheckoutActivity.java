@@ -11,8 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sasp.saspstore.controller.DataManager;
 import com.sasp.saspstore.model.Account;
+import com.sasp.saspstore.model.Ad;
 import com.sasp.saspstore.model.Cart;
 import com.sasp.saspstore.model.Coupon;
 import com.sasp.saspstore.model.Customer;
@@ -248,20 +251,26 @@ public class CheckoutActivity extends AppCompatActivity {
         Account account = DataManager.shared().getLoggedInAccount();
         if (!(account instanceof Customer)) return;
         Customer customer = (Customer) account;
-        BankAPI.tellBankAndReceiveResponse("get_token " + customer.getUsername() + " " + customer.getPassword(), token ->
-                BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
-                        "move" + " " + (int) priceAfterDiscount + " " + customer.getBankAccountNumber() +
-                        " " + DataManager.shared().getAdminBankAccountNumber() + " pBBT", receiptID ->
-                        BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
-                                runOnUiThread(() -> {
-                                    switch (response) {
-                                        case "source account does not have enough money":
-                                            Toast.makeText(CheckoutActivity.this, "حساب مبدا به اندازه کافی پول ندارد", Toast.LENGTH_LONG).show();
-                                            break;
-                                        case "done successfully":
-                                            finishEverything();
-                                            break;
-                                    }
-                                }))));
+        Gonnect.getData(DataManager.IP_SERVER + "req?action=payByBank&username=" + customer.getUsername() + "&password=" +
+                customer.getPassword() + "&customerBankAccountNumber=" + customer.getBankAccountNumber() +
+                "&adminBankAccountNumber=" + DataManager.shared().getAdminBankAccountNumber() +
+                "&priceAfterDiscount=" + priceAfterDiscount, (b, s) -> {
+            runOnUiThread(() -> Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show());
+        });
+//        BankAPI.tellBankAndReceiveResponse("get_token " + customer.getUsername() + " " + customer.getPassword(), token ->
+//                BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+//                        "move" + " " + (int) priceAfterDiscount + " " + customer.getBankAccountNumber() +
+//                        " " + DataManager.shared().getAdminBankAccountNumber() + " pBBT", receiptID ->
+//                        BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+//                                runOnUiThread(() -> {
+//                                    switch (response) {
+//                                        case "source account does not have enough money":
+//                                            Toast.makeText(CheckoutActivity.this, "حساب مبدا به اندازه کافی پول ندارد", Toast.LENGTH_LONG).show();
+//                                            break;
+//                                        case "done successfully":
+//                                            finishEverything();
+//                                            break;
+//                                    }
+//                                }))));
     }
 }

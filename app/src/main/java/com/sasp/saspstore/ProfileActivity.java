@@ -290,24 +290,29 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void addCreditTapped(View view) {
         Account account = DataManager.shared().getLoggedInAccount();
-        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
-            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
-                    "withdraw" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
-                    account.getBankAccountNumber() + " " + "-1" + " withdraw", receiptID ->
-                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
-                            runOnUiThread(() -> {
-                                switch (response) {
-                                    case "source account does not have enough money":
-                                        Toast.makeText(ProfileActivity.this, "حساب مبدا به اندازه کافی پول ندارد", Toast.LENGTH_LONG).show();
-                                        break;
-                                    case "done successfully":
-                                        Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
-                                        account.increaseCredit(Integer.parseInt(creditTxt.getText().toString()));
-                                        updateTxtCreditText();
-                                        break;
-                                }
-                            })));
+        Gonnect.getData(DataManager.IP_SERVER + "req?action=addCreditTapped&username=" + account.getUsername() + "&password=" +
+                account.getPassword() + "&credit=" + creditTxt.getText().toString() +
+                "&accountBankAccountNumber=" + account.getBankAccountNumber(), (b, s) -> {
+            runOnUiThread(() -> Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show());
         });
+//        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
+//            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+//                    "withdraw" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
+//                    account.getBankAccountNumber() + " " + "-1" + " withdraw", receiptID ->
+//                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+//                            runOnUiThread(() -> {
+//                                switch (response) {
+//                                    case "source account does not have enough money":
+//                                        Toast.makeText(ProfileActivity.this, "حساب مبدا به اندازه کافی پول ندارد", Toast.LENGTH_LONG).show();
+//                                        break;
+//                                    case "done successfully":
+//                                        Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
+//                                        account.increaseCredit(Integer.parseInt(creditTxt.getText().toString()));
+//                                        updateTxtCreditText();
+//                                        break;
+//                                }
+//                            })));
+//        });
     }
 
     public void removeCreditTapped(View view) {
@@ -316,17 +321,22 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "اعتبار حساب شما ناکافی است", Toast.LENGTH_LONG).show();
             return;
         }
-        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
-            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
-                    "deposit" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
-                    "-1" + " " + account.getBankAccountNumber() + " deposit", receiptID ->
-                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
-                            runOnUiThread(() -> {
-                                Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
-                                account.decreaseCredit(Integer.parseInt(creditTxt.getText().toString()));
-                                updateTxtCreditText();
-                            })));
+        Gonnect.getData(DataManager.IP_SERVER + "req?action=removeCreditTapped&username=" + account.getUsername() + "&password=" +
+                account.getPassword() + "&credit=" + creditTxt.getText().toString() +
+                "&accountBankAccountNumber=" + account.getBankAccountNumber(), (b, s) -> {
+            runOnUiThread(() -> Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show());
         });
+//        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
+//            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+//                    "deposit" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
+//                    "-1" + " " + account.getBankAccountNumber() + " deposit", receiptID ->
+//                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+//                            runOnUiThread(() -> {
+//                                Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
+//                                account.decreaseCredit(Integer.parseInt(creditTxt.getText().toString()));
+//                                updateTxtCreditText();
+//                            })));
+//        });
     }
 
     public void seeAuctionsTapped(View view) {
@@ -377,16 +387,21 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void chargeBankAccountTapped(View view) {
         Account account = DataManager.shared().getLoggedInAccount();
-        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
-            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
-                    "deposit" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
-                    "-1" + " " + account.getBankAccountNumber() + " deposit", receiptID ->
-                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
-                            runOnUiThread(() -> {
-                                if (response.equals("done successfully")) {
-                                    Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
-                                }
-                            })));
+        Gonnect.getData(DataManager.IP_SERVER + "req?action=chargeBankAccount&username=" + account.getUsername() + "&password=" +
+                account.getPassword() + "&credit=" + creditTxt.getText().toString() +
+                "&accountBankAccountNumber=" + account.getBankAccountNumber(), (b, s) -> {
+            runOnUiThread(() -> Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show());
         });
+//        BankAPI.tellBankAndReceiveResponse("get_token " + account.getUsername() + " " + account.getPassword(), token -> {
+//            BankAPI.tellBankAndReceiveResponse("create_receipt " + token + " " +
+//                    "deposit" + " " + Integer.parseInt(creditTxt.getText().toString()) + " " +
+//                    "-1" + " " + account.getBankAccountNumber() + " deposit", receiptID ->
+//                    BankAPI.tellBankAndReceiveResponse("pay " + receiptID, response ->
+//                            runOnUiThread(() -> {
+//                                if (response.equals("done successfully")) {
+//                                    Toast.makeText(ProfileActivity.this, "عملیات با موفقیت انجام شد", Toast.LENGTH_LONG).show();
+//                                }
+//                            })));
+//        });
     }
 }
