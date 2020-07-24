@@ -82,6 +82,11 @@ public class EachProductActivity extends AppCompatActivity {
         makeAuctionButton = findViewById(R.id.eachProduct_makeAuctionButton);
         getFileButton = findViewById(R.id.get_file);
 
+        if (currentProduct.getFileUri() != null)
+            getFileButton.setVisibility(View.VISIBLE);
+        else
+            getFileButton.setVisibility(View.GONE);
+
         makeAuctionButton.setVisibility(DataManager.shared().getLoggedInAccount() instanceof Seller ? View.VISIBLE : View.GONE);
         Intent intent = getIntent();
         String productID = intent.getStringExtra("productID");

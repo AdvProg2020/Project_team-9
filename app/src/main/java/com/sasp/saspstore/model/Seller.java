@@ -1,9 +1,7 @@
 package com.sasp.saspstore.model;
 
-import com.sasp.saspstore.FileServer;
 import com.sasp.saspstore.controller.DataManager;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -26,27 +24,27 @@ public class Seller extends Account {
                 "", account.getProfilePicPath());
     }
 
-    public String getHostAddress() {
-        return hostAddress;
+    public Seller(Seller seller) {
+        this(seller.getUsername(), seller.getPassword(), seller.getEmail(),
+                seller.getPhoneNumber(), seller.getFirstName(), seller.getLastName(),
+                seller.getCompanyDetails(), seller.getCompanyDetails());
+        isPermittedToSell = false;
     }
 
-    public int getPort() {
-        return port;
+    public String getHostAddress() {
+        return hostAddress;
     }
 
     public void setHostAddress(String hostAddress) {
         this.hostAddress = hostAddress;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public int getPort() {
+        return port;
     }
 
-    public Seller(Seller seller) {
-        this(seller.getUsername(), seller.getPassword(), seller.getEmail(),
-                seller.getPhoneNumber(), seller.getFirstName(), seller.getLastName(),
-                seller.getCompanyDetails(), seller.getCompanyDetails());
-        isPermittedToSell = false;
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public boolean isPermittedToSell() {
