@@ -1,0 +1,8 @@
+Last login: Sun Jul 19 14:49:13 on ttys001
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+Parsas-MacBook-Pro:Downloads parsa$ ./ngrok start --config conf.yml --all
+Parsas-MacBook-Pro:Downloads parsa$ say hi
+Parsas-MacBook-Pro:Downloads parsa$ ./ngrok start --config conf.yml --all

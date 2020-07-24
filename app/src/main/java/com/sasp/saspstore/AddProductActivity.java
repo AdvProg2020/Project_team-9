@@ -1,5 +1,6 @@
 package com.sasp.saspstore;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -32,13 +34,15 @@ import com.sasp.saspstore.model.Status;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class AddProductActivity extends AppCompatActivity {
 
@@ -145,15 +149,28 @@ public class AddProductActivity extends AppCompatActivity {
                 if (fileUri != null) {
                     product.setFilePath(fileUri.getPath());
                     product.setFileName(fileUri.getLastPathSegment());
-                    StringBuilder fileContents = new StringBuilder();
-                    try {
-                        Scanner scanner = new Scanner(new File(fileUri.getPath()));
-                        while (scanner.hasNextLine())
-                            fileContents.append(scanner.nextLine()).append('\n');
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                    String fileContents;
+                    String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    File file = null;
+                    if (EasyPermissions.hasPermissions(this, galleryPermissions)) {
+                        file = new File(fileUri.getPath());
+                    } else {
+                        EasyPermissions.requestPermissions(this, "Access for storage",
+                                101, galleryPermissions);
+                        file = new File(fileUri.getPath());
                     }
-                    product.setFileContents(fileContents.toString());
+                    fileContents = readTextFile(this.getResources().openRawResource(R.raw.tso));
+//                    try {
+//                        Scanner scanner = new Scanner(file);
+//                        while (scanner.hasNextLine())
+//                            fileContents.append(scanner.nextLine()).append('\n');
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+                    product.setFileContents(fileContents);
                 }
                 product.setImageBase64(encoded);
                 AddProductBySellerRequest request = new AddProductBySellerRequest(DataManager.getNewId(), (Seller) DataManager.shared().getLoggedInAccount(), product);
@@ -174,6 +191,22 @@ public class AddProductActivity extends AppCompatActivity {
             }
             finish();
         });
+    }
+
+    private String readTextFile(InputStream inputStream) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        int len;
+        try {
+            while ((len = inputStream.read(buf)) != -1) {
+                outputStream.write(buf, 0, len);
+            }
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+            Log.w("Err", e.getLocalizedMessage());
+        }
+        return outputStream.toString();
     }
 
     private Bitmap textAsBitmap(String text, float textSize, int textColor) {
