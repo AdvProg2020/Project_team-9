@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -47,6 +48,14 @@ public class FileServer {
 
     public void end() {
         mustContinue = false;
+    }
+
+    public InetAddress getInetAddress() {
+        return getServerSocket().getInetAddress();
+    }
+
+    public int getPort() {
+        return getServerSocket().getLocalPort();
     }
 
     private class ServerImpl extends Thread {
@@ -112,6 +121,7 @@ public class FileServer {
                         while (scanner.hasNextLine()) {
                             writeToOutputStream(scanner.nextLine());
                         }
+                        writeToOutputStream("\0");
                     }
                     exit = true;
                 } catch (IOException e) {
