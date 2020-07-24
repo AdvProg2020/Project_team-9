@@ -149,7 +149,7 @@ public class AddProductActivity extends AppCompatActivity {
                     try {
                         Scanner scanner = new Scanner(new File(fileUri.getPath()));
                         while (scanner.hasNextLine())
-                            fileContents.append(scanner.nextLine());
+                            fileContents.append(scanner.nextLine()).append('\n');
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
